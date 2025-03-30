@@ -8,6 +8,7 @@ yarn-error.log*
 
 # === FRONTEND ===
 frontend/build/
+/build/
 frontend/.env*
 frontend/.DS_Store
 
