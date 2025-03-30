@@ -1,0 +1,43 @@
+body {
+  font-family: "Poppins", sans-serif;;
+}
+
+.messages-page {
+    display: flex;
+    height: calc(100vh - 160px); 
+    max-height: calc(100vh - 160px);
+    overflow: hidden; /* Prevent scrolling the whole page */
+    background-color: #ffffff;
+    border-top: 1px solid #eee; /* Optional separator */
+  }
+  
+  .conversation-list-area {
+    flex: 0 0 300px; /* Fixed width for the list, adjust as needed */
+    border-right: 1px solid #e0e0e0;
+    display: flex; /* To allow ConversationList to fill height */
+    flex-direction: column;
+    background-color: #fdfdfd;
+  }
+  
+  .chat-interface-area {
+    flex: 1; /* Takes remaining space */
+    display: flex; /* To allow ChatInterface to fill height */
+    flex-direction: column;
+  }
+  
+  .no-chat-selected {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+    color: #777;
+    background-color: #f9f9f9;
+  }
+  
+  .no-chat-selected h2 {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #555;
+  }

@@ -1,0 +1,71 @@
+body {
+  font-family: "Poppins", sans-serif;;
+}
+
+.conversation-list-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Fill the parent area */
+    overflow: hidden; /* Prevent container overflow */
+  }
+  
+  .conversation-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1rem 0.75rem 1rem;
+    border-bottom: 1px solid #eee;
+    background-color: #f9f9f9;
+  }
+  
+  .conversation-list-header h2 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .add-contact-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #cc0000; /* Theme color */
+    cursor: pointer;
+    padding: 0.25rem;
+    line-height: 1;
+    transition: color 0.2s ease;
+  }
+  
+  .add-contact-btn:hover {
+    color: #a00000; /* Darker shade on hover */
+  }
+  
+  .conversation-list {
+    flex-grow: 1; /* Allow list to take remaining space */
+    overflow-y: auto; /* Enable scrolling for the list items */
+    padding: 0.5rem 0;
+  }
+  
+  .no-conversations {
+      padding: 2rem 1rem;
+      text-align: center;
+      color: #888;
+  }
+  
+  /* Styling for scrollbar (optional, webkit browsers) */
+  .conversation-list::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .conversation-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  .conversation-list::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+  }
+  
+  .conversation-list::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+  }
