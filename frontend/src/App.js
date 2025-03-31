@@ -1,8 +1,8 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import BuyingPage from "./pages/BuyingPage";
 import HomePage from "./pages/HomePage";
 import MessagesPage from "./pages/MessagesPage";
 import SellingPage from "./pages/SellingPage";
-import BuyingPage from "./pages/BuyingPage";
 
 function App() {
   return (

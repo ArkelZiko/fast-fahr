@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { getModelsForMake, getYearOptions } from '../data/selling.js';
+import React, { useEffect, useState } from 'react';
 import '../css/sellingCSS/createlistingform.css'; // Or dedicated filter CSS if preferred
+import { getModelsForMake, getYearOptions } from '../data/selling.js';
 
 function FilterListings({ onSubmit, onClose }) {
   // Filter fields

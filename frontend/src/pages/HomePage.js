@@ -1,9 +1,10 @@
-import Header from "../components/Header";
-import NavBar from "../components/Navbar";
 import Card from "../components/Card";
-import Filters from "../components/Filters";
-import ListingCard from "../components/ListingCard";
 import listings from "../components/data/listings";
+import Filters from "../components/Filters";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import ListingCard from "../components/ListingCard";
+import NavBar from "../components/Navbar";
 
 function HomePage() {
   return (
@@ -16,8 +17,7 @@ function HomePage() {
         {listings.map((car) => (
           <ListingCard
             key={car.id}
-            make={car.make}
-            model={car.model}
+            title={car.title}
             image={car.image}
             price={car.price}
             mileage={car.mileage}
@@ -25,6 +25,7 @@ function HomePage() {
           />
         ))}
       </div>
+      <Footer />
     </div>
   );
 }
