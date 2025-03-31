@@ -1,12 +1,14 @@
+/* --- Grid Container --- */
 .listing-grid {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 2rem;
+  gap: 4.5rem;
   padding: 2rem;
 }
 
+/* --- Card Styling --- */
 .listing-card {
   background-color: #ffffff;
   border: 1px solid #ddd;
@@ -15,23 +17,22 @@
   overflow: hidden;
   width: 100%;
   max-width: 350px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Poppins', sans-serif;
 }
 
-.listing-card:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-  cursor: pointer;
-}
-
+/* --- Image Styling --- */
 .listing-image {
   width: 100%;
   height: 180px;
   object-fit: cover;
 }
 
+/* --- Info Section Styling --- */
 .listing-info {
   padding: 1rem;
+  flex-grow: 1;
 }
 
 .listing-title {
@@ -44,12 +45,77 @@
 
 .listing-detail {
   font-size: 0.95rem;
-  color: #333; 
+  color: #333;
   margin-bottom: 0.5rem;
 }
 
 .listing-price {
   font-size: 1.1rem;
   font-weight: bold;
-  color: #000; 
+  color: #000;
+}
+
+/* --- Action Buttons Container */
+.listing-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem 1rem 1rem;
+  border-top: 1px solid #eee;
+  margin-top: auto;
+}
+
+/* --- Common Button Styles */
+.listing-actions button {
+  flex: 1;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.listing-actions button i {
+  font-size: 0.85rem;
+}
+
+/* --- Specific Button Color Styles --- */
+.view-btn {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.view-btn:hover {
+  background-color: #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.bookmark-btn {
+  background-color: #ff9800;
+  color: white;
+  border: none;
+}
+
+.bookmark-btn:hover {
+  background-color: #e67e00;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.message-btn {
+  background-color: #cc0000;
+  color: white;
+  border: none;
+}
+
+.message-btn:hover {
+  background-color: #a00000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }

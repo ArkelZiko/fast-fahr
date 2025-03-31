@@ -1,0 +1,118 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+  }
+  
+  .selling-content-wrapper {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* --- Header for Listings --- */
+  /* TODO: Make sure listing items are alligned with the border-bottom underline */
+  .my-listings-header {
+    display: flex;
+    justify-content: space-between; /* Need this to Push H2 and Button apart */
+    align-items: center; /* Vertically aligns them */
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid #ff9800; /* Makes it look underlined with that orange line */
+  }
+  
+  .my-listings-header h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #111;
+    margin: 0;
+  }
+  
+  .create-listing-btn-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0.9rem;
+    background-color: #1a1a1a; /* Black button */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    font-family: 'Poppins', sans-serif;
+  }
+  .create-listing-btn-trigger:hover {
+    background-color: #000000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .create-listing-btn-trigger i {
+      font-size: 0.9rem;
+  }
+  
+  .my-listings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid for these car listings */
+    gap: 4.5rem; /* Gap between cards might have to play around with */
+  }
+  
+  .no-listings-message {
+      color: #555;
+      font-style: italic;
+      padding: 2rem;
+      text-align: center;
+      background-color: #fff;
+      border-radius: 8px;
+      border: 1px dashed #ccc;
+      margin-top: 1rem;
+  }
+  
+  /* --- Modal Styles --- */
+  .modal-overlay {
+    position: fixed; /* Need this so the modal sits on top of everything else + the z-index */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's above other content */
+    padding: 1rem;
+  }
+  
+  .modal-content {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 750px; 
+    animation: fadeInModal 0.3s ease-out; /* Simple fade-in animation kind of clean */
+  }
+  
+  @keyframes fadeInModal {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+
+  /* TODO: Make this more resposnive */
+  @media (max-width: 600px) {
+      .my-listings-header {
+          flex-direction: column; /* Stack heading and button */
+          align-items: flex-start; /* Align to left */
+          gap: 1rem; /* Space button and mMy listings heading when stacked ontop */
+      }
+      .modal-content {
+          max-width: 95%; /* Allow more width on small screens */
+      }
+      .form-row {
+          flex-direction: column; /* Stack row items */
+          gap: 0; /* Remove gap when stacked */
+      }
+      .form-row .form-group {
+          margin-bottom: 1rem; /* Add margin back when stacked */
+      }
+  }

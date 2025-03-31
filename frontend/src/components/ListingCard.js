@@ -12,6 +12,17 @@ function ListingCard({ title, image, price, mileage, year }) {
         </p>
         <p className="listing-price">${price}</p>
       </div>
+      <div className="listing-actions">
+        <button className="view-btn">
+          <i className="fas fa-eye"></i> View
+        </button>
+        <button className="bookmark-btn">
+            <i className="fas fa-star"></i> Star
+        </button>
+        <button className="message-btn">
+            <i className="fas fa-envelope"></i> Contact
+        </button>
+      </div>
     </div>
   );
 }
