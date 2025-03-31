@@ -6,6 +6,7 @@ import BuyListingCard from "../components/buyingComponents/BuyListingCard";
 // (or SellListingCard if you prefer the same card in both pages)
 import listings from "../components/data/listings.js";
 import "../components/css/buyingCSS/buyingpage.css";
+import Footer from "../components/Footer";
 
 function BuyingPage() {
   const [myListings, setMyListings] = useState(listings);
@@ -62,6 +63,7 @@ function BuyingPage() {
           )}
         </section>
       </div>
+      <Footer />
 
       {/* --- Filter Modal --- */}
       {isModalOpen && (

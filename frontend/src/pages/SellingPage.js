@@ -6,6 +6,8 @@ import SellListingCard from '../components/sellingComponents/SellListingCard.js'
 import userListingsData from '../components/data/listings.js';
 import '../components/css/sellingCSS/sellingpage.css';
 import CreateListingForm from '../components/sellingComponents/CreateListingForm.js';
+import Footer from "../components/Footer";
+
 
 function SellingPage() {
   const [myListings, setMyListings] = useState(userListingsData); // State for user's listings
@@ -87,6 +89,7 @@ function SellingPage() {
         )}
 
       </div>
+      <Footer />
     </div>
   );
 }
