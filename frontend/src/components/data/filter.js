@@ -5,29 +5,29 @@ const carModelsByMake = {
     'Mercedes-Benz': ['A-Class', 'B-Class', 'C-Class', 'CLA', 'CLS', 'E-Class', 'EQA', 'EQB', 'EQC', 'EQE', 'EQS', 'G-Class', 'GLA', 'GLB', 'GLC', 'GLE', 'GLS', 'S-Class', 'SL', 'SLC', 'AMG GT'],
     Porsche: ['718 Boxster', '718 Cayman', '911', 'Cayenne', 'Macan', 'Panamera', 'Taycan'],
     Volkswagen: ['Arteon', 'Atlas', 'Golf', 'GTI', 'ID.4', 'Jetta', 'Passat', 'Taos', 'Tiguan', 'Touareg'],
-  };
+};
 
-  
-  /**
-   * Returns an array of models for a given make.
-   * @param {string} make - The selected car make.
-   * @returns {string[]} - An array of model names or an empty array.
-   */
-  export const getModelsForMake = (make) => {
+
+/**
+ * Returns an array of models for a given make.
+ * @param {string} make - The selected car make.
+ * @returns {string[]} - An array of model names or an empty array.
+ */
+export const getModelsForMake = (make) => {
     return carModelsByMake[make] || [];
-  };
-  
-  /**
-   * Generates a list of years from current year + 1 down to a minimum year.
-   * @param {number} [startYear=1900] - The oldest year to include.
-   * @returns {number[]} - An array of years.
-   */
-  export const getYearOptions = (startYear = 1900) => {
+};
+
+/**
+ * Generates a list of years from current year + 1 down to a minimum year.
+ * @param {number} [startYear=1900] - The oldest year to include.
+ * @returns {number[]} - An array of years.
+ */
+export const getYearOptions = (startYear = 1900) => {
     const currentYear = new Date().getFullYear();
     const endYear = currentYear + 1; // Allow listing for next year's models
     const years = [];
     for (let year = endYear; year >= startYear; year--) {
-      years.push(year);
+        years.push(year);
     }
     return years;
-  };
+};

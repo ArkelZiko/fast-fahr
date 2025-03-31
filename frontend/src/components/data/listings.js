@@ -217,7 +217,7 @@ const listings = [
   },
   {
     id: 20,
-    title: "Audi RS4 Avant (B7)",
+    title: "Audi RS4 Avant",
     make: "Audi",
     model: "RS4",
     image: rs4,
