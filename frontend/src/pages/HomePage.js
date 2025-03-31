@@ -16,7 +16,8 @@ function HomePage() {
         {listings.map((car) => (
           <ListingCard
             key={car.id}
-            title={car.title}
+            make={car.make}
+            model={car.model}
             image={car.image}
             price={car.price}
             mileage={car.mileage}
