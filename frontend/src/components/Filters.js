@@ -10,7 +10,7 @@ import "./css/filters.css";
 function Filters({ onApplyFilters }) {
   const [make, setMake] = useState("");
   const [models, setModels] = useState([]);
-  const [model, setModel] = useState(""); 
+  const [model, setModel] = useState("");
   const [yearMin, setYearMin] = useState("");
   const [yearMax, setYearMax] = useState("");
   const [price, setPrice] = useState([0, 200000]);
@@ -62,7 +62,7 @@ function Filters({ onApplyFilters }) {
       <div className="filters-grid">
         {/* Make (brand) DROPDOWN*/}
         <select value={make} onChange={(e) => setMake(e.target.value)}>
-          <option value="">Select Make</option>
+          <option value="">Select Make</option> {/*may add icons later */}
           <option value="Audi">Audi</option>
           <option value="BMW">BMW</option>
           <option value="Mercedes-Benz">Mercedes-Benz</option>
@@ -71,7 +71,11 @@ function Filters({ onApplyFilters }) {
         </select>
 
         {/* Model Dropdown (wont work until make is chosen) DROPDOWN */}
-        <select value={model} onChange={(e) => setModel(e.target.value)} disabled={!make}>
+        <select
+          value={model}
+          onChange={(e) => setModel(e.target.value)}
+          disabled={!make}
+        >
           <option value="">Select Model</option>
           {models.map((m) => (
             <option key={m} value={m}>
@@ -79,7 +83,7 @@ function Filters({ onApplyFilters }) {
             </option>
           ))}
         </select>
-        
+
         {/* Year Min DROPDOWN*/}
         <select value={yearMin} onChange={(e) => setYearMin(e.target.value)}>
           <option value="">Min Year</option>
@@ -89,55 +93,96 @@ function Filters({ onApplyFilters }) {
             </option>
           ))}
         </select>
-        
+
         {/* Price Range SLIDER */}
         <div className="slider-container">
-          <label>Price Range: ${price[0]} - ${price[1]}</label>
-          <div className="dual-slider">
+          <label>
+            Price Range: ${price[0].toLocaleString()} - $
+            {price[1].toLocaleString()}
+          </label>
+          <div
+            className="dual-slider"
+            style={{
+              "--left-thumb": `${(price[0] / 200000) * 100}%`,
+              "--right-thumb": `${(price[1] / 200000) * 100}%`,
+            }}
+          >
             <input
               type="range"
               min="0"
               max="200000"
+              step="1000"
               value={price[0]}
               onChange={(e) =>
-                setPrice([Math.min(Number(e.target.value), price[1] - 1000), price[1]])
+                setPrice([
+                  Math.min(Number(e.target.value), price[1] - 1000),
+                  price[1],
+                ])
               }
             />
             <input
               type="range"
               min="0"
               max="200000"
+              step="1000"
               value={price[1]}
               onChange={(e) =>
-                setPrice([price[0], Math.max(Number(e.target.value), price[0] + 1000)])
+                setPrice([
+                  price[0],
+                  Math.max(Number(e.target.value), price[0] + 1000),
+                ])
               }
             />
           </div>
+          {/* <div className="range-labels">
+            <span>$0</span>
+            <span>$200,000</span>
+          </div> */}
         </div>
 
         {/* Mileage Range [ or kilometerage (thats a word)] SLIDER */}
         <div className="slider-container">
-          <label>Mileage Range (km): {mileage[0]} - {mileage[1]}</label>
-          <div className="dual-slider">
+          <label>
+            Mileage: {mileage[0].toLocaleString()}km -{" "} {mileage[1].toLocaleString()}km
+          </label>
+          <div
+            className="dual-slider"
+            style={{
+              "--left-thumb": `${(mileage[0] / 200000) * 100}%`,
+              "--right-thumb": `${(mileage[1] / 200000) * 100}%`,
+            }}
+          >
             <input
               type="range"
               min="0"
               max="200000"
+              step="1000"
               value={mileage[0]}
               onChange={(e) =>
-                setMileage([Math.min(Number(e.target.value), mileage[1] - 1000), mileage[1]])
+                setMileage([
+                  Math.min(Number(e.target.value), mileage[1] - 1000),
+                  mileage[1],
+                ])
               }
             />
             <input
               type="range"
               min="0"
               max="200000"
+              step="1000"
               value={mileage[1]}
               onChange={(e) =>
-                setMileage([mileage[0], Math.max(Number(e.target.value), mileage[0] + 1000)])
+                setMileage([
+                  mileage[0],
+                  Math.max(Number(e.target.value), mileage[0] + 1000),
+                ])
               }
             />
           </div>
+          {/* <div className="range-labels">
+            <span>0 km</span>
+            <span>200,000 km</span>
+          </div> */}
         </div>
 
         {/* Year Max DROPDOWN */}

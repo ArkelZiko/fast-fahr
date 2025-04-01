@@ -16,6 +16,7 @@
   align-items: center;
 }
 
+/* DROPDOWN */
 select,
 input[type="range"] {
   width: 100%;
@@ -25,43 +26,96 @@ input[type="range"] {
   font-size: 14px;
 }
 
-/* Container for sliders */
+/* SLIDERS */
 .slider-container {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
+  margin-bottom: 10px;
 }
 
-/* Dual slider to show two range sliders together */
+.slider-container label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
 .dual-slider {
   position: relative;
   width: 100%;
-  height: 10px;
-  margin-top: 8px;
+  height: 30px;
 }
 
-/* Styling for both range inputs in the slider */
+.dual-slider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #e0e0e0;
+  border-radius: 2px;
+  transform: translateY(-50%);
+}
+
+.dual-slider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: var(--left-thumb, 0%); /*thumb just means draggable*/
+  right: calc(100% - var(--right-thumb, 100%));
+  height: 4px;
+  background: #f9b73c;
+  border-radius: 2px;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
 .dual-slider input[type="range"] {
   position: absolute;
   width: 100%;
-  height: 8px;
-  background: #ddd;
-  border-radius: 5px;
+  height: 30px;
+  background: transparent;
+  appearance: none;
+  -webkit-appearance: none;
   pointer-events: none;
+  z-index: 2;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
 }
 
-/* Style for slider thumb to be clickable */
 .dual-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
   width: 16px;
   height: 16px;
-  background-color: #4caf50;
   border-radius: 50%;
+  background: white;
+  border: 2px solid #f9b73c;
   cursor: pointer;
-  pointer-events: all;
-  /* -webkit-appearance: none; */
+  pointer-events: auto;
+  margin-top: -6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Apply and Clear button styles */
+.dual-slider input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  background: transparent;
+}
+
+/* This would have 0 - 200,000 label at the bottom i didnt really like it, but i kept it here just in case */
+/* Range labels for min/max
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  font-size: 12px;
+  color: #666;
+} */
+
+/* BUTTONS */
 .filter-actions {
   display: flex;
   justify-content: flex-end;
@@ -71,7 +125,7 @@ input[type="range"] {
 
 .apply-btn,
 .filter-clear {
-  background-color: #4caf50;
+  background-color: #a9a9a9;
   color: white;
   padding: 10px 15px;
   border: none;
@@ -81,7 +135,7 @@ input[type="range"] {
 }
 
 .apply-btn:hover {
-  background-color: #45a049;
+  background-color: #6e6e6e;
 }
 
 .filter-clear {
