@@ -13,17 +13,17 @@ class User {
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function getUserByUsername($username) {
+        $stmt = $this->dbh->prepare("SELECT user_id, username, profile_picture FROM {$this->table} WHERE username = :username");
+        $stmt->execute(['username' => $username]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getUserDetails($userId) {
+         $stmt = $this->dbh->prepare("SELECT user_id, username, profile_picture FROM {$this->table} WHERE user_id = :id");
+         $stmt->execute(['id' => $userId]);
+         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
-
-//     
-//     public function createUser($name, $email) {
-//         $stmt = $this->dbh->prepare("INSERT INTO {$this->table} (name, email) VALUES (:name, :email)");
-//         return $stmt->execute(['name' => $name, 'email' => $email]);
-//     }
-
-//     
-//     public function updateUser($id, $name, $email) {
-//         $stmt = $this->dbh->prepare("UPDATE {$this->table} SET name = :name, email = :email WHERE id = :id");
-//         return $stmt->execute(['id' => $id, 'name' => $name, 'email' => $email]);
-//     }
-// }
+?>
