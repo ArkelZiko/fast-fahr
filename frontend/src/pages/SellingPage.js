@@ -1,4 +1,3 @@
-// src/pages/SellingPage.js
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import NavBar from '../components/Navbar';

@@ -4,7 +4,11 @@ const path = require('path');
 // Define routes
 const routes = [
   '/messages',
-  '/login'
+  '/login',
+  '/buying',
+  '/selling',
+  'bookmarks',
+  'register'
 ];
 
 const buildDir = path.join(__dirname, 'build');

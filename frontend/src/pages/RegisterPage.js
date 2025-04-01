@@ -127,8 +127,9 @@ function LoginPage() {
             />
           </div>
 
-          <button
-            type="submit"
+          <button 
+            style={{ width: "100%" }} 
+            type="submit" 
             disabled={status.submitting}
           >
             {status.submitting ? 'Submitting...' : 'Submit'}

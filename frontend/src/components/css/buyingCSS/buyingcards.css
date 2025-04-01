@@ -79,36 +79,36 @@
     font-size: 0.85rem;
   }
   
-  /* --- Individual Button Color Styles --- */
-  .view-btn {
-    background-color: #f0f0f0;
-    color: #333;
-    border: 1px solid #ccc;
-  }
-  
-  .view-btn:hover {
-    background-color: #e0e0e0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .edit-btn {
-    background-color: #ff9800;
-    color: white;
-    border: none;
-  }
-  
-  .edit-btn:hover {
-    background-color: #e67e00;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .delete-btn {
-    background-color: #cc0000;
-    color: white;
-  }
-  
-  .delete-btn:hover {
-    background-color: #a00000;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
+  /* --- Specific Button Color Styles --- */
+.view-btn {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.view-btn:hover {
+  background-color: #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.bookmark-btn {
+  background-color: #ff9800;
+  color: white;
+  border: none;
+}
+
+.bookmark-btn:hover {
+  background-color: #e67e00;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.message-btn {
+  background-color: #cc0000;
+  color: white;
+  border: none;
+}
+
+.message-btn:hover {
+  background-color: #a00000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}

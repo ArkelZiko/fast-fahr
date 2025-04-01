@@ -10,7 +10,7 @@ function ListingCard({ title, make, model, image, price, mileage, year }) {
         <p className="listing-detail">
           {year} • {mileage} km
         </p>
-        <p className="listing-price">${price}</p>
+        <p className="listing-price">${price} CAD</p>
       </div>
       <div className="listing-actions">
         <button className="view-btn">

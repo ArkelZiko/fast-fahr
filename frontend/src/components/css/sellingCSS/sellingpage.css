@@ -11,7 +11,6 @@ body {
   }
   
   /* --- Header for Listings --- */
-  /* TODO: Make sure listing items are alligned with the border-bottom underline */
   .my-listings-header {
     display: flex;
     justify-content: space-between; /* Need this to Push H2 and Button apart */
@@ -43,10 +42,12 @@ body {
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
     font-family: 'Poppins', sans-serif;
   }
+
   .create-listing-btn-trigger:hover {
     background-color: #000000;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
+  
   .create-listing-btn-trigger i {
       font-size: 0.9rem;
   }
@@ -54,7 +55,7 @@ body {
   .my-listings-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid for these car listings */
-    gap: 4.5rem; /* Gap between cards might have to play around with */
+    gap: 4.5rem;
   }
   
   .no-listings-message {

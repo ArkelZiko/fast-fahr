@@ -12,12 +12,15 @@ function BuyListingCard({ title, image, price, mileage, year, onView, onContact 
                 </p>
                 <p className="buy-listing-price">${price} CAD</p>
             </div>
-            <div className="buy-listing-actions">
-                <button className="view-btn" onClick={onView}>
-                    <i className="fas fa-eye"></i> View Details
+            <div className="listing-actions">
+                <button className="view-btn">
+                <i className="fas fa-eye"></i> View
                 </button>
-                <button className="contact-btn" onClick={onContact}>
-                    <i className="fas fa-envelope"></i> Contact Seller
+                <button className="bookmark-btn">
+                <i className="fas fa-star"></i> Star
+                </button>
+                <button className="message-btn">
+                <i className="fas fa-envelope"></i> Contact
                 </button>
             </div>
         </div>
