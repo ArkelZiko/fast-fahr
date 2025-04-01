@@ -1,7 +1,16 @@
 import React from "react";
 import "../css/buyingCSS/buylistingcard.css";
+import { useState } from "react";
 
 function BuyListingCard({ title, image, price, mileage, year, onView, onContact }) {
+
+    const [isBookmarked, setIsBookmarked] = useState(false);
+
+    const handleBookmarkClick = () => {
+        setIsBookmarked(prev => !prev);
+        console.log(`${title} was ${!isBookmarked ? "bookmarked" : "unbookmarked"}`);
+    };
+
     return (
         <div className="buy-listing-card">
             <img src={image} alt={title} className="buy-listing-image" />
@@ -14,13 +23,14 @@ function BuyListingCard({ title, image, price, mileage, year, onView, onContact 
             </div>
             <div className="listing-actions">
                 <button className="view-btn">
-                <i className="fas fa-eye"></i> View
+                    <i className="fas fa-eye"></i> View
                 </button>
-                <button className="bookmark-btn">
-                <i className="fas fa-star"></i> Star
+                <button className="bookmark-btn" onClick={handleBookmarkClick}>
+                    <i className={`fas ${isBookmarked ? "fa-star" : "fa-star-half-alt"}`}></i>
+                    {isBookmarked ? " Saved" : " Star"}
                 </button>
                 <button className="message-btn">
-                <i className="fas fa-envelope"></i> Contact
+                    <i className="fas fa-envelope"></i> Contact
                 </button>
             </div>
         </div>
