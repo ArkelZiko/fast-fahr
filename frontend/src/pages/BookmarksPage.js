@@ -1,21 +1,60 @@
-// src/pages/BookmarksPage.js (or your file path)
-import React, { useState, useEffect } from 'react'; // Keep useState & useEffect for future data loading
+import React, { useState, useEffect } from 'react';
+import { useAuth } from "../hooks/useAuth"; // Import useAuth
+
 import Header from "../components/Header";
 import NavBar from "../components/Navbar";
-// Use the standard ListingCard component for displaying bookmarks
 import ListingCard from "../components/ListingCard";
-// Import sample data - will use later to demonstrate population
-import sampleListingsData from "../components/data/listings.js";
-import "../components/css/buyingCSS/buyingpage.css"; // Use buying page CSS for consistent layout
+import sampleListingsData from "../components/data/listings.js"; // Placeholder
+import "../components/css/buyingCSS/buyingpage.css";
 import Footer from "../components/Footer";
 
 function BookmarksPage() {
-  // State to hold the user's bookmarked listings where we first
-  // initialize as empty array to show the "no bookmarks" message for now
-  const [bookmarkedListings, setBookmarkedListings] = useState([]);
+  const { currentUser, isLoading: authLoading, requireAuth } = useAuth();
 
+  const [bookmarkedListings, setBookmarkedListings] = useState([]);
+  const [isLoadingBookmarks, setIsLoadingBookmarks] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    if (!authLoading) {
+      if (!requireAuth()) {
+        return; // Redirecting...
+      } else {
+        // Fetch user's bookmarks once authenticated
+        setIsLoadingBookmarks(true);
+        // TODO: Replace with actual API call: fetch(`/api/bookmarks?userId=${currentUser.id}`)
+        setTimeout(() => { // Simulate fetch
+          if (isMounted) {
+            const simulatedBookmarks = sampleListingsData.slice(0, 2);
+            setBookmarkedListings(simulatedBookmarks);
+            setIsLoadingBookmarks(false);
+          }
+        }, 1000);
+      }
+    }
+    return () => { isMounted = false; };
+  }, [authLoading, requireAuth, currentUser]);
+
+
+  if (authLoading) {
+    return (
+      <div className="buying-page">
+        <Header />
+        <NavBar />
+        <div className="loading-page" style={{ textAlign: 'center', padding: '50px' }}>
+            Checking authentication...
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!currentUser) {
+    return null; // Prevent rendering if not logged in (should be redirected)
+  }
+
+  // Render page only if authenticated
   return (
-    // Using 'buying-page' class for identical styling from buyingpage.css
     <div className="buying-page">
       <Header />
       <NavBar />
@@ -25,23 +64,20 @@ function BookmarksPage() {
         </div>
 
         <section className="my-listings-section">
-          {bookmarkedListings.length > 0 ? (
+          {isLoadingBookmarks ? (
+             <p className="loading-message" style={{ textAlign: 'center', padding: '30px' }}>Loading bookmarks...</p>
+          ) : bookmarkedListings.length > 0 ? (
             <div className="my-listings-grid">
-              {/* Map over the bookmarks state */}
               {bookmarkedListings.map((listing) => (
                 <ListingCard
                   key={listing.id}
-                  title={listing.title}
-                  image={listing.image}
-                  price={listing.price}
-                  mileage={listing.mileage}
-                  year={listing.year}
+                  title={listing.title} image={listing.image} price={listing.price}
+                  mileage={listing.mileage} year={listing.year}
                 />
               ))}
             </div>
           ) : (
-            // Display message when state is empty
-            <p className="no-listings-message">You have no bookmarks active.</p>
+            <p className="no-listings-message">You have no listings bookmarked yet.</p>
           )}
         </section>
       </div>

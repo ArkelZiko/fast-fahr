@@ -38,7 +38,7 @@ function LoginPage() {
       });
 
       // Send form data to PHP file
-      const response = await fetch('http://localhost/fastfahr/backend/apis/register.php', {
+      const response = await fetch('http://localhost/fastfahr/backend/apis/auth/register.php', {
         method: 'POST',
         body: formDataToSend
       });
@@ -134,6 +134,13 @@ function LoginPage() {
           >
             {status.submitting ? 'Submitting...' : 'Submit'}
           </button>
+
+          <div className="form-footer">
+            <a href="/fastfahr/">Homepage</a>
+            <span className="separator">•</span>
+            <a href="/fastfahr/login">Return to Login</a>
+         </div>
+
         </form>
       </div>
     </div>

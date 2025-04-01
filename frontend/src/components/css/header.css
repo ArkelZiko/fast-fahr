@@ -67,6 +67,7 @@
 .sign-in-btn:hover {
   background-color: #a00000;
 }
+
 .header-buttons {
   display: flex;
   gap: 1rem;
@@ -96,4 +97,40 @@
 
 .filter-btn:hover {
   background-color: #e67e00;
+}
+
+.header-actions {
+  /* Basic container for alignment if needed */
+  display: flex;
+  align-items: center;
+}
+
+.header-user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* Space between username and logout button */
+  color: #333; /* Or your desired text color */
+  font-family: "Poppins", sans-serif;
+}
+
+.header-username {
+  font-weight: 500;
+}
+
+.logout-btn {
+  padding: 0.5rem 1.25rem;
+  width: 6rem;
+  height: 2.75rem;
+  background-color: #cc0000;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.logout-btn:hover {
+   background-color: #a00000;
 }

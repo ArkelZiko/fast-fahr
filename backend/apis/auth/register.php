@@ -1,5 +1,5 @@
 <?php
-include "../config/connect.php";
+include "../../config/Connect.php";
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
