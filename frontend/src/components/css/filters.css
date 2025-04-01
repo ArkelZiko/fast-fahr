@@ -1,133 +1,93 @@
-.filters-container {
-  position: relative;
-  z-index: 100;
-}
-
 .filters-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  /* flex-wrap: wrap; */
-  
   background-color: #f9f9f9;
   border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 0.75rem 1.25rem;
-  margin: 1.5rem auto;
-  width: 97%;
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  width: 95%;
   max-width: 1200px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin: 1.5rem auto;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
-.filters-left {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.dropdown-container {
-  position: relative;
-}
-
-.filter-btn {
-  background-color: #fff;
-  border: 1px solid #ffcc80;
-  border-radius: 4px;
-  padding: 0.5rem 1rem;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #222;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
   align-items: center;
-  white-space: nowrap;
 }
 
-.dropdown-arrow {
-  margin-left: 4px;
-  font-size: 0.8rem;
-  transition: transform 0.2s ease;
-}
-
-.filter-btn:hover {
-  background-color: #fff3e0;
-  border-color: #ff9800;
-}
-
-.filter-btn:active {
-  background-color: #ffe0b2;
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: calc(100% + 5px);
-  left: 0;
-  background-color: #fff;
+select,
+input[type="range"] {
+  width: 100%;
+  padding: 8px;
   border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  width: max-content;
-  min-width: 100%;
-  max-height: 300px;
-  overflow-y: auto;
-  z-index: 10;
+  border-radius: 5px;
+  font-size: 14px;
 }
 
-.dropdown-item {
-  padding: 0.6rem 0.8rem;
+/* Container for sliders */
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Dual slider to show two range sliders together */
+.dual-slider {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  margin-top: 8px;
+}
+
+/* Styling for both range inputs in the slider */
+.dual-slider input[type="range"] {
+  position: absolute;
+  width: 100%;
+  height: 8px;
+  background: #ddd;
+  border-radius: 5px;
+  pointer-events: none;
+}
+
+/* Style for slider thumb to be clickable */
+.dual-slider input[type="range"]::-webkit-slider-thumb {
+  width: 16px;
+  height: 16px;
+  background-color: #4caf50;
+  border-radius: 50%;
   cursor: pointer;
-  transition: all 0.15s ease;
+  pointer-events: all;
+  /* -webkit-appearance: none; */
 }
 
-.dropdown-item:hover {
-  background-color: #fff3e0;
-  color: #cc0000;
+/* Apply and Clear button styles */
+.filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 1rem;
+}
+
+.apply-btn,
+.filter-clear {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.apply-btn:hover {
+  background-color: #45a049;
 }
 
 .filter-clear {
-  background: none;
-  border: none;
-  color: #cc0000;
-  font-weight: 500;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  padding: 0.5rem;
+  background-color: #f44336;
 }
 
 .filter-clear:hover {
-  color: #a00000;
-  text-decoration: underline;
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: transparent;
-  z-index: 5;
-}
-
-@media (max-width: 768px) {
-  .filters-bar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 1rem;
-  }
-  
-  .filters-left {
-    flex-direction: column;
-    width: 100%;
-  }
-  
-  .dropdown-menu {
-    width: 100%;
-  }
-  
-  .filter-clear {
-    align-self: flex-end;
-  }
+  background-color: #e53935;
 }
