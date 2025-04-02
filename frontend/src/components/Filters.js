@@ -91,7 +91,7 @@ function Filters({ onApplyFilters, onClearFilters, isModal = false, onClose }) {
       <div className="filters-grid">
         {/* Make (brand) DROPDOWN*/}
         <select value={make} onChange={(e) => setMake(e.target.value)}>
-          <option value="">Select Make</option> {/*may add icons later */}
+          <option value="">Select Make </option>
           <option value="Audi">Audi</option>
           <option value="BMW">BMW</option>
           <option value="Mercedes-Benz">Mercedes-Benz</option>
