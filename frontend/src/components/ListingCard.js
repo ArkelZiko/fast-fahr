@@ -5,7 +5,7 @@ function ListingCard({ title, make, model, image, price, mileage, year }) {
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   // Construct the correct image URL from the public folder
-  const imageUrl = `/${image}`;
+  const imageUrl = `${process.env.PUBLIC_URL}/${image}`;
   // Alternatively, use the PUBLIC_URL for subdirectory deployment:
   // const imageUrl = `${process.env.PUBLIC_URL}/${image}`;
 
