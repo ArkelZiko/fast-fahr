@@ -1,67 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from "../hooks/useAuth";
-import Header from '../components/Header';
-import NavBar from '../components/Navbar';
-import SellListingCard from '../components/sellingComponents/SellListingCard';
-import CreateListingForm from '../components/sellingComponents/CreateListingForm';
-import Footer from "../components/Footer";
-import '../components/css/sellingCSS/sellingpage.css';
-
 function SellingPage() {
   const { currentUser, isLoading: authLoading, requireAuth } = useAuth();
-
-  const [myListings, setMyListings] = useState([]);
+  const [myListings, setMyListings] = useState(userListingsData);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // ✅ Fetch user-specific listings
   useEffect(() => {
-    const fetchUserListings = async () => {
-      try {
-        const res = await fetch(`http://localhost/fastfahr/backend/apis/fetch/get_user_listings.php?user_id=${currentUser.user_id}`, {
-          credentials: "include",
-        });
-        const data = await res.json();
-        setMyListings(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error("Failed to fetch listings:", err);
+    if (!authLoading) {
+      if (!requireAuth()) {
+        // Redirecting...
+      } else {
+        // TODO: Fetch user-specific listings using currentUser.id
       }
-    };
-
-    if (!authLoading && requireAuth()) {
-      fetchUserListings();
     }
   }, [authLoading, requireAuth, currentUser]);
 
   const openModal = () => {
-    if (!currentUser) return requireAuth();
+    if (!currentUser) { requireAuth(); return; }
     setIsModalOpen(true);
   };
   const closeModal = () => setIsModalOpen(false);
 
   const handleDeleteListing = (id) => {
-    if (!currentUser) return requireAuth();
-    // Optional: Add API delete call
-    setMyListings(current => current.filter(listing => listing.id !== id));
+    if (!currentUser) { requireAuth(); return; }
+    setMyListings(currentListings => currentListings.filter(listing => listing.id !== id));
+    alert(`Listing ${id} deleted (simulation).`);
   };
 
   const handleEditListing = (id) => {
-    if (!currentUser) return requireAuth();
-    alert(`Edit listing ${id} (future feature)`);
+    if (!currentUser) { requireAuth(); return; }
+    alert(`Edit action for listing ${id} triggered (simulation).`);
   };
 
   const handlePublishListing = async (formData) => {
-    if (!currentUser) return requireAuth();
+    if (!currentUser) { requireAuth(); return; }
 
     try {
-      const res = await fetch("http://localhost/fastfahr/backend/apis/create/create_listing.php", {
+      const response = await fetch("http://localhost/fastfahr/backend/apis/create/create.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({ ...formData, user_id: currentUser.user_id }),
       });
-      const result = await res.json();
 
-      if (res.ok && result.success) {
+      const result = await response.json();
+      if (response.ok && result.success) {
         alert("Listing created!");
         setMyListings(prev => [...prev, { id: result.post_id, ...formData }]);
         closeModal();
@@ -69,23 +50,28 @@ function SellingPage() {
         throw new Error(result.error || "Unknown error");
       }
     } catch (err) {
-      console.error("Listing creation failed:", err.message);
+      console.error("Failed to create listing:", err.message);
       alert("Error: " + err.message);
     }
   };
 
+  // ✅ This entire return block should stay INSIDE the SellingPage function
   if (authLoading) {
     return (
       <div className="selling-page">
         <Header />
         <NavBar />
-        <div className="loading-page">Checking authentication...</div>
+        <div className="loading-page" style={{ textAlign: 'center', padding: '50px' }}>
+          Checking authentication...
+        </div>
         <Footer />
       </div>
     );
   }
 
-  if (!currentUser) return null;
+  if (!currentUser) {
+    return null;
+  }
 
   return (
     <div className="selling-page">
@@ -106,11 +92,8 @@ function SellingPage() {
               {myListings.map((listing) => (
                 <SellListingCard
                   key={listing.id}
-                  title={listing.title}
-                  image={`/images/${listing.image}`} // assuming images are in public/images/
-                  price={listing.price}
-                  mileage={listing.mileage}
-                  year={listing.year}
+                  title={listing.title} image={listing.image} price={listing.price}
+                  mileage={listing.mileage} year={listing.year}
                   onEdit={() => handleEditListing(listing.id)}
                   onDelete={() => handleDeleteListing(listing.id)}
                 />
@@ -124,10 +107,14 @@ function SellingPage() {
         {isModalOpen && (
           <div className="modal-overlay" onClick={closeModal}>
             <div className="modal-content" onClick={e => e.stopPropagation()}>
-              <CreateListingForm onSubmit={handlePublishListing} onClose={closeModal} />
+              <CreateListingForm
+                onSubmit={handlePublishListing}
+                onClose={closeModal}
+              />
             </div>
           </div>
         )}
+
       </div>
       <Footer />
     </div>

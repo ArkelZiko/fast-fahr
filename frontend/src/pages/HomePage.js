@@ -1,40 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Header from "../components/Header";
 import NavBar from "../components/Navbar";
 import Card from "../components/Card";
 import Filters from "../components/Filters";
 import filterListings from "../components/filterListingsComponent/filterListings";
 import ListingCard from "../components/ListingCard";
+import listings from "../components/data/listings";
 import Footer from "../components/Footer";
 
 function HomePage() {
-  const [allListings, setAllListings] = useState([]);
-  const [filteredListings, setFilteredListings] = useState([]);
-
-  useEffect(() => {
-    const fetchListings = async () => {
-      try {
-        const res = await fetch("http://localhost/fastfahr/backend/render/renderlistings.php");
-        const data = await res.json();
-        console.log("Fetched listings from backend:", data);
-
-        setAllListings(data);
-        setFilteredListings(data);
-      } catch (err) {
-        console.error("Error fetching listings:", err);
-      }
-    };
-
-    fetchListings();
-  }, []);
+  const [filteredListings, setFilteredListings] = useState(listings);
 
   const applyFilters = (filters) => {
-    const filtered = filterListings(allListings, filters);
+    const filtered = filterListings(listings, filters);
     setFilteredListings(filtered);
   };
 
   const clearFilters = () => {
-    setFilteredListings(allListings);
+    setFilteredListings(listings);
   };
 
   return (
@@ -42,25 +25,25 @@ function HomePage() {
       <Header />
       <NavBar />
       <Card />
-      <Filters onApplyFilters={applyFilters} onClearFilters={clearFilters} />
-
-      <div className="home-content-wrapper">
+      <Filters 
+        onApplyFilters={applyFilters} 
+        onClearFilters={clearFilters} 
+      />
+      <div className="home-cotent-wrapper">
         <div className="listing-grid">
           {filteredListings.length > 0 ? (
             filteredListings.map((car) => (
               <ListingCard
                 key={car.id}
                 title={car.title}
-                image={`/images/${car.image}`} // Make sure car.image is "m5.jpg" not a full path
+                image={car.image}
                 price={car.price}
                 mileage={car.mileage}
                 year={car.year}
               />
             ))
           ) : (
-            <p style={{ padding: "2rem", textAlign: "center" }}>
-              No listings loaded. Try refreshing or check your filters.
-            </p>
+            <p>No cars found matching the filters.</p>
           )}
         </div>
       </div>
