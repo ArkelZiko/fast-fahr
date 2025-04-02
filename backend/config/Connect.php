@@ -4,7 +4,7 @@
 
 try {
     $dbh = new PDO(
-        "mysql:host=localhost;dbname=govindag_db",
+        "mysql:host=localhost;dbname=zikoa_db",
         "root",
         "" // 8/hYM9U4jOCMWpc_
     );
