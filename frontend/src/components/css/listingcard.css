@@ -95,19 +95,21 @@
 
 .view-btn:hover {
   background-color: #e0e0e0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .bookmark-btn {
   background-color: #ff9800;
   color: white;
   border: none;
+  width: 2rem;
+
 }
 
 .bookmark-btn:hover {
   background-color: #e67e00;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  width:2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 2rem;
 }
 
 .message-btn {
@@ -118,5 +120,5 @@
 
 .message-btn:hover {
   background-color: #a00000;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
