@@ -29,21 +29,23 @@ function HomePage() {
         onApplyFilters={applyFilters} 
         onClearFilters={clearFilters} 
       />
-      <div className="listing-grid">
-        {filteredListings.length > 0 ? (
-          filteredListings.map((car) => (
-            <ListingCard
-              key={car.id}
-              title={car.title}
-              image={car.image}
-              price={car.price}
-              mileage={car.mileage}
-              year={car.year}
-            />
-          ))
-        ) : (
-          <p>No cars found matching the filters.</p>
-        )}
+      <div className="home-cotent-wrapper">
+        <div className="listing-grid">
+          {filteredListings.length > 0 ? (
+            filteredListings.map((car) => (
+              <ListingCard
+                key={car.id}
+                title={car.title}
+                image={car.image}
+                price={car.price}
+                mileage={car.mileage}
+                year={car.year}
+              />
+            ))
+          ) : (
+            <p>No cars found matching the filters.</p>
+          )}
+        </div>
       </div>
 
       <Footer />
