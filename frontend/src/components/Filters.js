@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { getModelsForMake, getYearOptions } from "../components/data/filter";
+import React, { useEffect, useState } from "react";
+import { getModelsForMake, getYearOptions } from "../components/data/selling";
 import "./css/filters.css";
 
 /**
@@ -7,7 +7,7 @@ import "./css/filters.css";
  * @param {function} onApplyFilters - sends the filter data to be applied
  * @returns {JSX.Element} - rendering
  */
-function Filters({ onApplyFilters }) {
+function Filters({ onApplyFilters, onClearFilters, isModal = false, onClose }) {
   const [make, setMake] = useState("");
   const [models, setModels] = useState([]);
   const [model, setModel] = useState("");
@@ -30,19 +30,20 @@ function Filters({ onApplyFilters }) {
   /**
    * Applies the selected (the whole poiint of this)
    */
-  const handleApplyFilters = () => {
-    const filterData = {
-      make,
-      model,
-      priceMin: price[0],
-      priceMax: price[1],
-      mileageMin: mileage[0],
-      mileageMax: mileage[1],
-      yearMin,
-      yearMax,
-    };
-    onApplyFilters(filterData);
-  };
+  // Function is not needed after merging the handleSubmit it (keeping it just in case)
+  // const handleApplyFilters = () => {
+  //   const filterData = {
+  //     make,
+  //     model,
+  //     priceMin: price[0],
+  //     priceMax: price[1],
+  //     mileageMin: mileage[0],
+  //     mileageMax: mileage[1],
+  //     yearMin,
+  //     yearMax,
+  //   };
+  //   onApplyFilters(filterData);
+  // };
 
   /**
    * Clears all filters and resets to default values
@@ -57,8 +58,36 @@ function Filters({ onApplyFilters }) {
     onApplyFilters({});
   };
 
+  const handleSubmit = (event) => {
+    if (event) event.preventDefault();
+    const filterData = {
+      make,
+      model,
+      priceMin: price[0],
+      priceMax: price[1],
+      mileageMin: mileage[0],
+      mileageMax: mileage[1],
+      yearMin,
+      yearMax,
+    };
+    onApplyFilters(filterData);
+    if (isModal && onClose) onClose();
+  };
+
   return (
-    <div className="filters-bar">
+    <form
+      className={`filters-bar ${isModal ? "modal-form" : ""}`}
+      onSubmit={handleSubmit}
+    >
+      {isModal && (
+        <div className="modal-header">
+          <h2>Filter Listings</h2>
+          <button type="button" className="close-modal-btn" onClick={onClose}>
+            ×
+          </button>
+        </div>
+      )}
+
       <div className="filters-grid">
         {/* Make (brand) DROPDOWN*/}
         <select value={make} onChange={(e) => setMake(e.target.value)}>
@@ -143,7 +172,8 @@ function Filters({ onApplyFilters }) {
         {/* Mileage Range [ or kilometerage (thats a word)] SLIDER */}
         <div className="slider-container">
           <label>
-            Mileage: {mileage[0].toLocaleString()}km -{" "} {mileage[1].toLocaleString()}km
+            Mileage: {mileage[0].toLocaleString()}km -{" "}
+            {mileage[1].toLocaleString()}km
           </label>
           <div
             className="dual-slider"
@@ -194,18 +224,31 @@ function Filters({ onApplyFilters }) {
             </option>
           ))}
         </select>
+      </div>
 
-        {/* Apply and Clear BUTTONS */}
-        <div className="filter-actions">
-          <button onClick={handleApplyFilters} className="apply-btn">
-            Apply Filters
-          </button>
-          <button onClick={handleClearFilters} className="filter-clear">
+      {/* Apply and Clear BUTTONS */}
+      <div className="filter-actions">
+        <button
+          type={isModal ? "submit" : "button"}
+          className="apply-btn"
+          onClick={!isModal ? handleSubmit : undefined}
+        >
+          Apply Filters
+        </button>
+        {onClearFilters && (
+          <button
+            type="button"
+            className="filter-clear"
+            onClick={() => {
+              handleClearFilters();
+              if (onClearFilters) onClearFilters();
+            }}
+          >
             Clear Filters
           </button>
-        </div>
+        )}
       </div>
-    </div>
+    </form>
   );
 }
 
