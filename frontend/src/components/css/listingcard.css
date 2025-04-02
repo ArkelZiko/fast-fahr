@@ -8,6 +8,20 @@
   padding: 2rem;
 }
 
+/* This is whats used in buy/sellingPage css which looks better and is more responsive */
+.my-listings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 4.5rem; /* Adjust as needed */
+}
+
+
+.home-content-wrapper {
+  padding: 2rem;
+  max-width: 1200px; /* limits how wide the grid can stretch */
+  margin: 0 auto;
+}
+
 /* --- Card Styling --- */
 .listing-card {
   background-color: #ffffff;
