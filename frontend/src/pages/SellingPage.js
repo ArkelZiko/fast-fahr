@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from "../hooks/useAuth"; // Import useAuth
 
 import Header from '../components/Header';
-import NavBar from '../components/Navbar';
+import NavBar from '../components/NavBar';
 import SellListingCard from '../components/sellingComponents/SellListingCard.js';
 import userListingsData from '../components/data/listings.js'; // Placeholder
 import '../components/css/sellingCSS/sellingpage.css';

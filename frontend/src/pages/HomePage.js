@@ -14,7 +14,7 @@ function HomePage() {
   useEffect(() => {
     const fetchListings = async () => {
       try {
-        const res = await fetch("http://localhost/fastfahr/backend/render/renderlistings.php", {
+        const res = await fetch("http://localhost/fastfahr/backend/apis/fetch/get_listings.php", {
           credentials: "include", // if your endpoint requires cookies
         });
         const data = await res.json();

@@ -1,5 +1,6 @@
 <?php
-include "../config/connect.php";
+
+include $_SERVER['DOCUMENT_ROOT'] . '/fastfahr/backend/config/connect.php';
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');
@@ -11,7 +12,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 try {
-    $stmt = $pdo->prepare("SELECT * FROM posts ORDER BY created_at DESC");
+    $stmt = $dbh->prepare("SELECT * FROM posts ORDER BY created_at DESC");
     $stmt->execute();
     $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
