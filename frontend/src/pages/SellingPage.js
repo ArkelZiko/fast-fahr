@@ -1,18 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from "../hooks/useAuth"; // Import useAuth
-
-import Header from '../components/Header';
-import NavBar from '../components/Navbar';
-import SellListingCard from '../components/sellingComponents/SellListingCard.js';
-import userListingsData from '../components/data/listings.js'; // Placeholder
-import '../components/css/sellingCSS/sellingpage.css';
-import CreateListingForm from '../components/sellingComponents/CreateListingForm.js';
-import Footer from "../components/Footer";
-
-
 function SellingPage() {
   const { currentUser, isLoading: authLoading, requireAuth } = useAuth();
-
   const [myListings, setMyListings] = useState(userListingsData);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -26,42 +13,56 @@ function SellingPage() {
     }
   }, [authLoading, requireAuth, currentUser]);
 
-
   const openModal = () => {
     if (!currentUser) { requireAuth(); return; }
     setIsModalOpen(true);
-  }
+  };
   const closeModal = () => setIsModalOpen(false);
 
   const handleDeleteListing = (id) => {
     if (!currentUser) { requireAuth(); return; }
-    // TODO: API call to delete
     setMyListings(currentListings => currentListings.filter(listing => listing.id !== id));
     alert(`Listing ${id} deleted (simulation).`);
   };
 
   const handleEditListing = (id) => {
     if (!currentUser) { requireAuth(); return; }
-    // TODO: Implement edit
     alert(`Edit action for listing ${id} triggered (simulation).`);
   };
 
-  const handlePublishListing = (formData) => {
+  const handlePublishListing = async (formData) => {
     if (!currentUser) { requireAuth(); return; }
-    // TODO: API call to create
-    console.log("Submitting listing data:", formData);
-    alert('Listing submitted (simulation)!');
-    closeModal();
+
+    try {
+      const response = await fetch("http://localhost/fastfahr/backend/apis/create/create.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ ...formData, user_id: currentUser.user_id }),
+      });
+
+      const result = await response.json();
+      if (response.ok && result.success) {
+        alert("Listing created!");
+        setMyListings(prev => [...prev, { id: result.post_id, ...formData }]);
+        closeModal();
+      } else {
+        throw new Error(result.error || "Unknown error");
+      }
+    } catch (err) {
+      console.error("Failed to create listing:", err.message);
+      alert("Error: " + err.message);
+    }
   };
 
-
+  // ✅ This entire return block should stay INSIDE the SellingPage function
   if (authLoading) {
     return (
       <div className="selling-page">
         <Header />
         <NavBar />
         <div className="loading-page" style={{ textAlign: 'center', padding: '50px' }}>
-            Checking authentication...
+          Checking authentication...
         </div>
         <Footer />
       </div>
@@ -69,10 +70,9 @@ function SellingPage() {
   }
 
   if (!currentUser) {
-    return null; // Prevent rendering if not logged in (should be redirected)
+    return null;
   }
 
-  // Render page only if authenticated
   return (
     <div className="selling-page">
       <Header />
@@ -106,12 +106,12 @@ function SellingPage() {
 
         {isModalOpen && (
           <div className="modal-overlay" onClick={closeModal}>
-             <div className="modal-content" onClick={e => e.stopPropagation()}>
-               <CreateListingForm
-                 onSubmit={handlePublishListing}
-                 onClose={closeModal}
-               />
-             </div>
+            <div className="modal-content" onClick={e => e.stopPropagation()}>
+              <CreateListingForm
+                onSubmit={handlePublishListing}
+                onClose={closeModal}
+              />
+            </div>
           </div>
         )}
 
