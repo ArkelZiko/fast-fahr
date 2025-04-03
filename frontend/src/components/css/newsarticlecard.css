@@ -1,0 +1,75 @@
+/* src/components/css/newsarticlecard.css */
+
+.news-article-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: 'Poppins', sans-serif;
+    height: 100%; /* Ensure cards in a grid row have same height */
+  }
+  
+  .news-article-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  }
+  
+  .news-article-image {
+    width: 100%;
+    height: 180px; /* Fixed height for consistency */
+    object-fit: cover;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .news-article-content {
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Allows content to expand */
+  }
+  
+  .news-article-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+  
+  .news-article-meta {
+      font-size: 0.8rem;
+      color: #555;
+      margin-bottom: 0.75rem;
+  }
+  
+  
+  .news-article-excerpt {
+    font-size: 0.95rem;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    flex-grow: 1; /* Pushes link to bottom */
+  }
+  
+  .news-article-link {
+    display: inline-block; /* Allows padding and margin */
+    padding: 0.5rem 1rem;
+    background-color: #cc0000; /* Main red color */
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-align: center;
+    transition: background-color 0.2s ease;
+    margin-top: auto; /* Sticks to the bottom */
+    align-self: flex-start; /* Aligns button to the left */
+  }
+  
+  .news-article-link:hover {
+    background-color: #a00000; /* Darker red */
+  }

@@ -1,0 +1,48 @@
+.news-feed-section {
+    max-width: 1400px; /* Or your preferred max width */
+    margin: 2rem auto; /* Center the section with top/bottom margin */
+    padding: 0 2rem; /* Padding on the sides */
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  /* Re-use or define a section title style */
+  .section-title {
+    font-size: 1.8rem; /* Consistent with SellingPage */
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #ff9800; /* Consistent orange underline */
+  }
+  
+  /* Grid layout for the news items */
+  .news-items-container {
+    display: grid;
+    /* Creates responsive columns: min 300px wide, max 1fr (equal space) */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem; /* Space between news cards */
+  }
+  
+  /* Responsive adjustments if needed */
+  @media (max-width: 768px) {
+    .news-feed-section {
+      padding: 0 1rem; /* Reduce side padding */
+    }
+    .news-items-container {
+      gap: 1.5rem;
+    }
+    .section-title {
+      font-size: 1.6rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+     /* Stack cards vertically on very small screens if grid looks bad */
+     .news-items-container {
+       /* grid-template-columns: 1fr;  */ /* Uncomment to force single column */
+       gap: 1rem;
+     }
+     .section-title {
+       font-size: 1.4rem;
+     }
+  }

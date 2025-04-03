@@ -22,16 +22,9 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/buying" element={<BuyingPage />} />
-
-          {/* Protected Routes (will be checked by components using useAuth) */}
           <Route path="/messages" element={<MessagesPage />} />
           <Route path="/selling" element={<SellingPage />} />
           <Route path="/bookmarks" element={<BookmarksPage />} />
-
-          {/* Add other routes here */}
-
-          {/* Optional: Catch-all route for 404 */}
-          {/* <Route path="*" element={<NotFoundPage />} /> */}
         </Routes>
       </AuthProvider>
     </Router>

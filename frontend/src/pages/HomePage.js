@@ -1,71 +1,44 @@
-import React, { useState, useEffect } from "react";
-import Header from "../components/Header";
-import NavBar from "../components/Navbar";
-import Card from "../components/Card";
-import Filters from "../components/Filters";
-import filterListings from "../components/filterListingsComponent/filterListings";
-import ListingCard from "../components/ListingCard";
-import Footer from "../components/Footer";
+import React from "react";
+import Header from "../components/Header.js";
+import NavBar from "../components/Navbar.js";
+import Card from "../components/Card.js";
+import NewsArticleCard from "../components/NewsArticleCard.js";
+import Footer from "../components/Footer.js";
+import sampleNewsData from "../components/data/sampleNewsData.js";
+import '../components/css/homeCSS/homepage.css';
 
 function HomePage() {
-  const [allListings, setAllListings] = useState([]);
-  const [filteredListings, setFilteredListings] = useState([]);
-
-  useEffect(() => {
-    const fetchListings = async () => {
-      try {
-        const res = await fetch("http://localhost/fastfahr/backend/apis/fetch/get_listings.php", {
-          credentials: "include", // if your endpoint requires cookies
-        });
-        const data = await res.json();
-        console.log("Fetched listings from backend:", data);
-        setAllListings(data);
-        setFilteredListings(data);
-      } catch (err) {
-        console.error("Error fetching listings:", err);
-      }
-    };
-
-    fetchListings();
-  }, []);
-
-  const applyFilters = (filters) => {
-    const filtered = filterListings(allListings, filters);
-    setFilteredListings(filtered);
-  };
-
-  const clearFilters = () => {
-    setFilteredListings(allListings);
-  };
 
   return (
     <div className="home-page">
       <Header />
       <NavBar />
       <Card />
-      <Filters onApplyFilters={applyFilters} onClearFilters={clearFilters} />
 
-      <div className="home-content-wrapper">
-        <div className="listing-grid">
-          {filteredListings.length > 0 ? (
-            filteredListings.map((car) => (
-              <ListingCard
-                key={car.id}
-                title={car.title}
-                image={`/images/${car.image}`} // Assumes images are stored in public/images folder
-                price={car.price}
-                mileage={car.mileage}
-                year={car.year}
+
+      {/* News Feed Section */}
+      <div className="news-feed-section">
+        <h2 className="section-title">German Auto News</h2>
+        <div className="news-items-container">
+          {sampleNewsData.length > 0 ? (
+            sampleNewsData.map((article) => (
+              <NewsArticleCard
+                key={article.id}
+                title={article.title}
+                imageUrl={article.imageUrl}
+                excerpt={article.excerpt}
+                source={article.source}
+                date={article.date}
+                link={article.link}
               />
             ))
           ) : (
-            <p style={{ padding: "2rem", textAlign: "center" }}>
-              No listings loaded. Try refreshing or check your filters.
+            <p style={{ padding: "2rem", textAlign: "center", gridColumn: "1 / -1" }}>
+              No news articles available at the moment.
             </p>
           )}
         </div>
       </div>
-
       <Footer />
     </div>
   );

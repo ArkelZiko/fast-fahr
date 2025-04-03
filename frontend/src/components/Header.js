@@ -43,8 +43,8 @@ function Header() {
 
       <div className="search-wrapper">
         <input type="text" className="search-box" placeholder="Search" />
-        <button className="filter-btn" title="Filter">
-          <i className="fas fa-filter"></i>
+        <button className="search-btn" title="Filter">
+          <i className="fas fa-search"></i>
         </button>
       </div>
 
