@@ -1,6 +1,5 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import { AuthProvider } from "./hooks/useAuth"; // Import the provider
-
+import { AuthProvider } from "./hooks/useAuth";
 import BuyingPage from "./pages/BuyingPage";
 import HomePage from "./pages/HomePage";
 import MessagesPage from "./pages/MessagesPage";
@@ -11,13 +10,9 @@ import BookmarksPage from "./pages/BookmarksPage";
 
 function App() {
   return (
-    // --- Router needs to be the outermost component ---
     <Router basename="/fastfahr">
-      {/* AuthProvider goes INSIDE Router */}
       <AuthProvider>
-        {/* Routes component handles route matching */}
         <Routes>
-          {/* Public Routes */}
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />

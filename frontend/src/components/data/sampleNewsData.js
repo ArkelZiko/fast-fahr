@@ -4,18 +4,18 @@ const sampleNewsData = [
     title: 'BMW Unveils the Next-Generation M5 Hybrid Concept',
     imageUrl: 'https://www.topgear.com/sites/default/files/2024/06/BMW_M5_Limousine-0018.jpg',
     excerpt: 'Spy shots and official teasers suggest the upcoming BMW M5 will feature a powerful plug-in hybrid V8 powertrain...',
-    source: 'Auto Motor und Sport',
+    source: 'Ars Technica',
     date: '2025-01-28',
-    link: '#',
+    link: 'https://arstechnica.com/cars/2025/03/the-2025-bmw-m5-touring-review-way-more-power-way-too-much-weight/',
   },
   {
     id: 'news-2',
     title: 'Audi RS e-tron GT Performance: Pushing Electric Limits',
     imageUrl: 'https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25749454/Original_13620_a244112_large.jpg?quality=90&strip=all&crop=0,10.727300834559,100,78.545398330882',
     excerpt: 'Audi updates its flagship electric performance sedan with even more power...',
-    source: 'Car and Driver',
+    source: 'Audi Newsroomr',
     date: '2024-12-27',
-    link: '#',
+    link: 'https://media.audiusa.com/releases/623',
   },
   {
     id: 'news-3',
@@ -24,7 +24,7 @@ const sampleNewsData = [
     excerpt: 'The ultra-efficient Mercedes concept car proves the potential of future electric vehicle technology...',
     source: 'Mercedes-Benz Media',
     date: '2024-11-25',
-    link: '#',
+    link: 'https://www.topgear.com/car-news/electric/mercedes-vision-eqxx-has-smashed-its-own-efficiency-record',
   },
    {
     id: 'news-4',
@@ -33,7 +33,7 @@ const sampleNewsData = [
     excerpt: 'Porsche is investing heavily in electrifying its sports car lineup...',
     source: 'Autocar UK',
     date: '2024-11-11',
-    link: '#',
+    link: 'https://www.caranddriver.com/news/a63571876/electric-porsche-718-cayman-spy-photos/',
   },
 ];
 
