@@ -46,7 +46,6 @@ function LoginPage() {
       const data = await response.json();
 
       if (response.ok) {
-        // Reset form after successful submission
         setFormData({ username: '', email: '', password: '' });
         setStatus({
           submitted: true,
@@ -58,11 +57,6 @@ function LoginPage() {
         throw new Error(data.message);
       }
 
-      if (data.success) {
-        setTimeout(() => {
-          window.location.href = '/fastfahr/login';
-        }, 2500);
-      }
     } catch (error) {
       setStatus({
         submitted: false,
