@@ -78,7 +78,7 @@ INSERT INTO `posts` (`id`, `title`, `make`, `model`, `year`, `price`, `mileage`,
 -- Indexes for table `posts`
 --
 ALTER TABLE `posts`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);S
 
 --
 -- AUTO_INCREMENT for dumped tables

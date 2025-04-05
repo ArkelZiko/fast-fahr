@@ -1,6 +1,6 @@
 import React from "react";
 import "./css/card.css";
-import main_tile from "./images/main_tile.png";
+import main_tile from "./images/PPP.png";
 
 function Card({}) {
   return (
@@ -8,11 +8,14 @@ function Card({}) {
       <img src={main_tile} alt="Main Tile" className="main-tile-image" />
       <div className="main-tile-content">
         <h3 className="main-tile-title">
-          <strong>Power. Prestige. Price.</strong>
+          <strong>THINK FAST</strong>
         </h3>
-        <p className="main-tile-subtitle">
-          <strong>Explore premium performance at low prices</strong>
-        </p>
+        <h3 className="main-tile-title">
+          <strong>THINK FAHR</strong>
+        </h3>
+        {/* <p className="main-tile-subtitle">
+          <strong></strong>
+        </p> */}
       </div>
     </div>
   );
