@@ -43,6 +43,7 @@ function LoginPage() {
 
  // Adjusted path
         method: 'POST',
+        // credentials: 'include',
         body: formDataToSend,
         // --- IMPORTANT: No 'credentials: include' needed for FormData POST usually ---
         // Browsers handle cookies automatically for same-origin requests,
