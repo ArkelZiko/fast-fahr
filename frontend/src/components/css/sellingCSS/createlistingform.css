@@ -229,3 +229,9 @@
   display: block;
   margin-bottom: 0.4rem;
 }
+
+/* Makes the stars red */
+.required {
+  color: #cc0000;
+  margin-left: 3px;
+}
