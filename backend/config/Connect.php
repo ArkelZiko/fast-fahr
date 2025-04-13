@@ -9,8 +9,8 @@ use Dotenv\Dotenv;
 
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
-var_dump($_ENV); //quick lil vardump never hurt
-exit;
+// var_dump($_ENV); //quick lil vardump never hurt
+// exit;
 
 
 try {
