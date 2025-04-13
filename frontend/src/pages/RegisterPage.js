@@ -38,7 +38,9 @@ function LoginPage() {
       });
 
       // Send form data to PHP file
-      const response = await fetch('http://localhost/fastfahr/backend/apis/auth/register.php', {
+      
+      const response = await fetch(`${process.env.REACT_APP_API_BASE}/auth/login.php`, {
+
         method: 'POST',
         body: formDataToSend
       });

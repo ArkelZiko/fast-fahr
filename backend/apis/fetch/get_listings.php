@@ -1,6 +1,6 @@
 <?php
 
-include $_SERVER['DOCUMENT_ROOT'] . '/fastfahr/backend/config/connect.php';
+include __DIR__ . '/../../config/Connect.php'; //relative path to conenct
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');

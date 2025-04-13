@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import for navigation
-import { useAuth } from '../hooks/useAuth'; // Import the auth hook
-import LoginHeader from '../components/loginElements/LoginHeader';
 import '../components/css/login.css';
+import LoginHeader from '../components/loginElements/LoginHeader';
+import { useAuth } from '../hooks/useAuth'; // Import the auth hook
 
 function LoginPage() {
   const navigate = useNavigate(); // Hook for navigation
@@ -27,6 +27,11 @@ function LoginPage() {
     e.preventDefault();
     setStatus(prevStatus => ({ ...prevStatus, submitting: true, info: { error: false, msg: null } }));
 
+    // console.log("All ENV Vars:", process.env);
+    // console.log("ENV:", process.env.REACT_APP_API_BASE);
+    // console.log("LOGGED IN FILE")
+    // console.log("Base URL:", process.env.REACT_APP_API_BASE); //testing if the .env is actually in effect
+    
     try {
       const formDataToSend = new FormData();
       Object.keys(loginData).forEach(key => {
@@ -34,7 +39,9 @@ function LoginPage() {
       });
 
       // --- IMPORTANT: Update API URL if needed ---
-      const response = await fetch('http://localhost/fastfahr/backend/apis/auth/login.php', { // Adjusted path
+      const response = await fetch(`${process.env.REACT_APP_API_BASE}/auth/login.php`, {
+
+ // Adjusted path
         method: 'POST',
         body: formDataToSend,
         // --- IMPORTANT: No 'credentials: include' needed for FormData POST usually ---

@@ -11,7 +11,8 @@ function Header() {
   const handleLogout = async () => {
     console.log("Logout button clicked");
     try {
-      const response = await fetch('http://localhost/fastfahr/backend/apis/auth/logout.php', {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE}/auth/login.php`, {
+
           method: 'POST',
           credentials: 'include' // Important to send session cookies
       });
