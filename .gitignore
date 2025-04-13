@@ -16,8 +16,6 @@ frontend/.DS_Store
 backend/.env*
 backend/.DS_Store
 
-/backend/config/Connect.php 
-
 
 # === TEST COVERAGE ===
 /coverage/
