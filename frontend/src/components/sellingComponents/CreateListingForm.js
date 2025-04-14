@@ -107,13 +107,13 @@ function CreateListingForm({ onSubmit, onClose }) {
         alert("Please fill in all required fields.");
         return;
     }
-     if (selectedFiles.length === 0) {
-        alert("Please upload at least one photo.");
-        return;
-    }
+    //  if (selectedFiles.length === 0) {
+    //     alert("Please upload at least one photo.");
+    //     return;
+    // }
 
     // Construct form data object
-    const formData = {
+    const listingData = {
       title,
       description,
       year,
@@ -121,22 +121,43 @@ function CreateListingForm({ onSubmit, onClose }) {
       model,
       transmission,
       price: parseFloat(price).toFixed(2),
-      kilometers: parseInt(kilometers, 10),
+      mileage: parseInt(kilometers, 10),
       exteriorColor,
       fuelType,
       driveType,
       bodyType,
       province,
       city,
-      photoCount: selectedFiles.length,
-      mainPhotoIndex // Include which photo is primary
+      // photoCount: selectedFiles.length,
+      // mainPhotoIndex 
+      // Include which photo is primary
       // In real app, handle actual file uploads (e.g., using FormData API)
     };
 
-    onSubmit(formData); // Pass data to parent handler
+    // 
+    fetch(`${process.env.REACT_APP_API_BASE}/create/save_listings.php`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(listingData),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert('Listing created successfully!');
+        if (onClose) onClose();
+      } else {
+        console.error(data.error || 'Unknown error');
+        alert('Failed to create listing. Please try again.');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('An unexpected error occurred. Please try again later.');
+    });
+    
   };
-
-// Lines 1–85 stay the same
 
 return (
   <form className="create-listing-form" onSubmit={handleSubmit}>
@@ -251,11 +272,11 @@ return (
     </div>
 
     {/* --- Photo Upload & Preview --- */}
-    <div className="form-group">
+    {/* <div className="form-group">
         <label htmlFor="photos">Upload Photos <span className="required">*</span> (Max 7)</label>
       <input type="file" id="photos" name="photos" multiple accept="image/png, image/jpeg, image/webp" onChange={handleFileChange} />
        <small>Upload up to 7 photos (JPEG, PNG, WEBP). First photo is the main preview by default.</small>
-    </div>
+    </div> */}
 
 
       {previewUrls.length > 0 && (
