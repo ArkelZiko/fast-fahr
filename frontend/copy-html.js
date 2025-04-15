@@ -8,7 +8,10 @@ const routes = [
   '/buying',
   '/selling',
   '/bookmarks',
-  '/register'
+  '/register',
+  '/forgot-password',
+  '/reset-password',
+  '/verify-code'
 ];
 
 const buildDir = path.join(__dirname, 'build');

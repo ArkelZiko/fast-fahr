@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         // Check session on initial load
-        fetch('http://localhost/fastfahr/backend/services/check_session.php', { credentials: 'include' }) // Important for sending session cookies
+        fetch(`${process.env.REACT_APP_API_BASE}/auth/check_session.php`, { credentials: 'include' })
             .then(res => res.json())
             .then(data => {
                 if (data.isLoggedIn && data.user) {

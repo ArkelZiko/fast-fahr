@@ -6,6 +6,9 @@ import MessagesPage from "./pages/MessagesPage";
 import SellingPage from "./pages/SellingPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import ForgotPasswordPage from './pages/ForgotPasswordPage'; // Create this file
+import ResetCodePage from './pages/ResetCodePage';       // Create this file
+import ResetPasswordPage from './pages/ResetPasswordPage'; // Create 
 import BookmarksPage from "./pages/BookmarksPage";
 
 function App() {
@@ -20,6 +23,9 @@ function App() {
           <Route path="/messages" element={<MessagesPage />} />
           <Route path="/selling" element={<SellingPage />} />
           <Route path="/bookmarks" element={<BookmarksPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/verify-code" element={<ResetCodePage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
         </Routes>
       </AuthProvider>
     </Router>

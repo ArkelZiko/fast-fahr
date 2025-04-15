@@ -8,14 +8,11 @@ function Card({}) {
       <img src={main_tile} alt="Main Tile" className="main-tile-image" />
       <div className="main-tile-content">
         <h3 className="main-tile-title">
-          <strong>THINK FAST</strong>
+          <strong>DRIVE FAST</strong>
         </h3>
         <h3 className="main-tile-title">
-          <strong>THINK FAHR</strong>
+          <strong>DRIVE FAHR</strong>
         </h3>
-        {/* <p className="main-tile-subtitle">
-          <strong></strong>
-        </p> */}
       </div>
     </div>
   );

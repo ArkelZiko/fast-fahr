@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import for navigation
+import { useNavigate } from 'react-router-dom';
 import '../components/css/login.css';
 import LoginHeader from '../components/loginElements/LoginHeader';
-import { useAuth } from '../hooks/useAuth'; // Import the auth hook
+import { useAuth } from '../hooks/useAuth';
 
 function LoginPage() {
-  const navigate = useNavigate(); // Hook for navigation
-  const { login } = useAuth(); // Get the login function from context
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [loginData, setLoginData] = useState({
     email: '',
@@ -20,17 +20,12 @@ function LoginPage() {
 
   const handleChange = e => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
-    setStatus(prev => ({ ...prev, info: { error: false, msg: null } })); // Clear error on change
+    setStatus(prev => ({ ...prev, info: { error: false, msg: null } }));
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
     setStatus(prevStatus => ({ ...prevStatus, submitting: true, info: { error: false, msg: null } }));
-
-    // console.log("All ENV Vars:", process.env);
-    // console.log("ENV:", process.env.REACT_APP_API_BASE);
-    // console.log("LOGGED IN FILE")
-    // console.log("Base URL:", process.env.REACT_APP_API_BASE); //testing if the .env is actually in effect
     
     try {
       const formDataToSend = new FormData();
@@ -41,13 +36,8 @@ function LoginPage() {
       // --- IMPORTANT: Update API URL if needed ---
       const response = await fetch(`${process.env.REACT_APP_API_BASE}/auth/login.php`, {
 
- // Adjusted path
         method: 'POST',
-        // credentials: 'include',
         body: formDataToSend,
-        // --- IMPORTANT: No 'credentials: include' needed for FormData POST usually ---
-        // Browsers handle cookies automatically for same-origin requests,
-        // but CORS headers on PHP side are still needed if origins differ (like localhost:3000 vs localhost)
       });
 
       const data = await response.json();
@@ -103,10 +93,9 @@ function LoginPage() {
           <div className="success-message">
             {status.info.msg}
           </div>
-        )}  {/* Maybe delete this block here */}
+        )}
 
         <form onSubmit={handleSubmit}>
-          {/* Form groups remain the same */}
            <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
@@ -128,7 +117,6 @@ function LoginPage() {
           </button>
         </form>
 
-        {/* Footer remains the same */}
         <div className="form-footer">
             <a href="/fastfahr/">Homepage</a>
             <span className="separator">•</span>

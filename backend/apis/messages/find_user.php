@@ -12,9 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-include '../../config/Connect.php';
+include '../../config/connect.php';
 include '../../models/UserModel.php'; // Use User model
-include '../../services/auth_check.php';
+include './auth_check.php';
 
 $loggedInUserId = require_login();
 

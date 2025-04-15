@@ -4,7 +4,7 @@ import { useAuth } from "../hooks/useAuth"; // Import useAuth
 import Header from '../components/Header';
 import NavBar from '../components/Navbar';
 import SellListingCard from '../components/sellingComponents/SellListingCard.js';
-import userListingsData from '../components/data/listings.js'; // Placeholder
+import userListingsData from '../components/data/listings.js';
 import '../components/css/sellingCSS/sellingpage.css';
 import CreateListingForm from '../components/sellingComponents/CreateListingForm.js';
 import Footer from "../components/Footer";

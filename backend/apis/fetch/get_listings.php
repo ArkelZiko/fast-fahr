@@ -1,6 +1,6 @@
 <?php
 
-include __DIR__ . '/../../config/Connect.php'; //relative path to conenct
+include __DIR__ . '/../../config/connect.php';
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');

@@ -11,11 +11,12 @@ function Header() {
   const handleLogout = async () => {
     console.log("Logout button clicked");
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE}/auth/login.php`, {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE}/auth/logout.php`, {
 
           method: 'POST',
-          credentials: 'include' // Important to send session cookies
+          credentials: 'include'
       });
+      
       const data = await response.json();
       console.log("Logout API response:", data);
       if (!response.ok || !data.success) {

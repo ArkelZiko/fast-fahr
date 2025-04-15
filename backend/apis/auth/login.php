@@ -1,6 +1,6 @@
 <?php
 
-include "../../config/Connect.php"; // Ensure this path is correct
+include "../../config/connect.php"; // Ensure this path is correct
 
 // CORS Headers - Consider making these more specific in production
 header('Access-Control-Allow-Origin: http://localhost:3000'); // Allow your React dev server origin

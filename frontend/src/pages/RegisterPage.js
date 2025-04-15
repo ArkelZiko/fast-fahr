@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import LoginHeader from '../components/loginElements/LoginHeader';
 import '../components/css/register.css';
 
-function LoginPage() {
-  // State to store form data
+function RegisterPage() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: ''
   });
 
-  // State for form submission status
   const [status, setStatus] = useState({
     submitted: false,
     submitting: false,
     info: { error: false, msg: null }
   });
 
-  // Handle input changes
   const handleChange = e => {
     setFormData({
       ...formData,
@@ -25,45 +25,44 @@ function LoginPage() {
     });
   };
 
-  // Handle form submission
   const handleSubmit = async e => {
     e.preventDefault();
-    setStatus(prevStatus => ({ ...prevStatus, submitting: true }));
+    setStatus(prevStatus => ({ ...prevStatus, submitting: true, info: { error: false, msg: null } }));
 
     try {
-      // Create form data object to send to PHP
       const formDataToSend = new FormData();
       Object.keys(formData).forEach(key => {
         formDataToSend.append(key, formData[key]);
       });
 
-      // Send form data to PHP file
-      
-      const response = await fetch(`${process.env.REACT_APP_API_BASE}/auth/login.php`, {
-
+      const response = await fetch(`${process.env.REACT_APP_API_BASE}/auth/register.php`, {
         method: 'POST',
         body: formDataToSend
       });
 
       const data = await response.json();
 
-      if (response.ok) {
+      if (response.ok && data.success) { 
         setFormData({ username: '', email: '', password: '' });
         setStatus({
           submitted: true,
           submitting: false,
-          info: { error: false, msg: data.message }
+          info: { error: false, msg: data.message || 'Registration successful!' }
         });
-        
+
+        setTimeout(() => {
+          navigate('/login');
+        }, 3000);
+
       } else {
-        throw new Error(data.message);
+        throw new Error(data.message || `Registration failed with status: ${response.status}`);
       }
 
     } catch (error) {
       setStatus({
         submitted: false,
         submitting: false,
-        info: { error: true, msg: error.message }
+        info: { error: true, msg: error.message || 'An unexpected error occurred.' }
       });
     }
   };
@@ -134,6 +133,8 @@ function LoginPage() {
           <div className="form-footer">
             <a href="/fastfahr/">Homepage</a>
             <span className="separator">•</span>
+            <a href="/fastfahr/forgot-password">Forgot password?</a>
+            <span className="separator">•</span>
             <a href="/fastfahr/login">Return to Login</a>
          </div>
 
@@ -143,4 +144,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default RegisterPage;

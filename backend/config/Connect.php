@@ -1,10 +1,8 @@
 <?php
 
-// CONNECT TO DATABASE, use  include 'connect.php';   in other backend filess that need database connection
-
 try {
     $dbh = new PDO(
-        "mysql:host=localhost;dbname=alamy1_db",
+        "mysql:host=localhost;dbname=INSERT_NAME",
         "root",
         ""
     );

@@ -12,9 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-include '../../config/Connect.php';
+include '../../config/connect.php';
 include '../../models/MessageModel.php';
-include '../../services/auth_check.php'; // Include the auth check helper
+include './auth_check.php';
 
 $loggedInUserId = require_login(); // Ensure user is logged in and get their ID
 

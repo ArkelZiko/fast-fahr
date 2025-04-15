@@ -13,6 +13,7 @@ frontend/.env*
 frontend/.DS_Store
 
 # === BACKEND ===
+backend/vendor/
 backend/.env*
 backend/.DS_Store
 
