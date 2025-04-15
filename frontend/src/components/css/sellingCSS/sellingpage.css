@@ -1,3 +1,12 @@
+/*
+ Authors:     Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ MACIDs:      alamy1, govindag, kharodg, zikoa
+ Date:        March 29th, 2025
+ Description: Formatting for the selling page which includes the grid layout
+              of the listings, and the modal pop-up in the event of create listings
+              being clicked.
+*/
+
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #f9f9f9;
@@ -13,7 +22,7 @@ body {
   /* --- Header for Listings --- */
   .my-listings-header {
     display: flex;
-    justify-content: space-between; /* Need this to Push H2 and Button apart */
+    justify-content: space-between;
     align-items: center; /* Vertically aligns them */
     margin-bottom: 1.5rem;
     padding-bottom: 0.8rem;

@@ -1,4 +1,9 @@
-/* modalStyles.css - Shared styles */
+/*
+ Authors:     Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ MACIDs:      alamy1, govindag, kharodg, zikoa
+ Date:        April 1st, 2025
+ Description: styles for modal when user chooses to start a new chat
+*/
 
 .modal-overlay {
     position: fixed;

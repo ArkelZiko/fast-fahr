@@ -1,3 +1,14 @@
+/*
+ Authors:     Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ MACIDs:      alamy1, govindag, kharodg, zikoa
+ Date:        March 29th, 2025
+ Description: *Near identical style to selllistingCard.css (intentional) 
+
+              Grid model of all the car listings in the form of a card
+              which in istelf containts the car image, info, and buttons
+              for further actions. cards fit the aesthetic of brand colour-scheme
+*/
+
 /* --- Grid Container --- */
 .listing-grid {
   display: flex;
@@ -8,7 +19,7 @@
   padding: 2rem;
 }
 
-/* This is whats used in buy/sellingPage css which looks better and is more responsive */
+/* Can be found in buying & selling page */
 .my-listings-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
