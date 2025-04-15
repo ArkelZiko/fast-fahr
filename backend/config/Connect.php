@@ -2,7 +2,7 @@
 
 try {
     $dbh = new PDO(
-        "mysql:host=localhost;dbname=zikoa_db",
+        "mysql:host=localhost;dbname=alamy1_db",
         "root",
         ""
     );
