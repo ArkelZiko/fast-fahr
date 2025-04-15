@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/messageCSS/modalStyles.css'; // Use a shared modal CSS
+import '../css/messageCSS/modalStyles.css';
 
 function DeleteConfirmModal({ onClose, onConfirmDelete, userName, isLoading }) {
    return (

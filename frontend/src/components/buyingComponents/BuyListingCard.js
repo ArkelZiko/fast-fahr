@@ -15,9 +15,6 @@ function BuyListingCard({
 
   const handleBookmarkClick = () => {
     setIsBookmarked((prev) => !prev);
-    console.log(
-      `${title} was ${!isBookmarked ? "bookmarked" : "unbookmarked"}`
-    );
   };
 
   return (

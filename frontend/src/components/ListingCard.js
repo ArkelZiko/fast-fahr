@@ -8,7 +8,6 @@ function ListingCard({ title, make, model, image, price, mileage, year }) {
 
   const handleBookmarkClick = () => {
     setIsBookmarked((prev) => !prev);
-    console.log(`${title} was ${!isBookmarked ? "bookmarked" : "unbookmarked"}`);
   };
 
   return (

@@ -8,7 +8,6 @@ header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
 header('Content-Type: application/json');
 
-// THis is to deal with CORS (this will allow the POST request to go through)
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204);
     exit;
@@ -22,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $input = json_decode(file_get_contents("php://input"), true);
 
-// ERROR CHECKING
 if (!$input) {
     http_response_code(400);
     echo json_encode(["error" => "Invalid JSON"]);

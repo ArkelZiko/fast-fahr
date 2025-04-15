@@ -8,7 +8,6 @@ include "../../config/connect.php";
 include "../../models/UserModel.php";
 include "../../models/PasswordResetModel.php";
 
-// --- CORS Headers ---
 header('Access-Control-Allow-Origin: http://localhost:3000');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -41,7 +40,8 @@ try {
 
     if ($user) {
         $userId = $user['user_id'];
-
+        
+        // Note: Below is code from the phpmailer documentation
         $plainToken = $passwordResetModel->createResetToken($userId, $email);
 
         if ($plainToken) {
@@ -63,15 +63,12 @@ try {
                  // --- Content ---
                  $mail->isHTML(true);
                  $mail->Subject = 'FastFahr Password Reset Request';
-                 $resetLink = "http://localhost:3000/reset-password?token=" . urlencode($plainToken) . "&email=" . urlencode($email); // Adjust domain/path if needed
 
-                 $mail->Body    = "Hello,<br><br>You requested a password reset. Use the code below or click the link (expires in 1 hour):<br><br>"
+                 $mail->Body    = "Hello,<br><br>You requested a password reset. Use the code below (expires in 1 hour):<br><br>"
                                 . "<b>Code: " . htmlspecialchars($plainToken) . "</b><br><br>"
-                                . "Link: <a href='" . $resetLink . "'>Reset Your Password</a><br><br>"
                                 . "If you didn't request this, please ignore this email.<br><br>Thanks,<br>The FastFahr Team";
-                 $mail->AltBody = "Hello,\n\nYou requested a password reset. Use the code below or visit the link (expires in 1 hour):\n\n"
+                 $mail->AltBody = "Hello,\n\nYou requested a password reset. Use the code below (expires in 1 hour):\n\n"
                                 . "Code: " . $plainToken . "\n\n"
-                                . "Link: " . $resetLink . "\n\n"
                                 . "If you didn't request this, ignore this email.\n\nThanks,\nThe FastFahr Team";
 
                  $mail->send();

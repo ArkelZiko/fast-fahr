@@ -62,7 +62,6 @@ function ResetPasswordPage() {
             }, 3000);
 
         } catch (error) {
-            console.error("Reset Password error:", error);
              setStatus({ submitting: false, info: { error: true, msg: error.message || 'Failed to reset password. The token might have expired or been used.' } });
         }
     };

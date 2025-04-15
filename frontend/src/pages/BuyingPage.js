@@ -18,7 +18,7 @@ function BuyingPage() {
 
   const applyFilters = (filters) => {
     const filtered = filterListings(listings, filters);
-    setFilteredListings(filtered); // for HomePage
+    setFilteredListings(filtered);
 
     closeModal();
   };

@@ -6,9 +6,9 @@ import MessagesPage from "./pages/MessagesPage";
 import SellingPage from "./pages/SellingPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import ForgotPasswordPage from './pages/ForgotPasswordPage'; // Create this file
-import ResetCodePage from './pages/ResetCodePage';       // Create this file
-import ResetPasswordPage from './pages/ResetPasswordPage'; // Create 
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetCodePage from './pages/ResetCodePage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 import BookmarksPage from "./pages/BookmarksPage";
 
 function App() {

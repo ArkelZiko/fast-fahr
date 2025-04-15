@@ -15,16 +15,13 @@ function AddContactModal({ onClose, onAddContact }) {
         setIsLoading(true);
 
         try {
-            // Call the backend API passed down via onAddContact prop
             const success = await onAddContact(username);
             if (success) {
-                onClose(); // Close modal on successful add/find
+                onClose();
             } else {
-                // Error message should be set by the parent handler calling this
+                setError(`Could not find or add user "${username}". Please check the username.`); // I might have to change this later - Arkel
             }
         } catch (err) {
-             // Error handling if the promise rejects unexpectedly
-             console.error("Error in handleAdd:", err);
              setError('An unexpected error occurred.');
         } finally {
              setIsLoading(false);

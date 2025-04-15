@@ -4,8 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 import Header from "../components/Header";
 import NavBar from "../components/Navbar";
 import ListingCard from "../components/ListingCard";
-// import sampleListingsData from "../components/data/listings.js";
-import "../components/css/buyingCSS/buyingpage.css"; // Keep this for other styles
+import "../components/css/buyingCSS/buyingpage.css";
 import Footer from "../components/Footer";
 
 function BookmarksPage() {

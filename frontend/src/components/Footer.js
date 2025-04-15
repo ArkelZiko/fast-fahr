@@ -1,6 +1,6 @@
 import React from "react";
-import "./css/footer.css"; // Correct path to the footer CSS
-import logo from "./images/logo.png"; // Logo Image
+import "./css/footer.css";
+import logo from "./images/logo.png";
 
 function Footer() {
   return (

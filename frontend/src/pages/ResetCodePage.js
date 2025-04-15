@@ -53,7 +53,6 @@ function ResetCodePage() {
             }, 1500);
 
         } catch (error) {
-            console.error("Verify Code error:", error);
             setStatus({ submitting: false, info: { error: true, msg: error.message || 'Invalid or expired code.' } });
         }
     };

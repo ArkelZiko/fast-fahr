@@ -49,7 +49,6 @@ function SellingPage() {
   const handlePublishListing = (formData) => {
     if (!currentUser) { requireAuth(); return; }
     // TODO: API call to create
-    console.log("Submitting listing data:", formData);
     alert('Listing submitted (simulation)!');
     closeModal();
   };

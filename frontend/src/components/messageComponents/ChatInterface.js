@@ -5,28 +5,24 @@ import "../css/messageCSS/chatInterface.css";
 function ChatInterface({
     conversation,
     messages,
-    isLoading, // Receive loading state
+    isLoading,
     onSendMessage,
-    onDeleteChat, // Renamed to match MessagesPage prop
-    currentUser // Receive current user info
+    onDeleteChat,
+    currentUser
  }) {
+
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef(null);
-
-  // Use conversation object directly
-  const otherUserId = conversation?.other_user_id; // ID of the person you're talking TO
   const userName = conversation?.userName;
   const userAvatar = conversation?.userAvatar;
   const defaultAvatar = 'https://i.pravatar.cc/150?img=10';
 
-  // Scroll to bottom effect remains the same
   useEffect(() => {
-    // Scroll immediately if not loading, otherwise wait a tiny bit after loading finishes
     const timer = setTimeout(() => {
          messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, isLoading ? 100 : 0); // Delay slightly if was loading
+    }, isLoading ? 100 : 0);
     return () => clearTimeout(timer);
-  }, [messages, isLoading]); // Trigger on messages change AND loading state change
+  }, [messages, isLoading]);
 
 
   const handleInputChange = (event) => {
@@ -34,11 +30,9 @@ function ChatInterface({
   };
 
   const handleSend = () => {
-    if (newMessage.trim() && currentUser) { // Check if logged in
+    if (newMessage.trim() && currentUser) {
       onSendMessage({ text: newMessage });
       setNewMessage("");
-    } else if (!currentUser) {
-        alert("Please log in to send messages."); // Or redirect via requireAuth
     }
   };
 
@@ -49,17 +43,12 @@ function ChatInterface({
     }
   }
 
-  // Delete button click now calls the passed onDeleteChat prop
-  // which will trigger the modal in MessagesPage
   const handleDeleteClick = () => {
-      if (currentUser) { // Check if logged in
-        onDeleteChat(); // Call the prop passed from MessagesPage
-      } else {
-         alert("Please log in to delete chats."); // Or redirect
+      if (currentUser) {
+        onDeleteChat();
       }
   };
 
-  // Render loading state
   if (isLoading) {
       return (
            <div className="chat-interface">
@@ -71,7 +60,7 @@ function ChatInterface({
                   </div>
               </header>
               <div className="message-list loading-messages">
-                  <div className="spinner"></div> {/* Add a CSS spinner */}
+                  <div className="spinner"></div>
                   <p>Loading messages...</p>
               </div>
                <footer className="chat-input-area disabled-input">
@@ -82,10 +71,7 @@ function ChatInterface({
       );
   }
 
-  // Handle cases where conversation might be null/undefined after loading
   if (!conversation || !currentUser) {
-      // This case should ideally be handled by the parent component (MessagesPage)
-      // showing the "Select a conversation" message.
        return <div className="chat-interface">Error: Chat data missing or not logged in.</div>;
   }
 
@@ -104,7 +90,7 @@ function ChatInterface({
         </div>
         <button
           className="delete-chat-btn"
-          onClick={handleDeleteClick} // Use the updated handler
+          onClick={handleDeleteClick}
           title="Delete Chat History"
         >
           <i className="fas fa-trash-alt"></i>
@@ -114,9 +100,8 @@ function ChatInterface({
       <div className="message-list">
         {messages.map((msg) => (
           <ChatMessage
-            key={msg.id} // Use the actual message ID from backend
+            key={msg.id}
             message={msg}
-            // Compare sender_id with the logged-in user's ID
             isCurrentUser={msg.senderId === currentUser.id}
           />
         ))}

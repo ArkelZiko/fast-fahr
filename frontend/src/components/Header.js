@@ -1,36 +1,31 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom"; // Import Link and useNavigate
-import { useAuth } from "../hooks/useAuth"; // Import the auth hook
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 import "./css/header.css";
 import logo from "./images/logo.png";
 
 function Header() {
-  const { currentUser, logout } = useAuth(); // Get user state and logout function
-  const navigate = useNavigate(); // Hook for navigation
+  const { currentUser, logout } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
-    console.log("Logout button clicked");
     try {
       const response = await fetch(`${process.env.REACT_APP_API_BASE}/auth/logout.php`, {
 
           method: 'POST',
           credentials: 'include'
       });
-      
+
       const data = await response.json();
-      console.log("Logout API response:", data);
-      if (!response.ok || !data.success) {
-           console.warn("Backend logout failed or session was already invalid:", data.message);
-      }
+      
     } catch (error) {
-      console.error("Error calling logout API:", error);
+      
     } finally {
        logout();
     }
   };
 
   const handleSignInClick = () => {
-    // Navigate to the login page (adjust path if your base path isn't handled by Router)
     navigate('/login');
   };
 

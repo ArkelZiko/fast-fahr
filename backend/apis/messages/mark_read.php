@@ -1,12 +1,11 @@
 <?php
-// Standard headers (similar, but allow POST)
+
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
 
-// Handle preflight OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     http_response_code(204);
     exit;
@@ -14,12 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 include '../../config/connect.php';
 include '../../models/MessageModel.php';
-include './auth_check.php';
+include '../auth/auth_check.php';
 
 $loggedInUserId = require_login();
 
 $data = json_decode(file_get_contents('php://input'), true);
-$senderId = filter_var($data['sender_id'] ?? null, FILTER_VALIDATE_INT); // The user whose messages are being read
+$senderId = filter_var($data['sender_id'] ?? null, FILTER_VALIDATE_INT);
 
 if (!$senderId) {
     http_response_code(400);
@@ -35,7 +34,7 @@ try {
         http_response_code(200);
         echo json_encode(['success' => true, 'message' => 'Messages marked as read.']);
     } else {
-         http_response_code(200); // Not really an error if nothing needed updating
+         http_response_code(200);
          echo json_encode(['success' => true, 'message' => 'Messages marked as read or none were unread.']);
     }
 

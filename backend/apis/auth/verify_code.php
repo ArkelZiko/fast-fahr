@@ -14,7 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') { http_response_code(204); exit; }
 $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
 $plainToken = filter_input(INPUT_POST, "token", FILTER_SANITIZE_SPECIAL_CHARS);
 
-// Validate inputs
 if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL) || empty($plainToken)) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Email and reset code are required.']);

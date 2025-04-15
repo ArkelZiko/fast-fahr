@@ -1,6 +1,9 @@
+// ARKEL CLEAN UP THIS CODE AND ADD WEBSOCKETS!!!!!
+// REMOVE ALL CONSOLE.WARNS ALSO AND CONSOLE.LOGS
+
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from "../hooks/useAuth"; // Import your auth hook
+import { useAuth } from "../hooks/useAuth"; 
 
 import Header from "../components/Header";
 import NavBar from "../components/Navbar";
@@ -10,9 +13,6 @@ import AddContactModal from "../components/messageComponents/AddContactModal.js"
 import DeleteConfirmModal from "../components/messageComponents/DeleteConfirmModal.js";
 
 import "../components/css/messageCSS/messagesPage.css";
-
-// PUT THIS AS 1XD3 CS MCMASTER WHEN I UPLOAD TO FILEZILLA
-const API_BASE_URL = 'http://localhost/fastfahr/backend/apis';
 
 function MessagesPage() {
     const { currentUser, isLoading: authLoading, requireAuth } = useAuth();
@@ -41,7 +41,7 @@ function MessagesPage() {
         if (!currentUser) return;
 
         try {
-            const response = await fetch(`${API_BASE_URL}/messages/get_conversations.php`, { credentials: 'include' });
+            const response = await fetch(`${process.env.REACT_APP_API_BASE}/messages/get_conversations.php`, { credentials: 'include' });
             if (!response.ok) {
                 const errorText = await response.text();
                 throw new Error(`HTTP error! status: ${response.status}, Response: ${errorText}`);
@@ -73,7 +73,7 @@ function MessagesPage() {
 
         setIsLoadingMessages(true);
         try {
-            const response = await fetch(`${API_BASE_URL}/messages/get_messages.php?other_user_id=${otherUserId}`, { credentials: 'include' });
+            const response = await fetch(`${process.env.REACT_APP_API_BASE}/messages/get_messages.php?other_user_id=${otherUserId}`, { credentials: 'include' });
              if (!response.ok) {
                  const errorText = await response.text();
                  throw new Error(`HTTP error! status: ${response.status}, Response: ${errorText}`);
@@ -102,7 +102,6 @@ function MessagesPage() {
             if (!requireAuth()) {
                 return; // Redirecting
             }
-            console.log("Initial load effect: Auth confirmed, fetching conversations...");
             setIsLoadingConversations(true);
             fetchConversations(true)
                  .catch((err) => {
@@ -110,14 +109,12 @@ function MessagesPage() {
                  })
                  .finally(() => {
                      if (isMounted) {
-                         console.log("Initial load effect: Setting isLoadingConversations to false.");
                          setIsLoadingConversations(false);
                      }
                  });
         }
          return () => {
              isMounted = false;
-             console.log("Initial load effect: Cleanup.");
          };
     // Dependencies: Run when auth loading finishes, or if requireAuth reference changes (stable)
     // fetchConversations is stable and doesn't need to be here as it only depends on currentUser
@@ -132,7 +129,6 @@ function MessagesPage() {
         if (!currentUser || authLoading || isLoadingConversations) {
             // If polling is running, clear it
             if (pollingIntervalRef.current) {
-                 console.log("Polling useEffect: Clearing interval (User logged out, auth loading, or initial load ongoing). ID:", pollingIntervalRef.current);
                  clearInterval(pollingIntervalRef.current);
                  pollingIntervalRef.current = null;
              }
@@ -141,7 +137,6 @@ function MessagesPage() {
 
         // Conditions met: Start polling if not already running
         if (!pollingIntervalRef.current) {
-            console.log("Polling useEffect: Starting polling interval...");
             intervalId = setInterval(() => {
                 fetchConversations(false);
                 if (selectedOtherUserId) {
@@ -149,19 +144,16 @@ function MessagesPage() {
                 }
             }, POLLING_RATE_MS);
             pollingIntervalRef.current = intervalId; // Store interval ID in ref
-            console.log("Polling useEffect: Interval started with ID:", intervalId);
         }
 
         // Cleanup function for this effect
         return () => {
              // Use the intervalId captured in this effect's scope for cleanup
              if (intervalId) {
-                console.log("Polling useEffect: Cleanup clearing interval ID:", intervalId);
                 clearInterval(intervalId);
              }
              // Check ref as a fallback (though clearing intervalId should be sufficient)
              if (pollingIntervalRef.current === intervalId) {
-                 // console.log("Polling useEffect: Cleanup clearing ref ID:", pollingIntervalRef.current);
                  pollingIntervalRef.current = null;
              }
         };
@@ -175,12 +167,11 @@ function MessagesPage() {
         if (!requireAuth()) return;
         if (otherUserId === selectedOtherUserId) return;
 
-        console.log("Selecting conversation with user ID:", otherUserId);
         setSelectedOtherUserId(otherUserId);
         fetchMessages(otherUserId); // Fetch messages, handles its own loading state
 
         // Mark as Read API call
-        fetch(`${API_BASE_URL}/messages/mark_read.php`, {
+        fetch(`${process.env.REACT_APP_API_BASE}/messages/mark_read.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ sender_id: otherUserId }),
@@ -214,7 +205,7 @@ function MessagesPage() {
         ));
 
         try {
-            const response = await fetch(`${API_BASE_URL}/messages/send_message.php`, {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE}/messages/send_message.php`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ receiver_id: selectedOtherUserId, content: newMessageData.text }),
                 credentials: 'include'
@@ -261,7 +252,7 @@ function MessagesPage() {
         setIsDeleting(true);
         setError('');
         try {
-            const response = await fetch(`${API_BASE_URL}/messages/delete_conversation.php`, {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE}/messages/delete_conversation.php`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ other_user_id: userToDelete.id }), credentials: 'include'
             });
@@ -294,7 +285,7 @@ function MessagesPage() {
         setAddContactError('');
         let success = false;
         try {
-            const response = await fetch(`${API_BASE_URL}/messages/find_user.php?username=${encodeURIComponent(usernameToAdd)}`, { credentials: 'include' });
+            const response = await fetch(`${process.env.REACT_APP_API_BASE}/messages/find_user.php?username=${encodeURIComponent(usernameToAdd)}`, { credentials: 'include' });
             const result = await response.json();
             if (!response.ok || !result.success) {
                 setAddContactError(result.message || result.error || 'Could not find user.');

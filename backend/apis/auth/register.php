@@ -27,7 +27,6 @@ if (empty($password)) {
     $errors[] = 'Password must be at least 8 characters long';
 }
 
-// If there are validation errors, return them
 if (!empty($errors)) {
     echo json_encode([
         'success' => false,
@@ -37,7 +36,6 @@ if (!empty($errors)) {
 }
 
 try {
-    // First checking is any users exist with the entered email
     $cmd = "SELECT COUNT(*) FROM users WHERE email = ?";
     $stmt = $dbh->prepare($cmd);
 
@@ -52,7 +50,6 @@ try {
         exit;
     }
 
-    // Checking if the username is already in use
     $cmd = "SELECT COUNT(*) FROM users WHERE username = ?";
     $stmt = $dbh->prepare($cmd);
 
@@ -67,17 +64,14 @@ try {
         exit;
     }
 
-    // Hashing password
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Creating new account
     $cmd = "INSERT INTO users (username, email, password_hash, created_at) VALUES (?, ?, ?, ?)";
     $stmt = $dbh->prepare($cmd);
 
     $args = [$username, $email, $hashed_password, $datetime];
     $success = $stmt->execute($args);
 
-    // Checking if it was successful
     if ($success) {
         echo json_encode([
             'success' => true,

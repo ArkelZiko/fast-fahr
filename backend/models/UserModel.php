@@ -33,14 +33,13 @@ class User {
      */
     public function getUserByEmail(string $email): array|false {
         try {
-            // Adjust selected columns if needed
             $sql = "SELECT user_id, email, username FROM {$this->table} WHERE email = :email LIMIT 1";
             $stmt = $this->dbh->prepare($sql);
             $params = [':email' => $email];
             $execute = $stmt->execute($params);
 
             if ($execute) {
-                return $stmt->fetch(PDO::FETCH_ASSOC); // Returns false if no row is found
+                return $stmt->fetch(PDO::FETCH_ASSOC);
             } else {
                  error_log("Failed to execute getUserByEmail query for email: " . $email);
                  return false;
@@ -60,7 +59,6 @@ class User {
      */
     public function updatePassword(int $userId, string $newPasswordHash): bool {
         try {
-            // Assumes your password column is named 'password_hash'
             $sql = "UPDATE {$this->table} SET password_hash = :password_hash WHERE user_id = :user_id";
             $stmt = $this->dbh->prepare($sql);
             $params = [

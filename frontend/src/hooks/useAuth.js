@@ -9,7 +9,6 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Check session on initial load
         fetch(`${process.env.REACT_APP_API_BASE}/auth/check_session.php`, { credentials: 'include' })
             .then(res => res.json())
             .then(data => {
@@ -20,7 +19,6 @@ export const AuthProvider = ({ children }) => {
                 }
             })
             .catch(error => {
-                console.error("Session check failed:", error);
                 setCurrentUser(null);
             })
             .finally(() => setIsLoading(false));
@@ -28,24 +26,19 @@ export const AuthProvider = ({ children }) => {
 
     const login = (userData) => {
         setCurrentUser(userData);
-        // Store maybe? localStorage.setItem('user', JSON.stringify(userData));
     };
 
     const logout = () => {
-        // TODO: Call a /api/auth/logout.php endpoint if you have one
         setCurrentUser(null);
-        // localStorage.removeItem('user');
-        navigate('/login'); // Redirect after logout
+        navigate('/login');
     };
 
-     // Function to check auth and redirect if necessary
     const requireAuth = () => {
         if (!isLoading && !currentUser) {
-            console.log("Authentication required, redirecting...");
-            navigate('/login', { replace: true }); // Use replace to avoid back button to protected page
-            return false; // Indicate auth failed
+            navigate('/login', { replace: true });
+            return false;
         }
-        return true; // Indicate auth passed
+        return true;
     };
 
 

@@ -33,7 +33,6 @@ function LoginPage() {
         formDataToSend.append(key, loginData[key]);
       });
 
-      // --- IMPORTANT: Update API URL if needed ---
       const response = await fetch(`${process.env.REACT_APP_API_BASE}/auth/login.php`, {
 
         method: 'POST',
@@ -43,11 +42,9 @@ function LoginPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        // Throw error using message from backend response
         throw new Error(data.message || `HTTP error! status: ${response.status}`);
       }
 
-      // Backend response indicates success
       if (data.success && data.user) {
         setStatus({
           submitted: true,
@@ -55,21 +52,17 @@ function LoginPage() {
           info: { error: false, msg: data.message }
         });
 
-        // --- Use Auth Context ---
-        login(data.user); // Update global auth state
+        login(data.user);
 
-        // --- Use React Router Navigation ---
-        navigate('/', { replace: true }); // Redirect to home page, replace login in history
+        navigate('/', { replace: true });
 
       } else {
-         // Handle cases where backend might send success: false even with 200 OK
          throw new Error(data.message || 'Login failed. Please check your credentials.');
       }
 
     } catch (error) {
-      console.error("Login error:", error); // Log the error for debugging
       setStatus({
-        submitted: false, // Keep submitted false on error
+        submitted: false,
         submitting: false,
         info: { error: true, msg: error.message || 'An unexpected error occurred.' }
       });
@@ -82,7 +75,7 @@ function LoginPage() {
       <div className="login-container">
         <h2>Login</h2>
 
-        {/* Show error message */}
+        {/* show error message */}
         {status.info.error && (
           <div className="error-message">
             {status.info.msg}

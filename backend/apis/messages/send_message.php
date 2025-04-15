@@ -13,15 +13,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 include '../../config/connect.php';
 include '../../models/MessageModel.php';
-include './auth_check.php';
+include '../auth/auth_check.php';
 
 $loggedInUserId = require_login();
 
-// Get data from POST request body (assuming JSON)
 $data = json_decode(file_get_contents('php://input'), true);
 
 $receiverId = filter_var($data['receiver_id'] ?? null, FILTER_VALIDATE_INT);
-$content = trim(filter_var($data['content'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS)); // Basic sanitization
+$content = trim(filter_var($data['content'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS));
 
 if (!$receiverId || empty($content)) {
     http_response_code(400);
@@ -35,13 +34,11 @@ if (!$receiverId || empty($content)) {
     exit;
 }
 
-
 try {
     $messageModel = new Message($dbh);
     $newMessageId = $messageModel->sendMessage($loggedInUserId, $receiverId, $content);
 
     if ($newMessageId) {
-         // Fetch the newly created message to return complete data to frontend
         $newMessageData = $messageModel->getMessageById($newMessageId);
         if ($newMessageData) {
              $date = new DateTime($newMessageData['sent_at']);
@@ -53,13 +50,12 @@ try {
                  'senderAvatar' => $newMessageData['senderAvatar'] ?? 'https://i.pravatar.cc/150?img=10',
                  'text' => $newMessageData['content'],
                  'timestamp' => $date->format('H:i A'),
-                 'isRead' => false // It's new, so definitely not read by receiver yet
+                 'isRead' => false
              ];
-            http_response_code(201); // Created
+            http_response_code(201);
             echo json_encode(['success' => true, 'message' => 'Message sent.', 'newMessage' => $formattedMessage]);
         } else {
-             // Message was inserted but couldn't be retrieved immediately (unlikely)
-             http_response_code(200); // Still OK, technically sent
+             http_response_code(200);
              echo json_encode(['success' => true, 'message' => 'Message sent, but retrieval failed.']);
         }
 
