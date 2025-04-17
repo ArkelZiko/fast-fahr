@@ -239,7 +239,7 @@
 }
 
 /* Makes the stars red */
-.required {
+.star {
   color: #cc0000;
   margin-left: 3px;
 }

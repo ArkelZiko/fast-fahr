@@ -107,53 +107,59 @@ function CreateListingForm({ onSubmit, onClose }) {
         alert("Please fill in all required fields.");
         return;
     }
-    //  if (selectedFiles.length === 0) {
-    //     alert("Please upload at least one photo.");
-    //     return;
-    // }
+     if (selectedFiles.length === 0) {
+        alert("Please upload at least one photo.");
+        return;
+    }
 
-    // Construct form data object
-    const listingData = {
-      title,
-      description,
-      year,
-      make,
-      model,
-      transmission,
-      price: parseFloat(price).toFixed(2),
-      mileage: parseInt(kilometers, 10),
-      exteriorColor,
-      fuelType,
-      driveType,
-      bodyType,
-      province,
-      city,
-      // photoCount: selectedFiles.length,
-      // mainPhotoIndex 
-      // Include which photo is primary
-      // In real app, handle actual file uploads (e.g., using FormData API)
-    };
+    // Using the FormData object instead of a JSON object to handle sending the images
+    const formData = new FormData();
 
-    // 
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('year', year);
+    formData.append('make', make);
+    formData.append('model', model);
+    formData.append('transmission', transmission);
+    formData.append('price', parseFloat(price).toFixed(2));
+    formData.append('mileage', parseInt(kilometers, 10));
+    formData.append('exteriorColor', exteriorColor);
+    formData.append('fuelType', fuelType);
+    formData.append('driveType', driveType);
+    formData.append('bodyType', bodyType);
+    formData.append('province', province);
+    formData.append('city', city);
+    formData.append('mainPhotoIndex', mainPhotoIndex);
+    
+    // Add all selected images
+    selectedFiles.forEach(file => formData.append('photos[]', file));
+
+    // using the FormData object to send both text and files (images) to be sent at the same time
     fetch(`${process.env.REACT_APP_API_BASE}/create/save_listings.php`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(listingData),
+      body: formData //*took out the manual set of content-type
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        alert('Listing created successfully!');
-        if (onClose) onClose();
-      } else {
-        console.error(data.error || 'Unknown error');
-        alert('Failed to create listing. Please try again.');
+
+    .then(async response => {
+      const text = await response.text();
+      // console.log("Raw PHP response:", text);
+    
+      try {
+        const data = JSON.parse(text);
+        if (data.success) {
+          alert('Listing created successfully!');
+          if (onClose) onClose();
+        } else {
+          console.error(data.error || 'Unknown error');
+          alert('Failed to create listing. Please try again.');
+        }
+      } catch (err) {
+        console.error('JSON parse error:', err); 
+        alert('An unexpected error occurred. Please try again later.');
       }
     })
     .catch(error => {
-      console.error('Error:', error);
+      console.error('Network error:', error);
       alert('An unexpected error occurred. Please try again later.');
     });
     
@@ -170,27 +176,27 @@ return (
 
     {/* --- Core Vehicle Info --- */}
     <div className="form-group">
-        <label htmlFor="listingTitle">Listing Title <span className="required">*</span></label>
+        <label htmlFor="listingTitle">Listing Title <span className="star">*</span></label>
       <input type="text" id="listingTitle" name="listingTitle" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g., 2021 BMW M3 Competition" maxLength="75" required />
     </div>
 
     <div className="form-row">
       <div className="form-group">
-          <label htmlFor="year">Year <span className="required">*</span></label>
+          <label htmlFor="year">Year <span className="star">*</span></label>
         <select id="year" name="year" value={year} onChange={e => setYear(e.target.value)} required>
           <option value="">Select</option>
           {yearsOptions.map(y => <option key={y} value={y}>{y}</option>)}
         </select>
       </div>
       <div className="form-group">
-          <label htmlFor="make">Make <span className="required">*</span></label>
+          <label htmlFor="make">Make <span className="star">*</span></label>
         <select id="make" name="make" value={make} onChange={handleMakeChange} required>
           <option value="">Select</option>
           {makes.map(m => <option key={m} value={m}>{m}</option>)}
         </select>
       </div>
       <div className="form-group">
-          <label htmlFor="model">Model <span className="required">*</span></label>
+          <label htmlFor="model">Model <span className="star">*</span></label>
         <select id="model" name="model" value={model} onChange={e => setModel(e.target.value)} required disabled={!make || modelOptions.length === 0}>
           <option value="">{make ? 'Select' : '--'}</option>
           {modelOptions.map(mod => <option key={mod} value={mod}>{mod}</option>)}
@@ -201,18 +207,18 @@ return (
     {/* --- Technical Specs --- */}
     <div className="form-row">
        <div className="form-group">
-            <label htmlFor="kilometers">Kilometers <span className="required">*</span></label>
+            <label htmlFor="kilometers">Kilometers <span className="star">*</span></label>
           <input type="number" id="kilometers" name="kilometers" value={kilometers} onChange={e => setKilometers(e.target.value)} min="0" placeholder="e.g., 15000" required />
         </div>
        <div className="form-group">
-            <label htmlFor="transmission">Transmission <span className="required">*</span></label>
+            <label htmlFor="transmission">Transmission <span className="star">*</span></label>
           <select id="transmission" name="transmission" value={transmission} onChange={e => setTransmission(e.target.value)} required>
             <option value="">Select</option>
             {transmissionsOptions.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
         </div>
         <div className="form-group">
-            <label htmlFor="driveType">Drive Type <span className="required">*</span></label>
+            <label htmlFor="driveType">Drive Type <span className="star">*</span></label>
           <select id="driveType" name="driveType" value={driveType} onChange={e => setDriveType(e.target.value)} required>
             <option value="">Select</option>
             {driveTypes.map(dt => <option key={dt} value={dt}>{dt}</option>)}
@@ -223,21 +229,21 @@ return (
     {/* --- Appearance & Type --- */}
     <div className="form-row">
        <div className="form-group">
-            <label htmlFor="bodyType">Body Type <span className="required">*</span></label>
+            <label htmlFor="bodyType">Body Type <span className="star">*</span></label>
           <select id="bodyType" name="bodyType" value={bodyType} onChange={e => setBodyType(e.target.value)} required>
             <option value="">Select</option>
             {bodyTypes.map(bt => <option key={bt} value={bt}>{bt}</option>)}
           </select>
         </div>
         <div className="form-group">
-            <label htmlFor="exteriorColor">Exterior Colour <span className="required">*</span></label>
+            <label htmlFor="exteriorColor">Exterior Colour <span className="star">*</span></label>
           <select id="exteriorColor" name="exteriorColor" value={exteriorColor} onChange={e => setExteriorColor(e.target.value)} required>
             <option value="">Select</option>
             {exteriorColors.map(color => <option key={color} value={color}>{color}</option>)}
           </select>
         </div>
        <div className="form-group">
-            <label htmlFor="fuelType">Fuel Type <span className="required">*</span></label>
+            <label htmlFor="fuelType">Fuel Type <span className="star">*</span></label>
           <select id="fuelType" name="fuelType" value={fuelType} onChange={e => setFuelType(e.target.value)} required>
             <option value="">Select</option>
             {fuelTypes.map(ft => <option key={ft} value={ft}>{ft}</option>)}
@@ -248,35 +254,41 @@ return (
     {/* --- Location --- */}
      <div className="form-row">
           <div className="form-group">
-                <label htmlFor="province">Province <span className="required">*</span></label>
+                <label htmlFor="province">Province <span className="star">*</span></label>
               <select id="province" name="province" value={province} onChange={e => setProvince(e.target.value)} required>
               <option value="">Select Province</option>
               {provinces.map(prov => <option key={prov} value={prov}>{prov}</option>)}
               </select>
           </div>
           <div className="form-group">
-                <label htmlFor="city">City <span className="required">*</span></label>
+                <label htmlFor="city">City <span className="star">*</span></label>
               <input type="text" id="city" name="city" value={city} onChange={e => setCity(e.target.value)} placeholder="e.g., Toronto" required />
           </div>
            <div className="form-group"> {/* Price moved here */}
-                <label htmlFor="price">Price ($ CAD) <span className="required">*</span></label>
+                <label htmlFor="price">Price ($ CAD) <span className="star">*</span></label>
               <input type="number" id="price" name="price" value={price} onChange={e => setPrice(e.target.value)} step="0.01" min="0" placeholder="e.g., 95000.00" required />
           </div>
      </div>
 
     {/* --- Description --- */}
     <div className="form-group">
-        <label htmlFor="description">Description <span className="required">*</span></label>
+        <label htmlFor="description">Description <span className="star">*</span></label>
       <textarea id="description" name="description" value={description} onChange={(e) => setDescription(e.target.value)} rows="5" maxLength="1500" placeholder="Describe the car's features, condition, history..." required></textarea>
       <small>{1500 - description.length} characters remaining</small>
     </div>
 
     {/* --- Photo Upload & Preview --- */}
-    {/* <div className="form-group">
-        <label htmlFor="photos">Upload Photos <span className="required">*</span> (Max 7)</label>
-      <input type="file" id="photos" name="photos" multiple accept="image/png, image/jpeg, image/webp" onChange={handleFileChange} />
+    <div className="form-group">
+        <label htmlFor="photos">Upload Photos <span className="star">*</span> (Max 7)</label>
+      <input 
+        type="file" 
+        id="photos" 
+        name="photos" 
+        multiple 
+        accept="image/png, image/jpeg, image/webp" 
+        onChange={handleFileChange} />
        <small>Upload up to 7 photos (JPEG, PNG, WEBP). First photo is the main preview by default.</small>
-    </div> */}
+    </div>
 
 
       {previewUrls.length > 0 && (
