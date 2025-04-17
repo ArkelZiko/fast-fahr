@@ -54,7 +54,7 @@ function BuyingPage() {
               <BuyListingCard
                 key={car.id}
                 title={car.title}
-                image={`${process.env.REACT_APP_STATIC_BASE}${car.image_path}`}
+                image={`${process.env.REACT_APP_STATIC_BASE}/${car.image_path}`}
                 price={car.price}
                 mileage={car.mileage}
                 year={car.year}
