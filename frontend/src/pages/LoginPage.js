@@ -34,11 +34,11 @@ function LoginPage() {
       });
 
       const response = await fetch(`${process.env.REACT_APP_API_BASE}/auth/login.php`, {
-
         method: 'POST',
         body: formDataToSend,
+        credentials: 'include',
       });
-
+      
       const data = await response.json();
 
       if (!response.ok) {

@@ -25,8 +25,8 @@ function BuyListingCard({
         <p className="buy-listing-detail">
           {year} • {mileage} km
         </p>
-        <p className="buy-listing-price">${price} CAD</p>
-      </div>
+        <p className="buy-listing-price">${parseInt(price).toLocaleString()} CAD</p>
+        </div>
       <div className="listing-actions">
         <button className="view-btn">
           <i className="fas fa-eye"></i> View

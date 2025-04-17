@@ -66,7 +66,7 @@ INSERT INTO `posts` (`id`, `title`, `make`, `model`, `year`, `price`, `mileage`,
 (13, 'Porsche Panamera 4', 'Porsche', 'Panamera', 2018, 76000.00, 42100, '2025-04-02 14:24:16', 'Luxury sport sedan with executive seating and strong V6 performance.', 'Automatic', 'Gasoline', 'AWD', 'Sedan', 'Grey', 'NS', 'Halifax'),
 (14, 'BMW M2 Competition', 'BMW', 'M2', 2019, 59999.00, 29750, '2025-04-02 14:24:16', 'Sharp-handling two-door coupe with turbocharged inline-6 and M upgrades.', 'Manual', 'Gasoline', 'RWD', 'Coupe', 'Yellow', 'ON', 'Hamilton'),
 (15, 'Volkswagen Tiguan R-Line', 'Volkswagen', 'Tiguan', 2020, 34500.00, 36700, '2025-04-02 14:24:16', 'German crossover SUV with R-Line trim, spacious interior, and FWD.', 'Automatic', 'Gasoline', 'FWD', 'SUV', 'Silver', 'PE', 'Charlottetown'),
-(16, 'Audi S5 Sportback', 'Audi', 'S5', 2018, 43900.00, 52300, '2025-04-02 14:24:16', 'Sportback with quattro grip, premium interior, and powerful turbo engine.', 'Automatic', 'Gasoline', 'AWD', 'Hatchback', 'White', 'NL', 'St. John'),
+(16, 'Audi S5 Sportback', 'Audi', 'S5', 2018, 43900.00, 52300, '2025-04-02 14:24:16', 'Sportback with quattro grip, premium interior, and powerful turbo engine.', 'Automatic', 'Gasoline', 'AWD', 'Hatchback', 'White', 'NL', 'Milton'),
 (17, 'Mercedes-Benz CLS550 4MATIC', 'Mercedes-Benz', 'C-Class', 2016, 38999.00, 61500, '2025-04-02 14:24:16', 'Luxury 4-door coupe with V8 power and 4MATIC all-wheel drive.', 'Automatic', 'Gasoline', 'AWD', 'Sedan', 'Burgundy', 'MB', 'Brandon'),
 (18, 'Porsche Boxster S', 'Porsche', 'Boxster', 2015, 51000.00, 45200, '2025-04-02 14:24:16', 'Convertible with mid-engine layout and classic roadster styling.', 'Manual', 'Gasoline', 'RWD', 'Convertible', 'Orange', 'ON', 'London'),
 (19, 'Volkswagen Golf GTI MK7', 'Volkswagen', 'GTI', 2017, 24500.00, 58000, '2025-04-02 14:24:16', 'MK7 GTI with iconic plaid seats and sharp turbocharged performance.', 'Manual', 'Gasoline', 'FWD', 'Hatchback', 'Black', 'QC', 'Gatineau'),
@@ -76,7 +76,6 @@ INSERT INTO `posts` (`id`, `title`, `make`, `model`, `year`, `price`, `mileage`,
 (23, 'Audi A7 3.0T Quattro', 'Audi', 'A7', 2015, 35750.00, 67800, '2025-04-02 14:24:16', 'Executive sportback with sleek lines, quattro handling, and smooth V6.', 'Automatic', 'Gasoline', 'AWD', 'Hatchback', 'Silver', 'NB', 'Fredericton'),
 (24, 'Porsche Cayman S (981)', 'Porsche', 'Cayman', 2014, 58800.00, 50600, '2025-04-02 14:24:16', 'Mid-engine coupe with razor-sharp handling and signature Porsche styling.', 'Manual', 'Gasoline', 'RWD', 'Coupe', 'Red', 'NS', 'Sydney'),
 (25, 'Volkswagen Passat R-Line', 'Volkswagen', 'Passat', 2017, 22000.00, 72300, '2025-04-02 14:24:16', 'Spacious family sedan with R-Line styling and turbocharged performance.', 'Automatic', 'Gasoline', 'FWD', 'Sedan', 'Blue', 'ON', 'Brampton'),
-(34, '1234', 'Audi', 'A4', 2026, 14.00, 1234, '2025-04-17 13:47:39', '1234', 'Automatic', 'Gasoline', 'RWD', 'Sedan', 'White', 'SK', '4');
 
 --
 -- Indexes for dumped tables

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import BuyListingCard from "../components/buyingComponents/BuyListingCard"; // (or SellListingCard if you prefer the same card in both pages)
 import "../components/css/buyingCSS/buyingpage.css";
 import listings from "../components/data/listings.js";
@@ -9,12 +9,22 @@ import Header from "../components/Header";
 import NavBar from "../components/Navbar";
 
 function BuyingPage() {
-  const [filteredListings, setFilteredListings] = useState(listings);
+  const [listings, setListings] = useState([]);
+  const [filteredListings, setFilteredListings] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_BASE}/fetch/get_listings.php`) //no longer using listings.js info now coming from the db
+      .then((res) => res.json())
+      .then((data) => {
+        setListings(data);
+        setFilteredListings(data); //defaults to date added since thats how it was stored
+      })
+      .catch((error) => console.error("Error fetching listings:", error));
+  }, []);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
 
   const applyFilters = (filters) => {
     const filtered = filterListings(listings, filters);
@@ -44,7 +54,7 @@ function BuyingPage() {
               <BuyListingCard
                 key={car.id}
                 title={car.title}
-                image={car.image}
+                image={`${process.env.REACT_APP_STATIC_BASE}${car.image_path}`}
                 price={car.price}
                 mileage={car.mileage}
                 year={car.year}

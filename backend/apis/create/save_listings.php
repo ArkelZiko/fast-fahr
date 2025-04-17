@@ -84,7 +84,7 @@ try {
 
     // Saving uploaded image portion
     if (!empty($_FILES['photos'])) {
-        $uploadDir = __DIR__ . '/uploads'; //images are going to go in the uploads folder
+        $uploadDir = __DIR__ . '/../../../uploads'; //images are going to go in the uploads folder
         if (!file_exists($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
