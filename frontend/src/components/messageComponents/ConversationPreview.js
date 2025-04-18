@@ -2,8 +2,9 @@ import React from "react";
 import "../css/messageCSS/conversationPreview.css";
 
 function ConversationPreview({ conversation, isSelected, onSelect }) {
-  const { userName, userAvatar, lastMessage, lastMessageTimestamp, unread } = conversation;
+  const { userName, userAvatar, lastMessage, unread } = conversation;
   const defaultAvatar = 'https://i.pravatar.cc/150?img=10';
+
 
   return (
     <div
@@ -23,7 +24,6 @@ function ConversationPreview({ conversation, isSelected, onSelect }) {
         <p className="preview-message">{lastMessage || '...'}</p>
       </div>
       <div className="preview-meta">
-        <span className="preview-timestamp">{lastMessageTimestamp || ''}</span>
         {unread && <span className="unread-indicator">!</span>}
       </div>
     </div>

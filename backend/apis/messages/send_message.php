@@ -20,7 +20,7 @@ $loggedInUserId = require_login();
 $data = json_decode(file_get_contents('php://input'), true);
 
 $receiverId = filter_var($data['receiver_id'] ?? null, FILTER_VALIDATE_INT);
-$content = trim(filter_var($data['content'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS));
+$content = trim($data['content'] ?? '');
 
 if (!$receiverId || empty($content)) {
     http_response_code(400);
