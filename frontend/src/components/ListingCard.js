@@ -1,39 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./css/listingcard.css";
 
-function ListingCard({ title, make, model, image, price, mileage, year }) {
-  const [isBookmarked, setIsBookmarked] = useState(false);
+export default function ListingCard({
+  title,
+  image,
+  price,
+  mileage,
+  year,
+  isBookmarked = false,
+  onBookmarkToggle,
+}) {
+  // ① initialize from prop …
+  const [bookmarked, setBookmarked] = useState(isBookmarked);
 
-  const imageUrl = `${process.env.PUBLIC_URL}/${image}`;
+  // ② … then stay in sync any time the parent flips the prop
+  useEffect(() => {
+    setBookmarked(isBookmarked);
+  }, [isBookmarked]);
 
-  const handleBookmarkClick = () => {
-    setIsBookmarked((prev) => !prev);
+  const handleClick = () => {
+    const next = !bookmarked;
+    setBookmarked(next);
+    if (onBookmarkToggle) onBookmarkToggle(next);
   };
 
   return (
-    <div className="listing-card">
-      <img src={imageUrl} alt={title} className="listing-image" />
-      <div className="listing-info">
-        <h3 className="listing-title">{title}</h3>
-        <p className="listing-detail">
-          {year} • {mileage} km
+    <div className="buy-listing-card">
+      <img src={image} alt={title} className="buy-listing-image" />
+
+      <div className="buy-listing-info">
+        <h3 className="buy-listing-title">{title}</h3>
+        <p className="buy-listing-detail">
+          {year} • {Number(mileage).toLocaleString()} km
         </p>
-        <p className="listing-price">${price} CAD</p>
+        <p className="buy-listing-price">
+          ${Number(price).toLocaleString()} CAD
+        </p>
       </div>
-      <div className="listing-actions">
-        <button className="view-btn">
-          <i className="fas fa-eye"></i> View
-        </button>
-        <button className="bookmark-btn" onClick={handleBookmarkClick}>
-          <i className={`fas ${isBookmarked ? "fa-star" : "fa-star-half-alt"}`}></i>
-          {isBookmarked ? " Saved" : " Star"}
-        </button>
-        <button className="message-btn">
-          <i className="fas fa-envelope"></i> Contact
-        </button>
-      </div>
+
+      <button
+        className={bookmarked ? "bookmark-btn active" : "bookmark-btn"}
+        onClick={handleClick}
+        title={bookmarked ? "Remove bookmark" : "Add bookmark"}
+      >
+        {bookmarked ? "★" : "☆"}
+      </button>
     </div>
   );
 }
-
-export default ListingCard;

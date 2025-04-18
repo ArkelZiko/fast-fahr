@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../css/buyingCSS/buylistingcard.css";
-import { useState } from "react";
 
 function BuyListingCard({
   title,
@@ -10,34 +9,58 @@ function BuyListingCard({
   year,
   onView,
   onContact,
+  onBookmark,
+  isBookmarked = false,
 }) {
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  // local UI state starts from the prop
+  const [bookmarked, setBookmarked] = useState(isBookmarked);
 
+  // keep in sync whenever the parent prop changes (e.g., page navigation)
+  useEffect(() => {
+    setBookmarked(isBookmarked);
+  }, [isBookmarked]);
+
+  // toggle bookmark
   const handleBookmarkClick = () => {
-    setIsBookmarked((prev) => !prev);
+    const next = !bookmarked;
+    setBookmarked(next); // instant UI feedback
+    if (onBookmark) onBookmark(next); // inform parent
   };
+
+  // fallback no‑op so buttons still work even if parent didn't pass a handler
+  const noop = () => {};
 
   return (
     <div className="buy-listing-card">
       <img src={image} alt={title} className="buy-listing-image" />
+
       <div className="buy-listing-info">
         <h3 className="buy-listing-title">{title}</h3>
         <p className="buy-listing-detail">
-          {year} • {mileage} km
+          {year} • {Number(mileage).toLocaleString()} km
         </p>
-        <p className="buy-listing-price">${parseInt(price).toLocaleString()} CAD</p>
-        </div>
+        <p className="buy-listing-price">
+          ${Number(price).toLocaleString()} CAD
+        </p>
+      </div>
+
       <div className="listing-actions">
-        <button className="view-btn">
+        {/* View */}
+        <button className="view-btn" onClick={onView ?? noop}>
           <i className="fas fa-eye"></i> View
         </button>
-        <button className="bookmark-btn" onClick={handleBookmarkClick}>
-          <i
-            className={`fas ${isBookmarked ? "fa-star" : "fa-star-half-alt"}`}
-          ></i>
-          {isBookmarked ? " Saved" : " Star"}
+
+        {/* Bookmark */}
+        <button
+          className={bookmarked ? "bookmark-btn active" : "bookmark-btn"}
+          onClick={handleBookmarkClick}
+        >
+          <i className={bookmarked ? "fas fa-star" : "far fa-star"}></i>
+          {bookmarked ? " Saved" : " Star"}
         </button>
-        <button className="message-btn">
+
+        {/* Contact */}
+        <button className="message-btn" onClick={onContact ?? noop}>
           <i className="fas fa-envelope"></i> Contact
         </button>
       </div>
