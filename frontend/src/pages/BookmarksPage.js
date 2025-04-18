@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import { fetchBookmarks } from "../hooks/useBookmarks";
 import { useAuth } from "../hooks/useAuth";
 
 import Header from "../components/Header";
@@ -10,35 +11,48 @@ import Footer from "../components/Footer";
 function BookmarksPage() {
   const { currentUser, isLoading: authLoading, requireAuth } = useAuth();
   const [bookmarkedListings, setBookmarkedListings] = useState([]);
-
   useEffect(() => {
     if (!authLoading) {
       requireAuth();
+            // once authenticated, load bookmarks
+      fetchBookmarks()
+        .then(data => {
+          // if using image_path in your posts table:
+          const withImages = data.map(post => ({
+            ...post,
+            image: `${process.env.REACT_APP_STATIC_BASE}/${post.image_path}`
+          }));
+          setBookmarkedListings(withImages);
+        })
+        .catch(console.error);
     }
   }, [authLoading, requireAuth, currentUser]);
 
-
   const pageStyle = {
-    display: 'flex',      
-    flexDirection: 'column',
-    flexGrow: 1            
-
+    display: "flex",
+    flexDirection: "column",
+    flexGrow: 1,
   };
 
   // This style makes the content area expand to push the footer down
   const contentWrapperStyle = {
-    flexGrow: 1 
+    flexGrow: 1,
   };
-
-
 
   if (authLoading) {
     return (
       <div className="buying-page" style={pageStyle}>
         <Header />
         <NavBar />
-        <div className="loading-page" style={{ textAlign: 'center', padding: '50px', flexGrow: 1 /* Make loading fill space too */ }}>
-            Checking authentication...
+        <div
+          className="loading-page"
+          style={{
+            textAlign: "center",
+            padding: "50px",
+            flexGrow: 1 /* Make loading fill space too */,
+          }}
+        >
+          Checking authentication...
         </div>
         <Footer />
       </div>
