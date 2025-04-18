@@ -2,14 +2,12 @@ import React from "react";
 import "../css/buyingCSS/buylistingcard.css";
 
 /**
- * Updated BuyListingCard to integrate bookmark functionality via props.
+ * BuyListingCard displays a listing with bookmark functionality.
  * Props:
- * - title, image, price, mileage, year
- * - onView, onContact, onBookmark (callback)
+ * - title, image (full URL string), price, mileage, year
+ * - onView, onContact, onBookmark (click handlers)
  * - isBookmarked (boolean)
  */
-const imageUrl = `${process.env.PUBLIC_URL}/${image}`;
-
 function BuyListingCard({
   title,
   image,
@@ -23,11 +21,11 @@ function BuyListingCard({
 }) {
   return (
     <div className="buy-listing-card">
-      <img src={imageUrl} alt={title} className="buy-listing-image" />
+      <img src={image} alt={title} className="buy-listing-image" />
       <div className="buy-listing-info">
         <h3 className="buy-listing-title">{title}</h3>
         <p className="buy-listing-detail">
-          {year} • {mileage} km
+          {year} • {mileage.toLocaleString()} km
         </p>
         <p className="buy-listing-price">
           ${parseInt(price).toLocaleString()} CAD
