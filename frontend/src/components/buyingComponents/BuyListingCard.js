@@ -12,22 +12,18 @@ function BuyListingCard({
   onBookmark,
   isBookmarked = false,
 }) {
-  // local UI state starts from the prop
   const [bookmarked, setBookmarked] = useState(isBookmarked);
 
-  // keep in sync whenever the parent prop changes (e.g., page navigation)
   useEffect(() => {
     setBookmarked(isBookmarked);
   }, [isBookmarked]);
 
-  // toggle bookmark
   const handleBookmarkClick = () => {
     const next = !bookmarked;
-    setBookmarked(next); // instant UI feedback
-    if (onBookmark) onBookmark(next); // inform parent
+    setBookmarked(next);
+    if (onBookmark) onBookmark(next);
   };
 
-  // fallback no‑op so buttons still work even if parent didn't pass a handler
   const noop = () => {};
 
   return (

@@ -4,7 +4,6 @@ import '../css/sellingCSS/createlistingform.css';
 
 function CreateListingForm({ onSubmit, onClose }) {
 
-  // --- Form Field State ---
   const [make, setMake] = useState('');
   const [model, setModel] = useState('');
   const [year, setYear] = useState('');
@@ -13,21 +12,15 @@ function CreateListingForm({ onSubmit, onClose }) {
   const [transmission, setTransmission] = useState('');
   const [price, setPrice] = useState('');
   const [kilometers, setKilometers] = useState('');
-
-  // New fields state
   const [exteriorColor, setExteriorColor] = useState('');
   const [fuelType, setFuelType] = useState('');
   const [driveType, setDriveType] = useState('');
   const [bodyType, setBodyType] = useState('');
   const [province, setProvince] = useState('');
   const [city, setCity] = useState('');
-
-  // --- Photo State ---
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [previewUrls, setPreviewUrls] = useState([]);
   const [mainPhotoIndex, setMainPhotoIndex] = useState(0);
-
-  // --- Dependent State ---
   const [modelOptions, setModelOptions] = useState([]);
 
   const makes = ['Audi', 'BMW', 'Mercedes-Benz', 'Porsche', 'Volkswagen'];
@@ -39,70 +32,49 @@ function CreateListingForm({ onSubmit, onClose }) {
   const bodyTypes = ['Sedan', 'Coupe', 'Convertible', 'Wagon', 'Hatchback', 'SUV', 'Truck', 'Minivan'];
   const provinces = ['AB', 'BC', 'MB', 'NB', 'NL', 'NS', 'NT', 'NU', 'ON', 'PE', 'QC', 'SK', 'YT'];
 
-  // --- Effects ---
-
-  // TODO: This part below has a lot going on and I'm not really sure if it's optimal or buggy
-  //       I had Gemini generate this bottom section for me, so run it through AI for claraficaiton 
-  //       of what's going on and possible improvements when it comes to backend integration
-
-  // Update model options when make changes
   useEffect(() => {
     if (make) {
       setModelOptions(getModelsForMake(make));
-      setModel(''); // Reset model when make changes
+      setModel('');
     } else {
       setModelOptions([]);
       setModel('');
     }
   }, [make]);
 
-  // Clean up preview URLs when component unmounts or previews change
   useEffect(() => {
-    // This function will be returned and run on cleanup
     return () => {
       previewUrls.forEach(url => URL.revokeObjectURL(url));
     };
-  }, [previewUrls]); // Dependency array includes previewUrls
+  }, [previewUrls]);
 
-
-  // --- Event Handlers ---
 
   const handleMakeChange = (event) => {
     setMake(event.target.value);
   };
 
-  // Handle file selection and preview generation
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
-    const limitedFiles = files.slice(0, 7); // Limit to 7 files
+    const limitedFiles = files.slice(0, 7);
 
     if (files.length > 7) {
       alert("You can upload a maximum of 7 photos. Only the first 7 were selected.");
     }
 
     setSelectedFiles(limitedFiles);
-
-    // Revoke previous URLs before creating new ones
     previewUrls.forEach(url => URL.revokeObjectURL(url));
-
-    // Create new preview URLs
     const urls = limitedFiles.map(file => URL.createObjectURL(file));
     setPreviewUrls(urls);
-
-    // Reset main photo index if files change
     setMainPhotoIndex(0);
   };
 
-  // Set main photo
   const handleSetMainPhoto = (index) => {
     setMainPhotoIndex(index);
   };
 
-  // Handle form submission
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Expanded validation
     if (!make || !model || !year || !title || !description || !transmission || !price || !kilometers || !exteriorColor || !fuelType || !driveType || !bodyType || !province || !city ) {
         alert("Please fill in all required fields.");
         return;
@@ -112,7 +84,6 @@ function CreateListingForm({ onSubmit, onClose }) {
         return;
     }
 
-    // Using the FormData object instead of a JSON object to handle sending the images
     const formData = new FormData();
 
     formData.append('title', title);
@@ -130,39 +101,30 @@ function CreateListingForm({ onSubmit, onClose }) {
     formData.append('province', province);
     formData.append('city', city);
     formData.append('mainPhotoIndex', mainPhotoIndex);
-    
-    // Add all selected images
+
     selectedFiles.forEach(file => formData.append('photos[]', file));
 
-    // using the FormData object to send both text and files (images) to be sent at the same time
     fetch(`${process.env.REACT_APP_API_BASE}/create/save_listings.php`, {
       method: 'POST',
-      body: formData //*took out the manual set of content-type
+      body: formData
     })
-
     .then(async response => {
       const text = await response.text();
-      // console.log("Raw PHP response:", text);
-    
       try {
         const data = JSON.parse(text);
         if (data.success) {
           alert('Listing created successfully!');
           if (onClose) onClose();
         } else {
-          console.error(data.error || 'Unknown error');
           alert('Failed to create listing. Please try again.');
         }
       } catch (err) {
-        console.error('JSON parse error:', err); 
         alert('An unexpected error occurred. Please try again later.');
       }
     })
     .catch(error => {
-      console.error('Network error:', error);
       alert('An unexpected error occurred. Please try again later.');
     });
-    
   };
 
 return (
@@ -174,7 +136,6 @@ return (
       </button>
     </div>
 
-    {/* --- Core Vehicle Info --- */}
     <div className="form-group">
         <label htmlFor="listingTitle">Listing Title <span className="star">*</span></label>
       <input type="text" id="listingTitle" name="listingTitle" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g., 2021 BMW M3 Competition" maxLength="75" required />
@@ -204,7 +165,6 @@ return (
       </div>
     </div>
 
-    {/* --- Technical Specs --- */}
     <div className="form-row">
        <div className="form-group">
             <label htmlFor="kilometers">Kilometers <span className="star">*</span></label>
@@ -226,7 +186,6 @@ return (
         </div>
     </div>
 
-    {/* --- Appearance & Type --- */}
     <div className="form-row">
        <div className="form-group">
             <label htmlFor="bodyType">Body Type <span className="star">*</span></label>
@@ -251,7 +210,6 @@ return (
         </div>
     </div>
 
-    {/* --- Location --- */}
      <div className="form-row">
           <div className="form-group">
                 <label htmlFor="province">Province <span className="star">*</span></label>
@@ -264,32 +222,29 @@ return (
                 <label htmlFor="city">City <span className="star">*</span></label>
               <input type="text" id="city" name="city" value={city} onChange={e => setCity(e.target.value)} placeholder="e.g., Toronto" required />
           </div>
-           <div className="form-group"> {/* Price moved here */}
+           <div className="form-group">
                 <label htmlFor="price">Price ($ CAD) <span className="star">*</span></label>
               <input type="number" id="price" name="price" value={price} onChange={e => setPrice(e.target.value)} step="0.01" min="0" placeholder="e.g., 95000.00" required />
           </div>
      </div>
 
-    {/* --- Description --- */}
     <div className="form-group">
         <label htmlFor="description">Description <span className="star">*</span></label>
       <textarea id="description" name="description" value={description} onChange={(e) => setDescription(e.target.value)} rows="5" maxLength="1500" placeholder="Describe the car's features, condition, history..." required></textarea>
       <small>{1500 - description.length} characters remaining</small>
     </div>
 
-    {/* --- Photo Upload & Preview --- */}
     <div className="form-group">
         <label htmlFor="photos">Upload Photos <span className="star">*</span> (Max 7)</label>
-      <input 
-        type="file" 
-        id="photos" 
-        name="photos" 
-        multiple 
-        accept="image/png, image/jpeg, image/webp" 
+      <input
+        type="file"
+        id="photos"
+        name="photos"
+        multiple
+        accept="image/png, image/jpeg, image/webp"
         onChange={handleFileChange} />
        <small>Upload up to 7 photos (JPEG, PNG, WEBP). First photo is the main preview by default.</small>
     </div>
-
 
       {previewUrls.length > 0 && (
         <div className="photo-preview-area">
@@ -313,8 +268,6 @@ return (
         </div>
       )}
 
-
-      {/* --- Form Actions --- */}
       <div className="form-actions">
         <button type="button" className="cancel-btn" onClick={onClose}>
           Cancel

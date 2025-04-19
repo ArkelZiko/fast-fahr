@@ -6,7 +6,7 @@ export async function fetchBookmarks() {
   });
   const json = await res.json();
   if (!res.ok) throw new Error(json.message);
-  return json.data; // array of post objects
+  return json.data;
 }
 
 export async function toggleBookmark(postId, isBookmarked) {

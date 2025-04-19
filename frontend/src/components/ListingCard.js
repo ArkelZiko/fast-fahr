@@ -10,10 +10,9 @@ export default function ListingCard({
   isBookmarked = false,
   onBookmarkToggle,
 }) {
-  // ① initialize from prop …
+
   const [bookmarked, setBookmarked] = useState(isBookmarked);
 
-  // ② … then stay in sync any time the parent flips the prop
   useEffect(() => {
     setBookmarked(isBookmarked);
   }, [isBookmarked]);

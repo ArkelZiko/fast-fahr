@@ -11,6 +11,7 @@
 */
 
 include __DIR__ . '/../../config/connect.php';
+include __DIR__ . '/../auth/auth_check.php'; 
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -26,6 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204);
     exit;
 }
+
+$loggedInUserId = require_login();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -48,22 +51,21 @@ foreach ($requiredFields as $field) {
 }
 
 try {
-    // 1 PREPARE
     $stmt = $dbh->prepare("
         INSERT INTO posts (
-        title, make, model, year, price, mileage,
-        description, transmission, fuelType, 
+        user_id, title, make, model, year, price, mileage,
+        description, transmission, fuelType,
         driveType, bodyType, exteriorColor, province,
         city)
-        VALUES 
-        (:title, :make, :model, :year, :price, :mileage,
-        :description, :transmission, :fuelType, 
+        VALUES
+        (:user_id, :title, :make, :model, :year, :price, :mileage,
+        :description, :transmission, :fuelType,
         :driveType, :bodyType, :exteriorColor, :province,
         :city)
     ");
 
-    // 2 EXECUTE
     $stmt->execute([
+        ':user_id' => $loggedInUserId,
         ':title' => $_POST['title'],
         ':make' => $_POST['make'],
         ':model' => $_POST['model'],
@@ -80,29 +82,26 @@ try {
         ':city' => $_POST['city'],
     ]);
 
-    $listingId = $dbh->lastInsertId(); //using the post ID so the saved image matches the desired car
+    $listingId = $dbh->lastInsertId();
 
-    // Saving uploaded image portion
     if (!empty($_FILES['photos'])) {
-        $uploadDir = __DIR__ . '/../../../uploads'; //images are going to go in the uploads folder
+        $uploadDir = __DIR__ . '/../../../uploads';
         if (!file_exists($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
-        
+
         $files = $_FILES['photos'];
         $mainIndex = isset($_POST['mainPhotoIndex']) ? (int) $_POST['mainPhotoIndex'] : 0;
 
-        // moving each image to the uploads folder then uploaded to the db
         for ($i = 0; $i < count($files['name']); $i++) {
             if ($files['error'][$i] === UPLOAD_ERR_OK) {
                 $tmpName = $files['tmp_name'][$i];
                 $originalName = preg_replace("/[^a-zA-Z0-9._-]/", "_", basename($files['name'][$i])); //using a regex to clean up any file names that could clash w the url
                 $uniqueName = uniqid('img_', true) . '_' . $originalName; //using this method to make no 2 images have same name (avoids overwrites)
-                $imagePath = 'uploads/' . $uniqueName; //saving the relative path to variable making it easier in the long run
+                $imagePath = '/uploads' . $uniqueName; //saving the relative path to variable making it easier in the long run
                 $destination = $uploadDir . '/' . $uniqueName;
 
                 if (move_uploaded_file($tmpName, $destination)) {
-                    // Insert image into the post_images table
                     $isMain = ($i === $mainIndex) ? 1 : 0;
                     $insertImg = $dbh->prepare("
                         INSERT INTO post_images (post_id, image_path, is_main)
@@ -118,8 +117,18 @@ try {
         }
     }
 
-    echo json_encode(['success' => true, 'message' => 'Listing saved successfully.']);
+    echo json_encode(['success' => true, 'message' => 'Listing saved successfully.', 'listingId' => $listingId]);
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+} catch (Exception $e) {
+    http_response_code(500);
+    if ($e->getMessage() === 'User not logged in') {
+         http_response_code(401);
+    } else {
+        http_response_code(500);
+    }
+    echo json_encode(['error' => 'Server error: ' . $e->getMessage()]);
 }
+
+?>
