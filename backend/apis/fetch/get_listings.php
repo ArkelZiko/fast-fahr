@@ -3,24 +3,45 @@
 include __DIR__ . '/../../config/connect.php';
 
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Methods: GET, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
 header('Content-Type: application/json');
+header('Access-Control-Allow-Credentials: true');
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(204);
+    exit;
 }
 
 try {
     $stmt = $dbh->prepare("
-        SELECT 
-            posts.*, 
-            post_images.image_path
-        FROM posts
-        LEFT JOIN post_images 
-            ON posts.id = post_images.post_id 
-            AND post_images.is_main = 1
-        ORDER BY posts.created_at DESC;
+        SELECT
+            p.id,
+            p.user_id,
+            u.username AS creator_username, -- Get the username from the users table
+            p.title,
+            p.make,
+            p.model,
+            p.year,
+            p.price,
+            p.mileage,
+            p.created_at,
+            p.description,
+            p.transmission,
+            p.fuelType,
+            p.driveType,
+            p.bodyType,
+            p.exteriorColor,
+            p.province,
+            p.city,
+            pi.image_path
+        FROM posts p
+        JOIN users u ON p.user_id = u.user_id -- Join posts with users
+        LEFT JOIN post_images pi
+            ON p.id = pi.post_id
+            AND pi.is_main = 1
+        ORDER BY p.created_at DESC;
     ");
 
     $stmt->execute();
@@ -30,6 +51,13 @@ try {
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode([
-        "error" => "Database error: " . $e->getMessage()
+        "error" => "Database error occurred. Please check server logs."
+    ]);
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode([
+        "error" => "An unexpected server error occurred."
     ]);
 }
+
+?>

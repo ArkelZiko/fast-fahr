@@ -13,85 +13,95 @@ export default function BookmarksPage() {
 
   const [bookmarkedListings, setBookmarkedListings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  /* ─────────────────────────────── Fetch bookmarks ────────────────────────── */
   useEffect(() => {
-    if (authLoading) return; // wait for auth hook
+    let isMounted = true;
+    if (authLoading) return;
 
     if (!currentUser) {
-      requireAuth(); // redirect to login
+      requireAuth();
+      if (isMounted) setLoading(false);
       return;
     }
 
-    (async () => {
-      try {
-        const data = await fetchBookmarks(currentUser.id);
-        setBookmarkedListings(data); // array of full listing objects
-      } catch (err) {
-        console.error("fetchBookmarks error:", err);
-      } finally {
-        setLoading(false);
-      }
-    })();
+    setLoading(true);
+    setError('');
+    fetchBookmarks()
+      .then((data) => {
+         if (isMounted) {
+             if(Array.isArray(data)){
+                 setBookmarkedListings(data);
+             } else {
+                 setError("Failed to load bookmarks: Invalid data format.");
+                 setBookmarkedListings([]);
+             }
+         }
+      })
+      .catch((err) => {
+        if(isMounted) setError(`Failed to load bookmarks: ${err.message}`);
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+      return () => { isMounted = false; }
   }, [authLoading, currentUser, requireAuth]);
 
-  /* ─────────────────────── Toggle / remove bookmark locally ────────────────── */
   const handleBookmarkToggle = async (listingId, nextState) => {
+    if (nextState) {
+    }
     try {
-      await toggleBookmark(listingId, !nextState);
-
-      setBookmarkedListings((prev) =>
-        nextState ? prev : prev.filter((l) => l.id !== listingId)
-      );
+      await toggleBookmark(listingId, true);
+      setBookmarkedListings((prev) => prev.filter((l) => l.id !== listingId));
     } catch (err) {
-      console.error("toggleBookmark error:", err);
-      alert("Couldn’t update bookmark – try again.");
+      alert("Couldn’t remove bookmark – try again.");
     }
   };
 
   if (authLoading || loading) {
     return (
-      <div className="buying-page" style={{ textAlign: "center", padding: 50 }}>
-        Loading bookmarks…
-      </div>
+       <div>
+           <Header />
+           <NavBar />
+           <div className="loading-page" style={{ textAlign: "center", padding: 50 }}>
+               Loading bookmarks…
+           </div>
+           <Footer />
+       </div>
     );
   }
-  if (!currentUser) return null; // already redirected
+  if (!currentUser) return null;
 
-  /* ────────────────────────────────── UI ───────────────────────────────────── */
   return (
-    <div
-      className="buying-page"
-      style={{ display: "flex", flexDirection: "column", flexGrow: 1 }}
-    >
+    <div className="buying-page">
       <Header />
       <NavBar />
-
-      <div className="buying-content-wrapper" style={{ flexGrow: 1 }}>
+      <div className="buying-content-wrapper">
         <div className="my-listings-header">
           <h2>My Bookmarks</h2>
         </div>
 
-        {bookmarkedListings.length ? (
+        {error && <div className="error-banner">{error}</div>}
+
+        {!error && bookmarkedListings.length > 0 ? (
           <div className="my-listings-grid">
             {bookmarkedListings.map((listing) => (
               <ListingCard
                 key={listing.id}
                 title={listing.title}
-                image={listing.image_path}
+                image={listing.image_path ? `${process.env.REACT_APP_STATIC_BASE}${listing.image_path}` : '/images/default-car.png'}
                 price={listing.price}
                 mileage={listing.mileage}
                 year={listing.year}
-                isBookmarked={true} // always true on this page
-                onBookmark={(next) => handleBookmarkToggle(listing.id, next)}
+                isBookmarked={true}
+                onBookmarkToggle={(next) => handleBookmarkToggle(listing.id, next)}
               />
             ))}
           </div>
-        ) : (
-          <p className="no-listings-message">You have no bookmarks active.</p>
-        )}
+        ) : !error ? (
+          <p className="no-listings-message">You have no bookmarks saved.</p>
+        ) : null }
       </div>
-
       <Footer />
     </div>
   );

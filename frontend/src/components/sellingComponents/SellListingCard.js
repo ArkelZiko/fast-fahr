@@ -8,9 +8,9 @@ function SellListingCard({ title, image, price, mileage, year, onEdit, onDelete 
       <div className="sell-listing-info">
         <h3 className="sell-listing-title">{title}</h3>
         <p className="sell-listing-detail">
-          {year} • {mileage} km
+          {year} • {Number(mileage).toLocaleString()} km
         </p>
-        <p className="sell-listing-price">${price} CAD</p>
+        <p className="sell-listing-price">${Number(price).toLocaleString()} CAD</p>
       </div>
       <div className="sell-listing-actions">
         <button className="view-btn">

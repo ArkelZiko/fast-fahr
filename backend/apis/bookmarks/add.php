@@ -1,27 +1,60 @@
 <?php
-include "../../config/connect.php";
-header('Content-Type: application/json');
-session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-// must be logged in
+include "../../config/connect.php";
+
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 if (empty($_SESSION['user_id'])) {
   http_response_code(401);
-  exit(json_encode(['success'=>false,'message'=>'Not authenticated']));
+  echo json_encode(['success'=>false,'message'=>'Not authenticated']);
+  exit;
 }
 
 $post_id = filter_input(INPUT_POST,'post_id',FILTER_VALIDATE_INT);
+
 if (!$post_id) {
   http_response_code(400);
-  exit(json_encode(['success'=>false,'message'=>'Invalid post_id']));
+  echo json_encode(['success'=>false,'message'=>'Invalid or missing post_id']);
+  exit;
 }
+
+$loggedInUserId = $_SESSION['user_id'];
 
 try {
-  $sql = "INSERT IGNORE INTO bookmarks (user_id,post_id) VALUES (?,?)";
+  $sql = "INSERT IGNORE INTO bookmarks (user_id, post_id, created_at) VALUES (:user_id, :post_id, NOW())";
   $stmt = $dbh->prepare($sql);
-  $stmt->execute([$_SESSION['user_id'],$post_id]);
+  $stmt->bindParam(':user_id', $loggedInUserId, PDO::PARAM_INT);
+  $stmt->bindParam(':post_id', $post_id, PDO::PARAM_INT);
+  $stmt->execute();
 
-  echo json_encode(['success'=>true,'message'=>'Bookmarked']);
+  if ($stmt->rowCount() > 0) {
+      echo json_encode(['success'=>true,'message'=>'Bookmarked']);
+  } else {
+      echo json_encode(['success'=>true,'message'=>'Bookmark already exists']);
+  }
+
+} catch (PDOException $e) {
+    error_log("Database Error in bookmarks/add.php: " . $e->getMessage());
+    http_response_code(500);
+    echo json_encode(['success'=>false,'message'=>'Database error occurred while adding bookmark.']);
 } catch (Exception $e) {
-  http_response_code(500);
-  echo json_encode(['success'=>false,'message'=>'Server error']);
+    error_log("General Error in bookmarks/add.php: " . $e->getMessage());
+    http_response_code(500);
+    echo json_encode(['success'=>false,'message'=>'An unexpected server error occurred.']);
 }
+?>

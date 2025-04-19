@@ -1,32 +1,63 @@
 <?php
-include "../../config/connect.php";
-header('Content-Type: application/json');
-session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-// must be logged in
-if (empty($_SESSION['user_id'])) {
-    http_response_code(401);
-    exit(json_encode(['success'=>false,'message'=>'Not authenticated']));
+include "../../config/connect.php";
+
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Methods: GET, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(204);
+    exit;
 }
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (empty($_SESSION['user_id'])) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'Not authenticated']);
+    exit;
+}
+
+$loggedInUserId = $_SESSION['user_id'];
+
 try {
-    // pull out all posts this user has bookmarked
     $sql = "
-      SELECT p.*
+      SELECT
+          p.*,                   -- Select all columns from posts
+          u.username AS creator_username, -- Get the username from the users table
+          pi.image_path        -- Select the main image path
       FROM posts p
-      JOIN bookmarks b ON p.id = b.post_id
-      WHERE b.user_id = ?
+      JOIN users u ON p.user_id = u.user_id      -- Join users table to get username
+      JOIN bookmarks b ON p.id = b.post_id       -- Join bookmarks to filter
+      LEFT JOIN post_images pi ON p.id = pi.post_id AND pi.is_main = 1 -- Left join for main image
+      WHERE b.user_id = :user_id                 -- Filter by logged-in user ID
       ORDER BY b.created_at DESC
     ";
+
     $stmt = $dbh->prepare($sql);
-    $stmt->execute([ $_SESSION['user_id'] ]);
+    $stmt->bindParam(':user_id', $loggedInUserId, PDO::PARAM_INT);
+    $stmt->execute();
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     echo json_encode([
       'success' => true,
       'data'    => $rows
     ]);
-} catch (Exception $e) {
+
+} catch (PDOException $e) {
     http_response_code(500);
-    echo json_encode(['success'=>false,'message'=>'Server error']);
+    echo json_encode(['success' => false, 'message' => 'Database error occurred while fetching bookmarks.']);
+
+} catch (Exception $e) {
+    error_log("General Error in bookmarks/list.php: " . $e->getMessage());
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'An unexpected server error occurred.']);
 }
+?>
