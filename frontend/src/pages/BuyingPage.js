@@ -11,64 +11,56 @@ import NavBar from "../components/Navbar";
 import { fetchBookmarks, toggleBookmark } from "../hooks/useBookmarks";
 
 function BuyingPage() {
-  const { currentUser, isLoading: authLoading, requireAuth } = useAuth();
+  const { currentUser, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [listings, setListings] = useState([]);
   const [filteredListings, setFilteredListings] = useState([]);
   const [bookmarkedIds, setBookmarkedIds] = useState(new Set());
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(true);
+  const [pageLoading, setPageLoading] = useState(true);
   const [fetchError, setFetchError] = useState('');
 
   useEffect(() => {
-    let isMounted = true;
     if (!authLoading) {
-      if (!requireAuth()) {
-        if (isMounted) setInitialLoading(false);
-      } else {
-        if (isMounted) setInitialLoading(false);
-      }
+      setPageLoading(false);
     }
-    return () => { isMounted = false; };
-  }, [authLoading, requireAuth]);
+  }, [authLoading]);
 
   useEffect(() => {
-    let isMounted = true;
-    if (currentUser && !authLoading && !initialLoading) {
-      setFetchError('');
-      fetch(`${process.env.REACT_APP_API_BASE}/fetch/get_listings.php`, { credentials: 'include' })
-        .then((res) => {
-          if (!res.ok) {
-            return res.text().then(text => { throw new Error(`HTTP error! status: ${res.status}, response: ${text}`) });
-          }
-          return res.json();
-        })
-        .then((data) => {
-          if (isMounted) {
-            if (Array.isArray(data)) {
-              if (data.length > 0 && (data[0].user_id === undefined || data[0].creator_username === undefined)) {
-              }
-              setListings(data);
-              setFilteredListings(data);
-            } else {
-              setFetchError("Failed to load listings: Invalid data format.");
-              setListings([]);
-              setFilteredListings([]);
-            }
-          }
-        })
-        .catch((error) => {
-          if (isMounted) setFetchError(`Failed to load listings: ${error.message}`);
-        });
-    } else if (!authLoading && !currentUser) {
-      if (isMounted) {
-        setListings([]);
-        setFilteredListings([]);
+    if (!authLoading) {
+        let isMounted = true;
         setFetchError('');
-      }
+        setPageLoading(true);
+
+        fetch(`${process.env.REACT_APP_API_BASE}/fetch/get_listings.php`, { credentials: 'omit' })
+            .then((res) => {
+                if (!res.ok) {
+                    return res.text().then(text => { throw new Error(`HTTP error! status: ${res.status}, response: ${text}`) });
+                }
+                return res.json();
+            })
+            .then((data) => {
+                if (isMounted) {
+                    if (Array.isArray(data)) {
+                        setListings(data);
+                        setFilteredListings(data);
+                    } else {
+                        setFetchError("Failed to load listings: Invalid data format.");
+                        setListings([]);
+                        setFilteredListings([]);
+                    }
+                }
+            })
+            .catch((error) => {
+                if (isMounted) setFetchError(`Failed to load listings: ${error.message}`);
+            })
+            .finally(() => {
+                if (isMounted) setPageLoading(false);
+            });
+
+        return () => { isMounted = false; };
     }
-    return () => { isMounted = false; };
-  }, [currentUser, authLoading, initialLoading]);
+  }, [authLoading]); 
 
   useEffect(() => {
     let isMounted = true;
@@ -92,12 +84,13 @@ function BuyingPage() {
     return () => { isMounted = false; };
   }, [currentUser]);
 
+
   const handleBookmark = useCallback(async (id) => {
     if (!currentUser) {
-      alert("Please log in to save listings.");
       navigate('/login');
       return;
     }
+
     const isCurrentlyBookmarked = bookmarkedIds.has(id);
     try {
       setBookmarkedIds((prev) => {
@@ -107,7 +100,6 @@ function BuyingPage() {
       });
       await toggleBookmark(id, isCurrentlyBookmarked);
     } catch (e) {
-      alert(`Failed to update bookmark: ${e.message}`);
       setBookmarkedIds((prev) => {
         const next = new Set(prev);
         isCurrentlyBookmarked ? next.add(id) : next.delete(id);
@@ -118,16 +110,7 @@ function BuyingPage() {
 
   const handleContact = useCallback((creatorUserId, creatorUsername) => {
     if (!currentUser) {
-      alert("Please log in to contact sellers.");
       navigate('/login');
-      return;
-    }
-    if (!creatorUsername) {
-      alert("Could not find seller's username.");
-      return;
-    }
-    if (creatorUserId === currentUser.id) {
-      alert("You cannot start a conversation with yourself.");
       return;
     }
     navigate('/messages', {
@@ -138,9 +121,11 @@ function BuyingPage() {
     });
   }, [currentUser, navigate]);
 
+  // --- HANDKLE THE VIEW BUTTON STUFF ---
   const handleView = useCallback((listingId, title = 'Listing') => {
     alert(`Viewing details for ${title} (ID: ${listingId})`);
   }, []);
+
 
   const openFilterModal = () => setIsFilterModalOpen(true);
   const closeFilterModal = () => setIsFilterModalOpen(false);
@@ -156,17 +141,10 @@ function BuyingPage() {
     closeFilterModal();
   }, [listings]);
 
-  if (initialLoading || authLoading) {
+  if (pageLoading) {
     return (
       <div className="buying-page">
-        <Header /> <NavBar /> <div className="loading-page">Loading...</div> <Footer />
-      </div>
-    );
-  }
-  if (!currentUser) {
-    return (
-      <div className="buying-page">
-        <Header /> <NavBar /> <div className="loading-page">Please log in to view listings.</div> <Footer />
+        <Header /> <NavBar /> <div className="loading-page">Loading Listings...</div> <Footer />
       </div>
     );
   }
@@ -195,7 +173,7 @@ function BuyingPage() {
                 price={car.price}
                 mileage={car.mileage}
                 year={car.year}
-                isBookmarked={bookmarkedIds.has(car.id)}
+                isBookmarked={!!currentUser && bookmarkedIds.has(car.id)}
                 onBookmark={() => handleBookmark(car.id)}
                 onContact={() => handleContact(car.user_id, car.creator_username)}
                 onView={() => handleView(car.id, car.title)}
