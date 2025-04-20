@@ -98,7 +98,7 @@ try {
                 $tmpName = $files['tmp_name'][$i];
                 $originalName = preg_replace("/[^a-zA-Z0-9._-]/", "_", basename($files['name'][$i])); //using a regex to clean up any file names that could clash w the url
                 $uniqueName = uniqid('img_', true) . '_' . $originalName; //using this method to make no 2 images have same name (avoids overwrites)
-                $imagePath = '/uploads' . $uniqueName; //saving the relative path to variable making it easier in the long run
+                $imagePath = '/uploads/' . $uniqueName; //saving the relative path to variable making it easier in the long run
                 $destination = $uploadDir . '/' . $uniqueName;
 
                 if (move_uploaded_file($tmpName, $destination)) {

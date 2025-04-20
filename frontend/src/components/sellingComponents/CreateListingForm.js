@@ -106,7 +106,8 @@ function CreateListingForm({ onSubmit, onClose }) {
 
     fetch(`${process.env.REACT_APP_API_BASE}/create/save_listings.php`, {
       method: 'POST',
-      body: formData
+      body: formData,
+      credentials: "include",
     })
     .then(async response => {
       const text = await response.text();
