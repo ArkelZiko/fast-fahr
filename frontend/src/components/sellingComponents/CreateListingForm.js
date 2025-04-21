@@ -104,7 +104,7 @@ function CreateListingForm({ onSubmit, onClose }) {
 
     selectedFiles.forEach(file => formData.append('photos[]', file));
 
-    fetch(`${process.env.REACT_APP_API_BASE}/create/save_listings.php`, {
+    fetch(`${process.env.REACT_APP_API_BASE}/listings/save_listings.php`, {
       method: 'POST',
       body: formData,
       credentials: "include",

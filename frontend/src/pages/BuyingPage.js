@@ -32,7 +32,7 @@ function BuyingPage() {
         setFetchError('');
         setPageLoading(true);
 
-        fetch(`${process.env.REACT_APP_API_BASE}/fetch/get_listings.php`, { credentials: 'omit' })
+        fetch(`${process.env.REACT_APP_API_BASE}/listings/get_listings.php`, { credentials: 'omit' })
             .then((res) => {
                 if (!res.ok) {
                     return res.text().then(text => { throw new Error(`HTTP error! status: ${res.status}, response: ${text}`) });

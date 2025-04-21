@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from "../hooks/useAuth";
-
 import Header from "../components/Header";
 import NavBar from "../components/Navbar";
 import ConversationList from "../components/messageComponents/ConversationList.js";
 import ChatInterface from "../components/messageComponents/ChatInterface.js";
 import AddContactModal from "../components/messageComponents/AddContactModal.js";
-import DeleteConfirmModal from "../components/messageComponents/DeleteConfirmModal.js";
+import DeleteConfirmModal from "../components/messageComponents/DeleteChatModal.js";
 
 import "../components/css/messageCSS/messagesPage.css";
 

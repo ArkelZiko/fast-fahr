@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../hooks/useAuth";
-
 import Header from '../components/Header';
 import NavBar from '../components/Navbar';
 import SellListingCard from '../components/sellingComponents/SellListingCard.js';
 import '../components/css/sellingCSS/sellingpage.css';
 import CreateListingForm from '../components/sellingComponents/CreateListingForm.js';
+import DeleteListingModal from '../components/sellingComponents/DeleteListingModal.js';
 import Footer from "../components/Footer";
 
 function SellingPage() {
@@ -14,9 +14,13 @@ function SellingPage() {
   const navigate = useNavigate();
 
   const [myListings, setMyListings] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
   const [fetchError, setFetchError] = useState('');
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [listingToDelete, setListingToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
 
   useEffect(() => {
     let isMounted = true;
@@ -27,7 +31,8 @@ function SellingPage() {
       }
 
       setFetchError('');
-      fetch(`${process.env.REACT_APP_API_BASE}/fetch/get_listings.php`, { credentials: 'include' })
+      setPageLoading(true);
+      fetch(`${process.env.REACT_APP_API_BASE}/listings/get_listings.php`, { credentials: 'include' })
         .then(res => {
           if (!res.ok) {
             return res.text().then(text => { throw new Error(`HTTP error! status: ${res.status}, response: ${text}`) });
@@ -60,17 +65,58 @@ function SellingPage() {
     return () => { isMounted = false; };
   }, [authLoading, currentUser, requireAuth]);
 
-  const openModal = () => {
+  const openCreateModal = () => {
     if (!currentUser) { requireAuth(); return; }
-    setIsModalOpen(true);
+    setIsCreateModalOpen(true);
   };
-  const closeModal = () => setIsModalOpen(false);
+  const closeCreateModal = () => setIsCreateModalOpen(false);
 
-  const handleDeleteListing = useCallback((id) => {
+  const openDeleteConfirmModal = useCallback((id, title) => {
     if (!currentUser) { requireAuth(); return; }
-    setMyListings(currentListings => currentListings.filter(listing => listing.id !== id));
-    alert(`Listing ${id} deleted (simulation). Implement API call.`);
+    setListingToDelete({ id, title });
+    setDeleteError('');
+    setIsDeleteModalOpen(true);
   }, [currentUser, requireAuth]);
+
+  const closeDeleteConfirmModal = useCallback(() => {
+      if (isDeleting) return;
+      setIsDeleteModalOpen(false);
+      setListingToDelete(null);
+      setDeleteError('');
+  }, [isDeleting]);
+
+  const handleConfirmDelete = useCallback(async () => {
+    if (!currentUser || !listingToDelete) return;
+
+    setIsDeleting(true);
+    setDeleteError('');
+
+    try {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE}/listings/delete_listings.php`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({ listing_id: listingToDelete.id })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.error || `Failed to delete listing (HTTP ${response.status})`);
+        }
+
+        setMyListings(currentListings => currentListings.filter(listing => listing.id !== listingToDelete.id));
+        closeDeleteConfirmModal();
+
+    } catch (error) {
+        setDeleteError(error.message || "An error occurred during deletion.");
+    } finally {
+        setIsDeleting(false);
+    }
+  }, [currentUser, requireAuth, listingToDelete, closeDeleteConfirmModal]);
+
 
   const handleEditListing = useCallback((id) => {
     if (!currentUser) { requireAuth(); return; }
@@ -80,7 +126,6 @@ function SellingPage() {
   const handlePublishListing = useCallback(async (formData) => {
     if (!currentUser) { requireAuth(); return; }
     try {
-
         alert('Listing submitted (simulation)! Implement API call.');
 
         const simulatedNewListing = {
@@ -93,14 +138,12 @@ function SellingPage() {
             year: formData.get('year') || new Date().getFullYear(),
         };
         setMyListings(prevListings => [simulatedNewListing, ...prevListings]);
-
-        closeModal();
+        closeCreateModal();
 
     } catch (error) {
         alert(`Failed to publish listing: ${error.message}. Please try again.`);
     }
-  }, [currentUser, requireAuth, closeModal]);
-
+  }, [currentUser, requireAuth, closeCreateModal]);
 
   if (authLoading || pageLoading) {
     return (
@@ -123,7 +166,7 @@ function SellingPage() {
 
         <div className="my-listings-header">
           <h2>My Listings</h2>
-          <button className="create-listing-btn-trigger" onClick={openModal}>
+          <button className="create-listing-btn-trigger" onClick={openCreateModal}>
             <i className="fas fa-plus"></i> Create Listing
           </button>
         </div>
@@ -142,7 +185,7 @@ function SellingPage() {
                   mileage={listing.mileage}
                   year={listing.year}
                   onEdit={() => handleEditListing(listing.id)}
-                  onDelete={() => handleDeleteListing(listing.id)}
+                  onDelete={() => openDeleteConfirmModal(listing.id, listing.title)}
                 />
               ))}
             </div>
@@ -151,15 +194,25 @@ function SellingPage() {
           ) : null }
         </section>
 
-        {isModalOpen && (
-          <div className="modal-overlay" onClick={closeModal}>
+        {isCreateModalOpen && (
+          <div className="modal-overlay" onClick={closeCreateModal}>
              <div className="modal-content" onClick={e => e.stopPropagation()}>
                <CreateListingForm
                  onSubmit={handlePublishListing}
-                 onClose={closeModal}
+                 onClose={closeCreateModal}
                />
              </div>
           </div>
+        )}
+
+        {isDeleteModalOpen && listingToDelete && (
+             <DeleteListingModal
+                 listingTitle={listingToDelete.title}
+                 onClose={closeDeleteConfirmModal}
+                 onConfirmDelete={handleConfirmDelete}
+                 isLoading={isDeleting}
+                 error={deleteError}
+             />
         )}
 
       </div>
