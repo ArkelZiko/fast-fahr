@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * File:         delete_listings.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 21st, 2025
+ * Description:  Handles deletion of a car listing from the db
+ *               Makes sure user is logged in before doing so
+*/
+
 include __DIR__ . '/../../config/connect.php';
 include __DIR__ . '/../auth/auth_check.php';
 include __DIR__ . '/../../vendor/autoload.php';

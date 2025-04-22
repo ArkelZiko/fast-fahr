@@ -1,4 +1,16 @@
 <?php
+
+/**
+ * File:         list.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 17th, 2025
+ * Description:  Retrieves all car listings bookmarked by the logged-in user.
+ *               Joins posts, users, bookmarks, and post_images tables to 
+ *               return full listing details along with creator username 
+ *               and main image.
+ */
+
 include "../../config/connect.php";
 include __DIR__ . '/../../vendor/autoload.php';
 

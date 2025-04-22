@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * File:         get_listings.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 4th, 2025
+ * Description:  Fetches all car listings from 2 different tables in the db
+ *               1. posts table provides the car info (make, model, price, etc.)
+ *               2. post_images table has the attatched image(s) to a given car
+ */
+
 include __DIR__ . '/../../config/connect.php';
 include __DIR__ . '/../../vendor/autoload.php';
 

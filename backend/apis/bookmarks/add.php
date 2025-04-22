@@ -1,4 +1,15 @@
 <?php
+
+/**
+ * File:         add.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 17th, 2025
+ * Description:  Creating a bookmark which on the backend is adding a listing
+ *               to the db inside the bookmarks table
+ *               user has to be logged in for this action
+ */
+
 include "../../config/connect.php";
 include __DIR__ . '/../../vendor/autoload.php';
 

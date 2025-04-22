@@ -6,7 +6,7 @@
  * MACIDs:       alamy1, govindag, kharodg, zikoa
  * Date:         April 14th, 2025
  * Description:  Handles the creation of new car listings including
- *               saving vehicle data to the posts.sql table (not POST)  
+ *               saving vehicle data to the posts.sql table (not to be confused with POST)  
  *               and processing several image uploads using the FormData object
 */
 

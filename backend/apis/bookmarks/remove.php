@@ -1,4 +1,14 @@
 <?php
+
+/**
+ * File:         remove.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 17th, 2025
+ * Description:  Dealing with removing a bookmark from the db (bookmarks table)
+ *               user has to be logged in for this action
+*/
+
 include "../../config/connect.php";
 include __DIR__ . '/../../vendor/autoload.php';
 
