@@ -1,8 +1,12 @@
 <?php
 
 include "../../config/connect.php";
+include __DIR__ . '/../../vendor/autoload.php';
 
-header('Access-Control-Allow-Origin: http://localhost:3000');
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
+$dotenv->load();
+
+header('Access-Control-Allow-Origin: ' . $_ENV['CORS_ORIGIN']);
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
