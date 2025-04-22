@@ -7,6 +7,7 @@ export default function ListingCard({
   price,
   mileage,
   year,
+  onView,
   isBookmarked = false,
   onBookmarkToggle,
 }) {
@@ -37,13 +38,19 @@ export default function ListingCard({
         </p>
       </div>
 
-      <button
-        className={bookmarked ? "bookmark-btn active" : "bookmark-btn"}
-        onClick={handleClick}
-        title={bookmarked ? "Remove bookmark" : "Add bookmark"}
-      >
-        {bookmarked ? "★" : "☆"}
+    <div className ="listing-actions">
+      <button className="view-btn" onClick={onView}>
+          <i className="fas fa-eye"></i> View
       </button>
+
+        <button
+          className="remove-bookmark-btn"
+          onClick={handleClick}
+          title="Remove Bookmark"
+        >
+          <i className="fas fa-star"></i> Remove
+        </button>
+      </div>
     </div>
   );
 }

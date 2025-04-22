@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { fetchBookmarks, toggleBookmark } from "../hooks/useBookmarks";
-
+import ViewModal from '../components/buyingComponents/ViewModal';
 import Header from "../components/Header";
 import NavBar from "../components/Navbar";
 import ListingCard from "../components/ListingCard";
@@ -14,6 +14,10 @@ export default function BookmarksPage() {
   const [bookmarkedListings, setBookmarkedListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  
+  const [selectedListing, setSelectedListing] = useState(null);
+  const [viewerImages, setViewerImages] = useState([]);
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -58,6 +62,19 @@ export default function BookmarksPage() {
     }
   };
 
+  const handleView = (listing) => {
+    fetch(`${process.env.REACT_APP_API_BASE}/listings/image_listings.php?post_id=${listing.id}`, {
+      credentials: 'include'
+    })
+      .then((res) => res.json())
+      .then((images) => {
+        setSelectedListing(listing);
+        setViewerImages(images);
+        setIsViewerOpen(true);
+      })
+      .catch(() => alert("Failed to load images."));
+  };  
+
   if (authLoading || loading) {
     return (
        <div>
@@ -95,6 +112,7 @@ export default function BookmarksPage() {
                 year={listing.year}
                 isBookmarked={true}
                 onBookmarkToggle={(next) => handleBookmarkToggle(listing.id, next)}
+                onView={() => handleView(listing)}  // ← this is new!
               />
             ))}
           </div>
@@ -102,6 +120,29 @@ export default function BookmarksPage() {
           <p className="no-listings-message">You have no bookmarks saved.</p>
         ) : null }
       </div>
+      
+      {isViewerOpen && selectedListing && (
+        <ViewModal
+          images={viewerImages}
+          onClose={() => setIsViewerOpen(false)}
+          title={selectedListing.title}
+          year={selectedListing.year}
+          price={selectedListing.price}
+          description={selectedListing.description}
+          specs={{
+            Make: selectedListing.make,
+            Model: selectedListing.model,
+            kilomterers: Number(selectedListing.mileage).toLocaleString(),
+            Transmission: selectedListing.transmission,
+            Drive: selectedListing.driveType,
+            Fuel: selectedListing.fuelType,
+            Body: selectedListing.bodyType,
+            Exterior: selectedListing.exteriorColor,
+            Location: `${selectedListing.city}, ${selectedListing.province}`
+          }}
+        />
+      )}
+
       <Footer />
     </div>
   );
