@@ -4,6 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 import Header from '../components/Header';
 import NavBar from '../components/Navbar';
 import SellListingCard from '../components/sellingComponents/SellListingCard.js';
+import ViewModal from '../components/buyingComponents/ViewModal';
 import '../components/css/sellingCSS/sellingpage.css';
 import CreateListingForm from '../components/sellingComponents/CreateListingForm.js';
 import DeleteListingModal from '../components/sellingComponents/DeleteListingModal.js';
@@ -21,6 +22,10 @@ function SellingPage() {
   const [listingToDelete, setListingToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState('');
+  const [selectedListing, setSelectedListing] = useState(null);
+  const [viewerImages, setViewerImages] = useState([]);
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
+
 
   useEffect(() => {
     let isMounted = true;
@@ -123,6 +128,19 @@ function SellingPage() {
     alert(`Edit action for listing ${id} triggered (simulation). Implement edit functionality.`);
   }, [currentUser, requireAuth]);
 
+  const handleView = useCallback((listing) => {
+    fetch(`${process.env.REACT_APP_API_BASE}/listings/image_listings.php?post_id=${listing.id}`, {
+      credentials: 'include'
+    })
+      .then(res => res.json())
+      .then(images => {
+        setSelectedListing(listing);
+        setViewerImages(images);
+        setIsViewerOpen(true);
+      })
+      .catch(() => alert("Failed to load images."));
+  }, []);
+
   const handlePublishListing = useCallback(async (formData) => {
     if (!currentUser) { requireAuth(); return; }
     try {
@@ -184,6 +202,7 @@ function SellingPage() {
                   price={listing.price}
                   mileage={listing.mileage}
                   year={listing.year}
+                  onView={() => handleView(listing)}
                   onEdit={() => handleEditListing(listing.id)}
                   onDelete={() => openDeleteConfirmModal(listing.id, listing.title)}
                 />
@@ -216,6 +235,29 @@ function SellingPage() {
         )}
 
       </div>
+
+        {isViewerOpen && selectedListing && (
+          <ViewModal
+            images={viewerImages}
+            onClose={() => setIsViewerOpen(false)}
+            title={selectedListing.title}
+            year={selectedListing.year}
+            price={selectedListing.price}
+            description={selectedListing.description}
+            specs={{
+              Make: selectedListing.make,
+              Model: selectedListing.model,
+              Kilometers: Number(selectedListing.mileage).toLocaleString(),
+              Transmission: selectedListing.transmission,
+              Drive: selectedListing.driveType,
+              Fuel: selectedListing.fuelType,
+              Body: selectedListing.bodyType,
+              Exterior: selectedListing.exteriorColor,
+              Location: `${selectedListing.city}, ${selectedListing.province}`
+            }}
+          />
+        )}
+
       <Footer />
     </div>
   );

@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Apr 19, 2025 at 06:19 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Host: 127.0.0.1
+-- Generation Time: Apr 22, 2025 at 08:53 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `zikoa_db`
+-- Database: `fastfahr`
 --
 
 -- --------------------------------------------------------
@@ -63,7 +63,15 @@ INSERT INTO `post_images` (`id`, `post_id`, `image_path`, `is_main`) VALUES
 (22, 22, '/uploads/x5m.jpg', 1),
 (23, 23, '/uploads/a7.jpg', 1),
 (24, 24, '/uploads/cayman.jpg', 1),
-(25, 25, '/uploads/passat.jpg', 1);
+(25, 25, '/uploads/passat.jpg', 1),
+(47, 26, '/uploads/img_6803f27ad4a202.50761189_maybach1.jpg', 1),
+(49, 28, '/uploads/img_6807c94b5fe5f2.54388881_porsche7.jpg', 1),
+(50, 28, '/uploads/img_6807c94b609d42.69321011_porsche6.jpg', 0),
+(51, 28, '/uploads/img_6807c94b613604.39484290_porsche5.jpg', 0),
+(52, 28, '/uploads/img_6807c94b61c2d7.41780942_porsche4.jpg', 0),
+(53, 28, '/uploads/img_6807c94b624200.33143626_porsche3.jpg', 0),
+(54, 28, '/uploads/img_6807c94b62bbc8.82428400_porsche2.jpg', 0),
+(55, 28, '/uploads/img_6807c94b6374f3.23635717_posrche1.jpg', 0);
 
 --
 -- Indexes for dumped tables
@@ -84,7 +92,7 @@ ALTER TABLE `post_images`
 -- AUTO_INCREMENT for table `post_images`
 --
 ALTER TABLE `post_images`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- Constraints for dumped tables

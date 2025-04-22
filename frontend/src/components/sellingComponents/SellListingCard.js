@@ -1,7 +1,17 @@
 import React from "react";
 import "../css/sellingCSS/selllistingcard.css";
 
-function SellListingCard({ title, image, price, mileage, year, onEdit, onDelete }) {
+function SellListingCard({
+  title,
+  image,
+  price,
+  mileage,
+  year,
+  onView,
+  onEdit,
+  onDelete,
+  
+}) {
   return (
     <div className="sell-listing-card">
       <img src={image} alt={title} className="sell-listing-image" />
@@ -10,10 +20,12 @@ function SellListingCard({ title, image, price, mileage, year, onEdit, onDelete 
         <p className="sell-listing-detail">
           {year} • {Number(mileage).toLocaleString()} km
         </p>
-        <p className="sell-listing-price">${Number(price).toLocaleString()} CAD</p>
+        <p className="sell-listing-price">
+          ${Number(price).toLocaleString()} CAD
+        </p>
       </div>
       <div className="sell-listing-actions">
-        <button className="view-btn">
+        <button className="view-btn" onClick={onView}>
           <i className="fas fa-eye"></i> View
         </button>
         <button className="edit-btn" onClick={onEdit}>

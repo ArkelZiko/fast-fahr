@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../css/buyingCSS/buylistingcard.css";
 
+/** */
 function BuyListingCard({
   title,
   image,

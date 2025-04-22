@@ -139,7 +139,7 @@ return (
 
     <div className="form-group">
         <label htmlFor="listingTitle">Listing Title <span className="star">*</span></label>
-      <input type="text" id="listingTitle" name="listingTitle" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g., 2021 BMW M3 Competition" maxLength="75" required />
+      <input type="text" id="listingTitle" name="listingTitle" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g., BMW M3 Competition" maxLength="75" required />
     </div>
 
     <div className="form-row">
@@ -225,13 +225,13 @@ return (
           </div>
            <div className="form-group">
                 <label htmlFor="price">Price ($ CAD) <span className="star">*</span></label>
-              <input type="number" id="price" name="price" value={price} onChange={e => setPrice(e.target.value)} step="0.01" min="0" placeholder="e.g., 95000.00" required />
+              <input type="number" id="price" name="price" value={price} onChange={e => setPrice(e.target.value)} step="0.01" min="0" placeholder="e.g., 95000" required />
           </div>
      </div>
 
     <div className="form-group">
         <label htmlFor="description">Description <span className="star">*</span></label>
-      <textarea id="description" name="description" value={description} onChange={(e) => setDescription(e.target.value)} rows="5" maxLength="1500" placeholder="Describe the car's features, condition, history..." required></textarea>
+      <textarea id="description" name="description" value={description} onChange={(e) => setDescription(e.target.value)} rows="5" maxLength="1500" placeholder="Describe the car's features, condition, and history..." required></textarea>
       <small>{1500 - description.length} characters remaining</small>
     </div>
 
@@ -242,9 +242,9 @@ return (
         id="photos"
         name="photos"
         multiple
-        accept="image/png, image/jpeg, image/webp"
+        accept="image/png, image/jpeg"
         onChange={handleFileChange} />
-       <small>Upload up to 7 photos (JPEG, PNG, WEBP). First photo is the main preview by default.</small>
+       <small>Upload up to 7 photos (JPEG, PNG). First photo is the main preview by default.</small>
     </div>
 
       {previewUrls.length > 0 && (

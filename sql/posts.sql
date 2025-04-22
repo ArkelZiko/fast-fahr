@@ -77,6 +77,8 @@ INSERT INTO `posts` (`id`, `user_id`, `title`, `make`, `model`, `year`, `price`,
 (23, 1, 'Audi A7 3.0T Quattro', 'Audi', 'A7', 2015, 35750.00, 67800, '2025-04-02 14:24:16', 'Executive sportback with sleek lines, quattro handling, and smooth V6.', 'Automatic', 'Gasoline', 'AWD', 'Hatchback', 'Silver', 'NB', 'Fredericton'),
 (24, 1, 'Porsche Cayman S (981)', 'Porsche', 'Cayman', 2014, 58800.00, 50600, '2025-04-02 14:24:16', 'Mid-engine coupe with razor-sharp handling and signature Porsche styling.', 'Manual', 'Gasoline', 'RWD', 'Coupe', 'Red', 'NS', 'Sydney'),
 (25, 1, 'Volkswagen Passat R-Line', 'Volkswagen', 'Passat', 2017, 22000.00, 72300, '2025-04-02 14:24:16', 'Spacious family sedan with R-Line styling and turbocharged performance.', 'Automatic', 'Gasoline', 'FWD', 'Sedan', 'Blue', 'ON', 'Brampton');
+(26, 6, 'Mercedes Maybach', 'Mercedes-Benz', 'S-Class', 2025, 200000.00, 3000, '2025-04-19 14:59:06', 'This is a maybach', 'Automatic', 'Gasoline', 'AWD', 'Sedan', 'White', 'ON', 'Milton'),
+(28, 6, 'Porsche 911 Turbo Coupe', 'Porsche', '911', 2015, 100000.00, 20000, '2025-04-22 12:52:27', 'THIS is the porsche 911', 'Manual', 'Gasoline', 'FWD', 'Coupe', 'Silver', 'ON', 'Toronto');
 
 --
 -- Indexes for dumped tables

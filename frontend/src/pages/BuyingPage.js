@@ -234,7 +234,7 @@ function BuyingPage() {
           ) : null}
         </div>
       </div>
-      <Footer />
+
 
       {isFilterModalOpen && (
         <div className="modal-overlay" onClick={closeFilterModal}>
@@ -260,7 +260,7 @@ function BuyingPage() {
           specs={{
             Make: selectedCar.make,
             Model: selectedCar.model,
-            kilomterers: `${Number(selectedCar.mileage).toLocaleString()} km`,
+            Kilometers: `${Number(selectedCar.mileage).toLocaleString()} km`,
             Transmission: selectedCar.transmission,
             Drive: selectedCar.driveType,
             Body: selectedCar.bodyType,
@@ -269,7 +269,9 @@ function BuyingPage() {
             Location: `${selectedCar.city}, ${selectedCar.province}`,
           }}
         />
-      )}
+      )}      
+      
+      <Footer />
     </div>
   );
 }
