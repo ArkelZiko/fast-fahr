@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { useAuth } from "../hooks/useAuth";
-import { fetchBookmarks, toggleBookmark } from "../hooks/useBookmarks";
-import ViewModal from '../components/buyingComponents/ViewModal';
-import Header from "../components/Header";
-import NavBar from "../components/Navbar";
-import ListingCard from "../components/ListingCard";
+import React, { useEffect, useState } from "react";
+import ViewModal from "../components/buyingComponents/ViewModal";
 import "../components/css/buyingCSS/buyingpage.css";
 import Footer from "../components/Footer";
+import Header from "../components/Header";
+import ListingCard from "../components/ListingCard";
+import NavBar from "../components/Navbar";
+import { useAuth } from "../hooks/useAuth";
+import { fetchBookmarks, toggleBookmark } from "../hooks/useBookmarks";
 
 export default function BookmarksPage() {
   const { currentUser, isLoading: authLoading, requireAuth } = useAuth();
 
   const [bookmarkedListings, setBookmarkedListings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  
+  const [error, setError] = useState("");
+
   const [selectedListing, setSelectedListing] = useState(null);
   const [viewerImages, setViewerImages] = useState([]);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
@@ -30,25 +30,27 @@ export default function BookmarksPage() {
     }
 
     setLoading(true);
-    setError('');
+    setError("");
     fetchBookmarks()
       .then((data) => {
-         if (isMounted) {
-             if(Array.isArray(data)){
-                 setBookmarkedListings(data);
-             } else {
-                 setError("Failed to load bookmarks: Invalid data format.");
-                 setBookmarkedListings([]);
-             }
-         }
+        if (isMounted) {
+          if (Array.isArray(data)) {
+            setBookmarkedListings(data);
+          } else {
+            setError("Failed to load bookmarks: Invalid data format.");
+            setBookmarkedListings([]);
+          }
+        }
       })
       .catch((err) => {
-        if(isMounted) setError(`Failed to load bookmarks: ${err.message}`);
+        if (isMounted) setError(`Failed to load bookmarks: ${err.message}`);
       })
       .finally(() => {
         if (isMounted) setLoading(false);
       });
-      return () => { isMounted = false; }
+    return () => {
+      isMounted = false;
+    };
   }, [authLoading, currentUser, requireAuth]);
 
   const handleBookmarkToggle = async (listingId, nextState) => {
@@ -63,9 +65,12 @@ export default function BookmarksPage() {
   };
 
   const handleView = (listing) => {
-    fetch(`${process.env.REACT_APP_API_BASE}/listings/image_listings.php?post_id=${listing.id}`, {
-      credentials: 'include'
-    })
+    fetch(
+      `${process.env.REACT_APP_API_BASE}/listings/image_listings.php?post_id=${listing.id}`,
+      {
+        credentials: "include",
+      }
+    )
       .then((res) => res.json())
       .then((images) => {
         setSelectedListing(listing);
@@ -73,18 +78,21 @@ export default function BookmarksPage() {
         setIsViewerOpen(true);
       })
       .catch(() => alert("Failed to load images."));
-  };  
+  };
 
   if (authLoading || loading) {
     return (
-       <div>
-           <Header />
-           <NavBar />
-           <div className="loading-page" style={{ textAlign: "center", padding: 50 }}>
-               Loading bookmarks…
-           </div>
-           <Footer />
-       </div>
+      <div>
+        <Header />
+        <NavBar />
+        <div
+          className="loading-page"
+          style={{ textAlign: "center", padding: 50 }}
+        >
+          Loading bookmarks…
+        </div>
+        <Footer />
+      </div>
     );
   }
   if (!currentUser) return null;
@@ -106,21 +114,28 @@ export default function BookmarksPage() {
               <ListingCard
                 key={listing.id}
                 title={listing.title}
-                image={listing.image_path ? `${process.env.REACT_APP_STATIC_BASE}${listing.image_path}` : '/images/default-car.png'}
+                image={
+                  listing.image_path
+                    ? `${process.env.REACT_APP_STATIC_BASE}${listing.image_path}`
+                    : "/images/default-car.png"
+                }
                 price={listing.price}
                 mileage={listing.mileage}
                 year={listing.year}
                 isBookmarked={true}
-                onBookmarkToggle={(next) => handleBookmarkToggle(listing.id, next)}
-                onView={() => handleView(listing)}  // ← this is new!
+                onBookmarkToggle={(next) =>
+                  handleBookmarkToggle(listing.id, next)
+                }
+                onView={() => handleView(listing)}
+                context="bookmarks"
               />
             ))}
           </div>
         ) : !error ? (
           <p className="no-listings-message">You have no bookmarks saved.</p>
-        ) : null }
+        ) : null}
       </div>
-      
+
       {isViewerOpen && selectedListing && (
         <ViewModal
           images={viewerImages}
@@ -138,7 +153,7 @@ export default function BookmarksPage() {
             Fuel: selectedListing.fuelType,
             Body: selectedListing.bodyType,
             Exterior: selectedListing.exteriorColor,
-            Location: `${selectedListing.city}, ${selectedListing.province}`
+            Location: `${selectedListing.city}, ${selectedListing.province}`,
           }}
         />
       )}

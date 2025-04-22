@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import BuyListingCard from "../components/buyingComponents/BuyListingCard";
+import ListingCard from "../components/ListingCard";
 import ViewModal from "../components/buyingComponents/ViewModal";
 import "../components/css/buyingCSS/buyingpage.css";
 import filterListings from "../components/filterListingsComponent/filterListings";
@@ -208,23 +208,18 @@ function BuyingPage() {
         <div className="my-listings-grid">
           {!fetchError && filteredListings.length > 0 ? (
             filteredListings.map((car) => (
-              <BuyListingCard
+              <ListingCard
                 key={car.id}
                 title={car.title}
-                image={
-                  car.image_path
-                    ? `${process.env.REACT_APP_STATIC_BASE}${car.image_path}`
-                    : "/images/default-car.png"
-                }
+                image={car.image_path ? `${process.env.REACT_APP_STATIC_BASE}${car.image_path}` : "/images/default-car.png"}
                 price={car.price}
                 mileage={car.mileage}
                 year={car.year}
                 isBookmarked={!!currentUser && bookmarkedIds.has(car.id)}
-                onBookmark={() => handleBookmark(car.id)}
-                onContact={() =>
-                  handleContact(car.user_id, car.creator_username)
-                }
+                onBookmarkToggle={(next) => handleBookmark(car.id)}
+                onContact={() => handleContact(car.user_id, car.creator_username)}
                 onView={() => handleView(car)}
+                context="buying"
               />
             ))
           ) : !fetchError ? (

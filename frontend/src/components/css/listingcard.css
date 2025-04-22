@@ -1,161 +1,138 @@
 /*
  Authors:     Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
  MACIDs:      alamy1, govindag, kharodg, zikoa
- Date:        March 29th, 2025
- Description: *Near identical style to selllistingCard.css (intentional) 
-
-              Grid model of all the car listings in the form of a card
-              which in istelf containts the car image, info, and buttons
-              for further actions. cards fit the aesthetic of brand colour-scheme
+ Date:        April 22nd, 2025
+ Description: Unified styling for car listing cards across Buying, Selling, and Bookmarks pages.
+              Uses consistent layout and button aesthetics with dynamic context-based button rendering.
 */
 
-/* --- Grid Container --- */
-.listing-grid {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 4.5rem;
-  padding: 2rem;
-}
-
-/* Can be found in buying & selling page */
-.my-listings-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 4.5rem; /* Adjust as needed */
-}
-
-
-.home-content-wrapper {
-  padding: 2rem;
-  max-width: 1200px; /* limits how wide the grid can stretch */
-  margin: 0 auto;
-}
-
-/* --- Card Styling --- */
-.listing-card {
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
-  width: 100%;
-  max-width: 350px;
-  display: flex;
-  flex-direction: column;
-  font-family: 'Poppins', sans-serif;
-}
-
-/* --- Image Styling --- */
-.listing-image {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-}
-
-/* --- Info Section Styling --- */
-.listing-info {
-  padding: 1rem;
-  flex-grow: 1;
-}
-
-.listing-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #111;
-  margin-bottom: 0.25rem;
-  font-family: 'Poppins', sans-serif;
-}
-
-.listing-detail {
-  font-size: 0.95rem;
-  color: #333;
-  margin-bottom: 0.5rem;
-}
-
-.listing-price {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #000;
-}
-
-/* --- Action Buttons Container */
-.listing-actions {
-  display: flex;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem 1rem 1rem;
-  border-top: 1px solid #eee;
-  margin-top: auto;
-}
-
-/* --- Common Button Styles */
-.listing-actions button {
-  flex: 1;
-  justify-content: center;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: 'Poppins', sans-serif;
-  text-align: center;
-  white-space: nowrap;
-}
-
-.listing-actions button i {
-  font-size: 0.85rem;
-}
-
-/* --- Specific Button Color Styles --- */
-.view-btn {
-  background-color: #f0f0f0;
-  color: #333;
-  border: 1px solid #ccc;
-}
-
-.view-btn:hover {
-  background-color: #e0e0e0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.bookmark-btn {
-  background-color: #ff9800;
-  color: white;
-  border: none;
-  width: 2rem;
-
-}
-
-.bookmark-btn:hover {
-  background-color: #e67e00;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 2rem;
-}
-
-.message-btn {
-  background-color: #cc0000;
-  color: white;
-  border: none;
-}
-
-.message-btn:hover {
-  background-color: #a00000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.remove-bookmark-btn {
-  background-color: #ff9800;
-  color: white;
-  border: none;
-  transition: background-color 0.2s ease;
-}
-
-.remove-bookmark-btn:hover {
-  background-color: #e67e00;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+.buy-listing-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    width: 100%;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .buy-listing-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+  }
+  
+  .buy-listing-info {
+    padding: 1rem;
+    flex-grow: 1;
+  }
+  
+  .buy-listing-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 0.25rem;
+  }
+  
+  .buy-listing-detail {
+    font-size: 0.95rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+  
+  .buy-listing-price {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #000;
+  }
+  
+  .listing-actions {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem 1rem 1rem;
+    border-top: 1px solid #eee;
+    margin-top: auto;
+  }
+  
+  .listing-actions button {
+    flex: 1;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    white-space: nowrap;
+  }
+  
+  .listing-actions button i {
+    font-size: 0.85rem;
+  }
+  
+  /* Button Color Styles */
+  .view-btn {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ccc;
+  }
+  
+  .view-btn:hover {
+    background-color: #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .bookmark-btn,
+  .remove-bookmark-btn {
+    background-color: #ff9800;
+    color: white;
+    border: none;
+  }
+  
+  .bookmark-btn:hover,
+  .remove-bookmark-btn:hover {
+    background-color: #e67e00;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .message-btn {
+    background-color: #cc0000;
+    color: white;
+    border: none;
+  }
+  
+  .message-btn:hover {
+    background-color: #a00000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .edit-btn {
+    background-color: #ff9800;
+    color: white;
+    border: none;
+  }
+  
+  .edit-btn:hover {
+    background-color: #e67e00;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .delete-btn {
+    background-color: #cc0000;
+    color: white;
+    border: none;
+  }
+  
+  .delete-btn:hover {
+    background-color: #a00000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
