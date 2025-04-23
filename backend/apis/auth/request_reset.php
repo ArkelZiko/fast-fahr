@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * File:         request_reset.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 5th, 2025
+ * Description:  Handles password reset requests. Validates email, generates a reset
+ *               token, stores it (or its hash) in the database, and sends an email
+ *               containing the reset code/token to the user using PHPMailer.
+ */
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 

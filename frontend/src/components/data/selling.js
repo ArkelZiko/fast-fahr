@@ -1,3 +1,13 @@
+/**
+ * File:         selling.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 10th, 2025
+ * Description:  Provides helper data and functions related to vehicle listings,
+ *               specifically for the selling/creation process. Includes a mapping
+ *               of car makes to models and a function to generate year options.
+*/
+
 // Simple data structure for Make -> Models mapping
 const carModelsByMake = {
     Audi: ['A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'Q3', 'Q5', 'Q7', 'Q8', 'R8', 'RS3', 'RS5', 'RS6', 'RS7', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'TT', 'e-tron'],

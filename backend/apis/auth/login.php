@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * File:         login.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         March 20th, 2025
+ * Description:  Handles user login requests. Verifies email and password against
+ *               the database, starts a session, and returns user data on success.
+ */
+
 include "../../config/connect.php";
 include __DIR__ . '/../../vendor/autoload.php';
 

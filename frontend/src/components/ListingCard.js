@@ -1,6 +1,34 @@
+/**
+ * File:         ListingCard.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         March 20th, 2025
+ * Description:  A general-purpose listing card component. Intended to display
+ *               vehicle information and conditionally render action buttons
+ *               (View, Edit, Delete, Bookmark, Contact) based on the 'context' prop.
+ *               (Note: This component seems less used now in favor of Buy/Sell specific cards).
+*/
+
 import React, { useState, useEffect } from "react";
 import "./css/listingcard.css";
 
+/**
+ * Renders a generic listing card with conditional action buttons.
+ * @param {object} props - Component properties.
+ * @param {string} props.title - Listing title.
+ * @param {string} props.image - Image URL.
+ * @param {number|string} props.price - Listing price.
+ * @param {number|string} props.mileage - Vehicle mileage.
+ * @param {number|string} props.year - Vehicle year.
+ * @param {function} [props.onView] - Callback function for View action.
+ * @param {function} [props.onEdit] - Callback function for Edit action.
+ * @param {function} [props.onDelete] - Callback function for Delete action.
+ * @param {function} [props.onContact] - Callback function for Contact action.
+ * @param {function} [props.onBookmarkToggle] - Callback function when bookmark state changes.
+ * @param {boolean} [props.isBookmarked=false] - Initial bookmark state.
+ * @param {'buying'|'selling'|'bookmarks'} [props.context='buying'] - Context to determine which buttons to show.
+ * @returns {JSX.Element} The ListingCard component.
+*/
 function ListingCard({
   title,
   image,

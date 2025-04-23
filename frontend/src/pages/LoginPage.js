@@ -1,9 +1,24 @@
+/**
+ * File:         LoginPage.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         March 20th, 2025
+ * Description:  Page component for user login. Provides a form for email and password,
+ *               handles form submission, calls the login API endpoint, updates the
+ *               authentication context on success using the useAuth hook, displays
+ *               error/success messages, and navigates the user upon successful login.
+*/
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../components/css/login.css';
 import LoginHeader from '../components/loginElements/LoginHeader';
 import { useAuth } from '../hooks/useAuth';
 
+/**
+ * Renders the user login page.
+ * @returns {JSX.Element} The LoginPage component.
+*/
 function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuth();

@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * File:         find_user.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 3rd, 2025
+ * Description:  Handles requests to find a user by their username, excluding
+ *               the logged-in user themselves. Returns basic user info if found.
+ */
+
 include __DIR__ . '/../../vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));

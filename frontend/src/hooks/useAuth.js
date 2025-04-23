@@ -1,3 +1,13 @@
+/**
+ * File:         useAuth.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         March 25th, 2025
+ * Description:  Provides an authentication context and hook (`useAuth`) for managing
+ *               user authentication state (currentUser, isLoading) throughout the application.
+ *               Includes functions for login, logout, and requiring authentication for routes.
+*/
+
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 

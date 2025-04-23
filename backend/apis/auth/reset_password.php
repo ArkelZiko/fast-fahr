@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * File:         reset_password.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 6th, 2025
+ * Description:  Handles the actual password reset action. Validates the provided
+ *               email, reset token, and new password. If the token is valid and
+ *               not expired, it updates the user's password hash in the database
+ *               and deletes the used token.
+ */
+
 include "../../config/connect.php";
 include "../../models/UserModel.php";
 include __DIR__ . '/../../vendor/autoload.php';

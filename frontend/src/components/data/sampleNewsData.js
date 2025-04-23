@@ -1,3 +1,12 @@
+/**
+ * File:         sampleNewsData.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         March 21st, 2025
+ * Description:  Provides static sample data for news articles related to German cars.
+ *               Used to populate the news feed section on the HomePage.
+*/
+
 const sampleNewsData = [
   {
     id: 'news-1',

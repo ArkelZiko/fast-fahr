@@ -1,8 +1,24 @@
+/**
+ * File:         ResetCodePage.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 6th, 2025
+ * Description:  Page component for verifying the password reset code sent via email.
+ *               Receives email via navigation state, collects the code from the user,
+ *               calls the verify_code API endpoint, displays feedback, and navigates
+ *               to the password setting page on success.
+*/
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import LoginHeader from '../components/loginElements/LoginHeader';
 import '../components/css/login.css';
 
+
+/**
+ * Renders the page for verifying a password reset code.
+ * @returns {JSX.Element} The ResetCodePage component.
+*/
 function ResetCodePage() {
     const navigate = useNavigate();
     const location = useLocation();

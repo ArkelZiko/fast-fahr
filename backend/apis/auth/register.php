@@ -1,4 +1,15 @@
 <?php
+
+/**
+ * File:         register.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         March 20th, 2025
+ * Description:  Handles new user registration requests. Validates input, checks for
+ *               existing email/username, hashes the password, and inserts the new
+ *               user into the database.
+ */
+
 include "../../config/connect.php";
 include __DIR__ . '/../../vendor/autoload.php';
 

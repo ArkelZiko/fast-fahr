@@ -1,4 +1,14 @@
 <?php
+
+/**
+ * File:         logout.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         March 20th, 2025
+ * Description:  Handles user logout requests. Destroys the current session
+ *               and associated session cookie.
+ */
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }

@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * File:         get_messages.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 3rd, 2025
+ * Description:  Fetches the message history between the logged-in user and another
+ *               specified user. Also marks fetched messages as read for the recipient.
+ */
+
 include __DIR__ . '/../../vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));

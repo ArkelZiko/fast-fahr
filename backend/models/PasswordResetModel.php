@@ -1,9 +1,24 @@
 <?php
 
+/**
+ * File:         PasswordResetModel.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 4th, 2025
+ * Description:  Model class for handling database operations related to password
+ *               reset tokens (creating, validating, deleting).
+ */
+
 class PasswordReset {
     private $dbh;
     private $table = 'password_resets';
 
+    /**
+    * Constructor for PasswordReset model.
+    *
+    * @param PDO $dbConnection A PDO database connection object.
+    * @throws InvalidArgumentException If the database connection is null.
+    */
     public function __construct($dbConnection) {
         if ($dbConnection === null) {
             throw new InvalidArgumentException("Database connection cannot be null.");
@@ -12,12 +27,12 @@ class PasswordReset {
     }
 
     /**
-     * Creates a new password reset token entry, returning the plain token.
-     *
-     * @param int    $userId The ID of the user requesting the reset.
-     * @param string $email The email of the user.
-     * @return string|false The plain reset token if successful, false on failure.
-     */
+    * Creates a new password reset token entry, returning the plain token.
+    *
+    * @param int    $userId The ID of the user requesting the reset.
+    * @param string $email The email of the user.
+    * @return string|false The plain reset token if successful, false on failure.
+    */
     public function createResetToken(int $userId, string $email): string|false {
         try {
             $sql_delete = "DELETE FROM {$this->table} WHERE user_id = :user_id";
@@ -55,12 +70,12 @@ class PasswordReset {
     }
 
     /**
-     * Validates a plain token against the stored hashed token for an email.
-     *
-     * @param string $email The user's email.
-     * @param string $plainToken The plain token received from the user.
-     * @return array|false The reset request data array (incl. user_id, id) if valid, false otherwise.
-     */
+    * Validates a plain token against the stored hashed token for an email.
+    *
+    * @param string $email The user's email.
+    * @param string $plainToken The plain token received from the user.
+    * @return array|false The reset request data array (incl. user_id, id) if valid, false otherwise.
+    */
     public function validateResetToken(string $email, string $plainToken): array|false {
         try {
             $currentTime = date('Y-m-d H:i:s');
@@ -92,11 +107,11 @@ class PasswordReset {
     }
 
     /**
-     * Deletes a specific password reset token by its primary key ID.
-     *
-     * @param int $resetId The ID of the password_resets record.
-     * @return bool True on success, false on failure.
-     */
+    * Deletes a specific password reset token by its primary key ID.
+    *
+    * @param int $resetId The ID of the password_resets record.
+    * @return bool True on success, false on failure.
+    */
     public function deleteTokenById(int $resetId): bool {
         try {
             $sql = "DELETE FROM {$this->table} WHERE id = :id";
@@ -111,23 +126,23 @@ class PasswordReset {
         }
     }
 
-     /**
-      * Deletes all password reset tokens for a specific user ID.
-      *
-      * @param int $userId The user's ID.
-      * @return bool True on success or if no tokens existed, false on DB error.
-      */
-     public function deleteTokensForUser(int $userId): bool {
-         try {
-             $sql = "DELETE FROM {$this->table} WHERE user_id = :user_id";
-             $stmt = $this->dbh->prepare($sql);
-             $params = [':user_id' => $userId];
-             $execute = $stmt->execute($params);
-             return $execute;
+    /**
+    * Deletes all password reset tokens for a specific user ID.
+    *
+    * @param int $userId The user's ID.
+    * @return bool True on success or if no tokens existed, false on DB error.
+    */
+    public function deleteTokensForUser(int $userId): bool {
+        try {
+            $sql = "DELETE FROM {$this->table} WHERE user_id = :user_id";
+            $stmt = $this->dbh->prepare($sql);
+            $params = [':user_id' => $userId];
+            $execute = $stmt->execute($params);
+            return $execute;
 
-         } catch (PDOException $e) {
-             error_log("Database error in deleteTokensForUser for user ID $userId: " . $e->getMessage());
-             return false;
+         }  catch (PDOException $e) {
+                error_log("Database error in deleteTokensForUser for user ID $userId: " . $e->getMessage());
+                return false;
          }
      }
 }

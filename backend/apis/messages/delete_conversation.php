@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * File:         delete_conversation.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 4th, 2025
+ * Description:  Handles requests to delete the entire message history between
+ *               the logged-in user and another specified user.
+ */
+
 include __DIR__ . '/../../vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));

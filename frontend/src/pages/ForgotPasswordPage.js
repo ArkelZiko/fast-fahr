@@ -1,8 +1,23 @@
+/**
+ * File:         ForgotPasswordPage.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 5th, 2025
+ * Description:  Page component allowing users to request a password reset email.
+ *               Collects the user's email and sends it to the request_reset API endpoint.
+ *               Provides feedback on success or failure and navigates to the code verification page on success.
+*/
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginHeader from '../components/loginElements/LoginHeader';
 import '../components/css/login.css';
 
+
+/**
+ * Renders the Forgot Password page form.
+ * @returns {JSX.Element} The ForgotPasswordPage component.
+*/
 function ForgotPasswordPage() {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');

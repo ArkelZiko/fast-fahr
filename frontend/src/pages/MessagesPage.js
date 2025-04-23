@@ -1,3 +1,15 @@
+/**
+ * File:         MessagesPage.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 4th, 2025
+ * Description:  Page component for displaying user messages and conversations.
+ *               Fetches conversation list and messages for selected chat. Handles
+ *               sending messages, deleting conversations, adding new contacts via modal,
+ *               and marking messages as read. Implements polling for updates.
+ *               Handles opening AddContactModal automatically based on navigation state.
+ */
+
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from "../hooks/useAuth";
@@ -10,6 +22,11 @@ import DeleteConfirmModal from "../components/messageComponents/DeleteChatModal.
 
 import "../components/css/messageCSS/messagesPage.css";
 
+
+/**
+ * Renders the Messages page, allowing users to view and manage conversations.
+ * @returns {JSX.Element|null} The MessagesPage component or null if redirecting.
+*/
 function MessagesPage() {
     const { currentUser, isLoading: authLoading, requireAuth } = useAuth();
     const navigate = useNavigate();

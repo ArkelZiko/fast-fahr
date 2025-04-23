@@ -1,6 +1,27 @@
+/**
+ * File:         NewsArticleCard.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         March 21st, 2025
+ * Description:  Component for displaying a single news article preview card.
+ *               Shows title, image (with placeholder), source, date, excerpt,
+ *               and a link to the full article.
+*/
+
 import React from 'react';
 import './css/newsarticlecard.css';
 
+/**
+ * Renders a card displaying information about a news article.
+ * @param {object} props - Component properties.
+ * @param {string} props.title - The title of the news article.
+ * @param {string} [props.imageUrl] - The URL of the article's image.
+ * @param {string} props.excerpt - A short summary or excerpt of the article.
+ * @param {string} [props.source] - The source/publisher of the article.
+ * @param {string|Date} [props.date] - The publication date of the article.
+ * @param {string} props.link - The URL to the full news article.
+ * @returns {JSX.Element} The news article card component.
+*/
 function NewsArticleCard({ title, imageUrl, excerpt, source, date, link }) {
   const displayImage = imageUrl || '/images/news/placeholder.jpg'; 
 

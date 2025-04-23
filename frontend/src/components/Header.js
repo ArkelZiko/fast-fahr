@@ -1,9 +1,25 @@
+/**
+ * File:         Header.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         March 19th, 2025
+ * Description:  Component rendering the main site header. Includes the logo/site name,
+ *               a search bar (currently non-functional), and conditional rendering
+ *               for either a "Sign-in" button or user greeting/logout button
+ *               based on the authentication status from useAuth hook.
+*/
+
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import "./css/header.css";
 import logo from "./images/logo.png";
 
+
+/**
+ * Renders the main site header, adapting based on user login status.
+ * @returns {JSX.Element} The header component.
+*/
 function Header() {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();

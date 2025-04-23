@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * File:         mark_read.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 4th, 2025
+ * Description:  Handles requests to mark messages received by the logged-in user
+ *               from a specific sender as read in the database.
+ */
+
 include __DIR__ . '/../../vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));

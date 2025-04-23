@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * File:         get_conversations.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 3rd, 2025
+ * Description:  Fetches a list of conversations for the logged-in user, including
+ *               details about the other participant, the last message, timestamp,
+ *               and unread status.
+ */
+
 include __DIR__ . '/../../vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));

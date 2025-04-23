@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * File:         send_message.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 3rd, 2025
+ * Description:  Handles requests to send a new message from the logged-in user
+ *               to a specified recipient. Inserts the message into the database
+ *               and returns the newly created message details.
+ */
+
 include __DIR__ . '/../../vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));

@@ -1,3 +1,13 @@
+/**
+ * File:         HomePage.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         March 19th, 2025
+ * Description:  Page component for the website's homepage. Displays the main
+ *               header, navigation bar, a promotional card, a section for news
+ *               articles (using sample data), and the footer.
+*/
+
 import React from "react";
 import Header from "../components/Header.js";
 import NavBar from "../components/Navbar.js";
@@ -7,6 +17,10 @@ import Footer from "../components/Footer.js";
 import sampleNewsData from "../components/data/sampleNewsData.js";
 import '../components/css/homeCSS/homepage.css';
 
+/**
+ * Renders the homepage of the application.
+ * @returns {JSX.Element} The HomePage component.
+*/
 function HomePage() {
 
   return (

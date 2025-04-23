@@ -1,6 +1,24 @@
+/**
+ * File:         AddContactModal.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 4th, 2025
+ * Description:  A modal component allowing users to search for another user by
+ *               username to start a new chat conversation. Handles input, displays
+ *               loading state, shows errors, and calls the parent's add contact handler.
+*/
+
 import React, { useState, useEffect } from 'react';
 import '../css/messageCSS/modalStyles.css';
 
+/**
+ * Renders a modal for finding and adding a new chat contact.
+ * @param {object} props - Component properties.
+ * @param {function} props.onClose - Function to call to close the modal.
+ * @param {function} props.onAddContact - Async function (passed from parent) to call when finding/adding a user. Should return true on success, false on failure.
+ * @param {string} [props.initialUsername=''] - Optional username to pre-fill the input field.
+ * @returns {JSX.Element} The AddContactModal component.
+*/
 function AddContactModal({ onClose, onAddContact, initialUsername = '' }) {
     const [username, setUsername] = useState('');
     const [error, setError] = useState('');

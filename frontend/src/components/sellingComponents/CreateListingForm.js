@@ -1,7 +1,25 @@
+/**
+ * File:         CreateListingForm.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 12th, 2025
+ * Description:  Component providing a form for users to create a new vehicle listing.
+ *               Includes fields for vehicle details, specs, location, description,
+ *               and photo uploads with preview and main photo selection.
+ *               Submits data using FormData to the backend API.
+*/
+
 import React, { useState, useEffect } from 'react';
 import { getModelsForMake, getYearOptions } from '../data/selling.js';
 import '../css/sellingCSS/createlistingform.css';
 
+/**
+ * Renders a form for creating new car listings.
+ * @param {object} props - Component properties.
+ * @param {function} props.onSubmit - Callback function triggered on form submission (receives FormData).
+ * @param {function} props.onClose - Callback function to close the modal/form container.
+ * @returns {JSX.Element} The CreateListingForm component.
+*/
 function CreateListingForm({ onSubmit, onClose }) {
 
   const [make, setMake] = useState('');

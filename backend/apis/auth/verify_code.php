@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * File:         verify_code.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 6th, 2025
+ * Description:  Verifies if a password reset code (token) provided by the user
+ *               is valid and not expired for the given email address. Does not
+ *               change the password itself.
+ */
+
 include "../../config/connect.php";
 include "../../models/PasswordResetModel.php";
 include __DIR__ . '/../../vendor/autoload.php';

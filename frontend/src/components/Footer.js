@@ -1,7 +1,20 @@
+/**
+ * File:         Footer.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         March 19th, 2025
+ * Description:  Component rendering the website footer, including logo,
+ *               social media links, additional text/links, and copyright info.
+ */
+
 import React from "react";
 import "./css/footer.css";
 import logo from "./images/logo.png";
 
+/**
+ * Renders the site footer.
+ * @returns {JSX.Element} The footer component.
+*/
 function Footer() {
   return (
     <footer className="footer">

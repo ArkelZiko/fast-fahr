@@ -1,3 +1,15 @@
+/**
+ * File:         SellingPage.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 10th, 2025 (Assumed date for initial Selling Page)
+ * Description:  Page component for users to manage their own listings.
+ *               Fetches and displays only the listings created by the logged-in user.
+ *               Allows users to create new listings via a modal form and delete
+ *               their existing listings via a confirmation modal. Includes
+ *               placeholder for edit functionality.
+*/
+
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
@@ -10,6 +22,11 @@ import CreateListingForm from "../components/sellingComponents/CreateListingForm
 import DeleteListingModal from "../components/sellingComponents/DeleteListingModal.js";
 import { useAuth } from "../hooks/useAuth";
 
+
+/**
+ * Renders the Selling page, displaying and managing the user's own listings.
+ * @returns {JSX.Element|null} The SellingPage component or null if redirecting.
+*/
 function SellingPage() {
   const { currentUser, isLoading: authLoading, requireAuth } = useAuth();
   const navigate = useNavigate();

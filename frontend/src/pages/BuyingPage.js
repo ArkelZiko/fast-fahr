@@ -1,3 +1,15 @@
+/**
+ * File:         BuyingPage.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 20th, 2025 (Date reflects latest functional version provided)
+ * Description:  Page component for displaying available car listings for purchase.
+ *               Fetches all listings, allows filtering via a modal, displays listings
+ *               using ListingCard, handles bookmarking, contacting seller (via MessagesPage),
+ *               and viewing listing details via a modal. Adapts functionality based on
+ *               user login status (redirects interaction attempts if not logged in).
+*/
+
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ListingCard from "../components/ListingCard";
@@ -11,6 +23,13 @@ import NavBar from "../components/Navbar";
 import { useAuth } from "../hooks/useAuth";
 import { fetchBookmarks, toggleBookmark } from "../hooks/useBookmarks";
 
+
+/**
+ * Renders the Buying page, displaying car listings available for purchase.
+ * Includes filtering, bookmarking, contacting, and viewing functionality.
+ * Allows public viewing but redirects interactions for non-logged-in users.
+ * @returns {JSX.Element} The BuyingPage component.
+*/
 function BuyingPage() {
   const { currentUser, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();

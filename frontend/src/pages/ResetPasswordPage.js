@@ -1,8 +1,23 @@
+/**
+ * File:         ResetPasswordPage.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 7th, 2025
+ * Description:  Page component for setting a new password after verifying a reset code.
+ *               Receives email and token via navigation state. Collects and validates
+ *               the new password, calls the reset_password API endpoint, displays feedback,
+ *               and navigates to the login page on success.
+*/
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import LoginHeader from '../components/loginElements/LoginHeader';
 import '../components/css/login.css';
 
+/**
+ * Renders the page for setting a new password using a verified reset token.
+ * @returns {JSX.Element} The ResetPasswordPage component.
+*/
 function ResetPasswordPage() {
     const navigate = useNavigate();
     const location = useLocation();

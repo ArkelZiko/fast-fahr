@@ -1,6 +1,37 @@
+/**
+ * File:         DeleteConfirmModal.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 4th, 2025
+ * Description:  A modal component used specifically for confirming the deletion
+ *               of an entire chat conversation within the Messages page.
+*/
+
 import React from 'react';
 import '../css/messageCSS/modalStyles.css';
 
+
+/**
+ * File:         DeleteConfirmModal.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 4th, 2025
+ * Description:  A modal component used specifically for confirming the deletion
+ *               of an entire chat conversation within the Messages page.
+ */
+import React from 'react';
+// Assuming shared modal styles, adjust if specific to messages
+import '../css/messageCSS/modalStyles.css';
+
+/**
+ * Renders a confirmation modal for deleting a chat conversation.
+ * @param {object} props - Component properties.
+ * @param {function} props.onClose - Function to call when closing the modal.
+ * @param {function} props.onConfirmDelete - Function to call when the Delete button is clicked.
+ * @param {string} props.userName - The username of the other participant in the chat.
+ * @param {boolean} props.isLoading - Flag indicating if the deletion process is ongoing.
+ * @returns {JSX.Element} The DeleteConfirmModal component.
+*/
 function DeleteConfirmModal({ onClose, onConfirmDelete, userName, isLoading }) {
    return (
        <div className="modal-overlay" onClick={onClose}>

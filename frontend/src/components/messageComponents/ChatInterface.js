@@ -1,7 +1,30 @@
+/**
+ * File:         ChatInterface.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 3rd, 2025
+ * Description:  Component representing the main chat window for a selected conversation.
+ *               Displays the chat header (other user's info), the list of messages,
+ *               and the input area for sending new messages. Handles scrolling to
+ *               the bottom and message input/sending actions.
+*/
+
 import React, { useState, useRef, useEffect } from "react";
 import ChatMessage from "./ChatMessage.js";
 import "../css/messageCSS/chatInterface.css";
 
+
+/**
+ * Renders the main chat interface for a selected conversation.
+ * @param {object} props - Component properties.
+ * @param {object} props.conversation - The currently selected conversation object.
+ * @param {Array<object>} props.messages - Array of message objects for the current conversation.
+ * @param {boolean} props.isLoading - Flag indicating if messages are currently loading.
+ * @param {function} props.onSendMessage - Callback function to send a new message.
+ * @param {function} props.onDeleteChat - Callback function to initiate chat deletion.
+ * @param {object} props.currentUser - The currently logged-in user object.
+ * @returns {JSX.Element} The ChatInterface component.
+*/
 function ChatInterface({
     conversation,
     messages,

@@ -1,8 +1,23 @@
+/**
+ * File:         RegisterPage.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         March 20th, 2025
+ * Description:  Page component for user registration. Provides a form for username,
+ *               email, and password. Handles form submission, calls the registration
+ *               API endpoint, displays success/error messages, and navigates to
+ *               the login page upon successful registration.
+*/
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginHeader from '../components/loginElements/LoginHeader';
 import '../components/css/register.css';
 
+/**
+ * Renders the user registration page.
+ * @returns {JSX.Element} The RegisterPage component.
+*/
 function RegisterPage() {
   const navigate = useNavigate();
 

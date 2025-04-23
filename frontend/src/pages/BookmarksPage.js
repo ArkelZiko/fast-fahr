@@ -1,3 +1,14 @@
+/**
+ * File:         BookmarksPage.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 18th, 2025
+ * Description:  Page component for displaying the listings that the currently
+ *               logged-in user has bookmarked. Fetches bookmark data, handles
+ *               un-bookmarking actions, and displays listings using ListingCard.
+ *               Includes logic for viewing listing details via a modal.
+*/
+
 import React, { useEffect, useState } from "react";
 import ViewModal from "../components/buyingComponents/ViewModal";
 import "../components/css/buyingCSS/buyingpage.css";
@@ -8,6 +19,11 @@ import NavBar from "../components/Navbar";
 import { useAuth } from "../hooks/useAuth";
 import { fetchBookmarks, toggleBookmark } from "../hooks/useBookmarks";
 
+
+/**
+ * Renders the Bookmarks page, showing saved listings for the logged-in user.
+ * @returns {JSX.Element|null} The BookmarksPage component or null if redirecting.
+*/
 export default function BookmarksPage() {
   const { currentUser, isLoading: authLoading, requireAuth } = useAuth();
 

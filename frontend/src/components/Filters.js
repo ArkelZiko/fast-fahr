@@ -1,12 +1,26 @@
+/**
+ * File:         Filters.js
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         March 22nd, 2025
+ * Description:  Component providing filtering options for car listings.
+ *               Includes dropdowns for make, model, year, and sliders for
+ *               price and mileage ranges. Can be used standalone or within a modal.
+*/
+
 import React, { useEffect, useState } from "react";
 import { getModelsForMake, getYearOptions } from "../components/data/selling";
 import "./css/filters.css";
 
 /**
- * Filters Component
- * @param {function} onApplyFilters - sends the filter data to be applied
- * @returns {JSX.Element} - rendering
- */
+ * Renders filter controls for listings.
+ * @param {object} props - Component properties.
+ * @param {function} props.onApplyFilters - Callback function to apply selected filters.
+ * @param {function} [props.onClearFilters] - Optional callback function to clear filters.
+ * @param {boolean} [props.isModal=false] - Flag indicating if component is rendered in a modal.
+ * @param {function} [props.onClose] - Optional callback function to close the modal (if isModal is true).
+ * @returns {JSX.Element} The Filters component.
+*/
 function Filters({ onApplyFilters, onClearFilters, isModal = false, onClose }) {
   const [make, setMake] = useState("");
   const [models, setModels] = useState([]);
@@ -16,9 +30,6 @@ function Filters({ onApplyFilters, onClearFilters, isModal = false, onClose }) {
   const [price, setPrice] = useState([0, 200000]);
   const [mileage, setMileage] = useState([0, 200000]);
 
-  /**
-   * Updates models based on selected make
-   */
   useEffect(() => {
     if (make) {
       setModels(getModelsForMake(make));
