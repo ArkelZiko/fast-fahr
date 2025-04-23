@@ -1,0 +1,51 @@
+WORK CITED PAGE / REFERENCES USED FOR CODE
+
+WE WERE ACTIVELY TASKED WITH LEARNING NEW CONCEPTS WHEN TAKING ON THIS PROJECT
+SO FOR ACADEMIC INTEGRITY PURPOSES, PLEASE FIND BELOW THE SOURCES WHICH WE USED 
+TO HELP US IN OUR DEVELOPMENT PROCESS WITH CREATING CODE, DEBUGGING, AND INSPIRATION:
+
+
+Core Technologies & Documentation:
+-React: https://react.dev/ (Core UI library, Hooks like useState, useEffect, useCallback, useContext)
+-React Router: https://reactrouter.com/ (Client-side routing, useNavigate, useLocation)
+-PHP Manual: https://www.php.net/manual/en/ (Better understanding of sessions, file uploads)
+-MySQL / MariaDB Documentation: https://dev.mysql.com/doc/ (SQL syntax help for using join statements + left joins + right joins)
+-Create React App: https://create-react-app.dev/ (Project setup, build process, environment variables)
+-Web Dev Textbook by Sam Scott: https://ecampusontario.pressbooks.pub/webdev/ (for those refreshers mostly on frontend design)
+
+
+Libraries & Packages:
+-PHPMailer: https://github.com/PHPMailer/PHPMailer (Sending password reset emails via SMTP)
+-phpdotenv: https://github.com/vlucas/phpdotenv (Loading environment variables in PHP backend)
+-Composer: https://getcomposer.org/ (PHP dependency management)
+
+
+Development Tools:
+-Git & GitHub: (Version control, collaboration)
+-phpMyAdmin: https://www.phpmyadmin.net/ (Database administration and management)
+
+
+Community & Learning Resources:
+-Stack Overflow: Many, many Stacked Overflow posts for troubleshooting specific coding errors, finding solutions to problems popping up in our browser's console
+
+
+YouTube:
+-MVC in PHP: https://www.youtube.com/watch?v=OsCTzGASImQlist=PLfdtiltiRHWGXVHXX09fxXDi-DqInchFD
+-PHP Video Series (However, we mostly refered to only the web dev and OOP related videos from this useful Youtube Series): https://www.youtube.com/watch?v=sVbEyFZKgqk&list=PLr3d3QYzkw2xabQRUpcZ_IBk9W50M9pe- 
+-Full React Course We Used for Learning Fundamentals: https://www.youtube.com/watch?v=CgkZ7MvWUAA 
+-Full React Hooks Tutorial We Used For Understanding React Hooks: https://www.youtube.com/watch?v=6wf5dIrryoQ
+-Basic CRUD Tutorial W/ PHP + React (This series gave us the basic/fundamental idea of how we were going to setup our project):
+https://www.youtube.com/watch?v=XjjfpNsChhI&list=PLCakfctNSHkFDTFczqhXNv-nYMHvLMT1H 
+
+
+Generative AI:
+-ChatGPT
+-Claude
+-Gemini
+
+!!!!!!!!!
+(Note: we used AI to mostly speed up our debugging process)
+(However, we did also use AI for ideas on how to approach implementing certain features for the web app)
+(Also, AI was used with caution to clean up/optimize certain aspects of our code to improve the user experience)
+(Lastly, AI was used as a tool/teacher to accelerate our learning of different concepts with React and occasionally PHP)
+!!!!!!!!!!
