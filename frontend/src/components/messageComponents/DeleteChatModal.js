@@ -5,9 +5,9 @@
  * Date:         April 4th, 2025
  * Description:  A modal component used specifically for confirming the deletion
  *               of an entire chat conversation within the Messages page.
- */
+*/
+
 import React from 'react';
-// Assuming shared modal styles, adjust if specific to messages
 import '../css/messageCSS/modalStyles.css';
 
 /**
