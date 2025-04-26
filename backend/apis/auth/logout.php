@@ -1,15 +1,14 @@
 <?php
 
 /**
-* File:         logout.php
-* Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
-* MACIDs:       alamy1, govindag, kharodg, zikoa
-* Date:         March 20th, 2025
-* Description:  Handles user logout requests. Destroys the current session
-*               and associated session cookie.
-*/
+ * File:         logout.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         March 20th, 2025
+ * Description:  Handles user logout requests. Destroys the current session
+ *               and associated session cookie.
+ */
 
-// Checking session status
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -25,7 +24,6 @@ header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
 header('Content-Type: application/json');
 
-
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     http_response_code(204);
     exit;
@@ -33,12 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 $_SESSION = array();
 
-// Checking if session cookes are enabled
 if (ini_get("session.use_cookies")) {
-    // Getting the current cookie
     $params = session_get_cookie_params();
-
-    // Deleting the session cookie
     setcookie(
         session_name(),
         '',
@@ -50,10 +44,8 @@ if (ini_get("session.use_cookies")) {
     );
 }
 
-// Destroying session
 session_destroy();
 
-// Response message
 echo json_encode(['success' => true, 'message' => 'Logout successful.']);
 
 exit;

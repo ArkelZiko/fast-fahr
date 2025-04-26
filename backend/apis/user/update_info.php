@@ -4,7 +4,7 @@
  * File:         update_info.php
  * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
  * MACIDs:       alamy1, govindag, kharodg, zikoa
- * Date:         April 25th, 2025
+ * Date:         April 25th, 2025 (Refactored April 23rd, 2025)
  * Description:  Updates a user's profile information (username and email).
  */
 
@@ -40,12 +40,10 @@ if (function_exists('require_login')) {
 $username = trim(filter_input(INPUT_POST, "username", FILTER_SANITIZE_SPECIAL_CHARS) ?: '');
 $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
 
-// Declaring an empty errors array
 $errors = [];
 if (empty($username)) { $errors[] = 'Username is required'; }
 if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) { $errors[] = 'Valid email is required'; }
 
-// Checking if there were any errors
 if (!empty($errors)) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => implode(', ', $errors)]);
@@ -69,6 +67,7 @@ if ($username !== ($_SESSION['user_username'] ?? '')) {
     $stmt_user = $dbh->prepare($cmd_user);
     $params_user = [$username, $loggedInUserId];
     $stmt_user->execute($params_user);
+
     if ($stmt_user->fetchColumn() > 0) {
         http_response_code(409);
         echo json_encode(['success' => false, 'message' => 'Username already taken by another account.']);

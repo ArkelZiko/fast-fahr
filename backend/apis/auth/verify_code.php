@@ -1,12 +1,12 @@
 <?php
 
 /**
-* File:         verify_code.php
-* Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
-* MACIDs:       alamy1, govindag, kharodg, zikoa
-* Date:         April 6th, 2025
-* Description:  Verifies if a password reset code (token) is valid and not expired.
-*/
+ * File:         verify_code.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         April 6th, 2025
+ * Description:  Verifies if a password reset code (token) is valid and not expired.
+ */
 
 include "../../config/connect.php";
 include "../../models/PasswordResetModel.php";

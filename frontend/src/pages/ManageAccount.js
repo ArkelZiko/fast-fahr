@@ -35,7 +35,7 @@ function ManageAccount() {
     let fetchUserData = async () => {
       try {
         let response = await fetch(
-          `${process.env.REACT_APP_API_BASE}/user/get-profile.php`,
+          `${process.env.REACT_APP_API_BASE}/user/get_profile.php`,
           {
             method: "GET",
             credentials: "include",
@@ -104,7 +104,7 @@ function ManageAccount() {
       formData.append("email", userData.email);
 
       let response = await fetch(
-        `${process.env.REACT_APP_API_BASE}/user/update-info.php`,
+        `${process.env.REACT_APP_API_BASE}/user/update_info.php`,
         {
           method: "POST",
           credentials: "include",
@@ -150,7 +150,7 @@ function ManageAccount() {
 
     try {
       let response = await fetch(
-        `${process.env.REACT_APP_API_BASE}/user/update-password.php`,
+        `${process.env.REACT_APP_API_BASE}/user/update_password.php`,
         {
           method: "POST",
           credentials: "include",
@@ -202,7 +202,7 @@ function ManageAccount() {
       formData.append("profilePicture", userData.profilePicture);
 
       let response = await fetch(
-        `${process.env.REACT_APP_API_BASE}/user/update-profile-picture.php`,
+        `${process.env.REACT_APP_API_BASE}/user/update_profile_picture.php`,
         {
           method: "POST",
           credentials: "include",

@@ -4,7 +4,7 @@
  * File:         update_profile_picture.php
  * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
  * MACIDs:       alamy1, govindag, kharodg, zikoa
- * Date:         April 25th, 2025
+ * Date:         April 25th, 2025 (Refactored April 23rd, 2025)
  * Description:  Handles profile picture uploads.
  */
 
@@ -26,7 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-if (session_status() == PHP_SESSION_NONE) { session_start(); }
+if (session_status() == PHP_SESSION_NONE) { 
+    session_start(); 
+}
+
 $loggedInUserId = null;
 if (function_exists('require_login')) {
    try { $loggedInUserId = require_login(); }
@@ -37,7 +40,6 @@ if (function_exists('require_login')) {
    http_response_code(500); echo json_encode(['success' => false, 'error' => 'Auth system error.']); exit;
 }
 
-// Check if a picture was uploaded successfully.
 if (!isset($_FILES['profilePicture']) || $_FILES['profilePicture']['error'] !== UPLOAD_ERR_OK) {
     http_response_code(400);
     $uploadErrors = [
@@ -55,21 +57,21 @@ if (!isset($_FILES['profilePicture']) || $_FILES['profilePicture']['error'] !== 
     exit;
 }
 
-$upload_dir_base = dirname(__DIR__, 3) . '/uploads'; 
+$upload_dir_base = dirname(__DIR__, 3) . '/uploads';
 $upload_subdir = '/profile_pictures/';             
-$upload_dir = $upload_dir_base . $upload_subdir;   
-$web_path_base = '/fastfahr/uploads';              
-$web_path_subdir = '/profile_pictures/';           
+$upload_dir = $upload_dir_base . $upload_subdir;  
+$web_path_base = '/fastfahr/uploads';             
+$web_path_subdir = '/profile_pictures/';          
 $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
 $max_size = 5 * 1024 * 1024; // 5 MB
 
+// Create directory if needed
 if (!is_dir($upload_dir) && !mkdir($upload_dir, 0755, true) && !is_dir($upload_dir)) {
      http_response_code(500);
      echo json_encode(['success' => false, 'message' => 'Failed to create upload directory.']);
      exit;
 }
 
-// Setting new variables
 $file = $_FILES['profilePicture'];
 $file_tmp = $file['tmp_name'];
 $file_size = $file['size'];
@@ -83,18 +85,18 @@ if (!in_array($mime_type, $allowed_types)) {
     exit;
 }
 
-// Checking if the file exceeds the maximum allowed size of 5MB
 if ($file_size > $max_size) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'File size exceeds 5MB limit.']);
     exit;
 }
 
-$file_extension = pathinfo($file['name'], PATHINFO_EXTENSION) ?: 'jpg'; // Get original extension
+$file_extension = pathinfo($file['name'], PATHINFO_EXTENSION) ?: 'jpg';
 $new_filename = $loggedInUserId . '_' . uniqid() . '.' . strtolower($file_extension);
 $upload_path = $upload_dir . $new_filename;
-$image_url = $web_path_base . $web_path_subdir . $new_filename; // Construct relative URL path
+$image_url = $web_path_base . $web_path_subdir . $new_filename;
 
+// Attempt to move the file
 if (move_uploaded_file($file_tmp, $upload_path)) {
     $cmd_update = "UPDATE users SET profile_picture = ? WHERE user_id = ?";
     $stmt_update = $dbh->prepare($cmd_update);
@@ -102,6 +104,7 @@ if (move_uploaded_file($file_tmp, $upload_path)) {
     $success_db = $stmt_update->execute($params_update);
 
     if ($success_db) {
+        // Update successful, update session
         $_SESSION['user_profile_picture'] = $image_url;
         echo json_encode([
             'success' => true,

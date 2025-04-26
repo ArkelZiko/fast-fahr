@@ -1,15 +1,15 @@
 <?php
 
 /**
-* File:         login.php
-* Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
-* MACIDs:       alamy1, govindag, kharodg, zikoa
-* Date:         March 20th, 2025
-* Description:  Handles user login requests. Verifies email and password against
-*               the database, starts a session, and returns user data on success.
-*/
+ * File:         login.php
+ * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+ * MACIDs:       alamy1, govindag, kharodg, zikoa
+ * Date:         March 20th, 2025
+ * Description:  Handles user login requests. Verifies email and password against
+ *               the database, starts a session, and returns user data on success.
+ */
 
-include "../../config/connect.php"; // Ensure $dbh is available
+include "../../config/connect.php";
 include __DIR__ . '/../../vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
@@ -26,17 +26,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-// Checking Session status
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Setting variables
 $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
 $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_SPECIAL_CHARS);
 
-
-// Checking if the parameters are valid, i.e. not empty, no invalid entries.
 if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL) || empty($password)) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Please enter a valid email and password']);
@@ -49,6 +45,7 @@ $params = [$email];
 $stmt->execute($params);
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
+// Verify password and handle session/response
 if ($row && password_verify($password, $row['password_hash'])) {
     session_regenerate_id(true);
 

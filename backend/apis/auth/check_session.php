@@ -30,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 // Check if the user is logged in with a valid session
 if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true && isset($_SESSION['user_id'])) {
-    // JSON encoded message with the user's session information
     echo json_encode([
         'isLoggedIn' => true,
         'user' => [
@@ -41,6 +40,7 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true && isset($_
         ]
     ]);
 } else {
-    // JSON encoded message saying that the user is not logged in
     echo json_encode(['isLoggedIn' => false]);
 }
+
+exit;
