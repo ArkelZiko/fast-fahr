@@ -11,7 +11,7 @@
   background-color: #ffffff;
   border-radius: 8px;
   max-height: 85vh;
-  overflow-y: auto; /* Allow scrolling if content exceeds height */
+  overflow-y: auto; 
   font-family: "Poppins", sans-serif;
 }
 
@@ -22,6 +22,12 @@
   margin-bottom: 1.5rem;
   padding-bottom: 0.8rem;
   border-bottom: 1px solid #eee;
+}
+
+.photo-warning {
+  color: #d9534f;
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
 }
 
 .modal-header h2 {
