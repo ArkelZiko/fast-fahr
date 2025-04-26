@@ -26,10 +26,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
+// Checking if the session exists
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+// Checking if the user is logged in
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     http_response_code(401);
     echo json_encode([
@@ -39,10 +41,13 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     exit;
 }
 
+// Setting user id based on the session data
 $user_id = $_SESSION['user_id'];
 
+// Read and parse JSON data sent in the request body
 $data = json_decode(file_get_contents('php://input'), true);
 
+// Checking if both required password fields are in the request
 if (!isset($data['currentPassword']) || !isset($data['newPassword'])) {
     http_response_code(400);
     echo json_encode([
@@ -52,9 +57,11 @@ if (!isset($data['currentPassword']) || !isset($data['newPassword'])) {
     exit;
 }
 
+// Setting variables based on the users input.
 $currentPassword = $data['currentPassword'];
 $newPassword = $data['newPassword'];
 
+// Checking if the length of the password is valid.
 if (strlen($newPassword) < 8) {
     http_response_code(400);
     echo json_encode([
@@ -65,14 +72,17 @@ if (strlen($newPassword) < 8) {
 }
 
 try {
+    // Preparing SQL command to select the users password hash.
     $cmd = "SELECT password_hash FROM users WHERE user_id = ?";
     $stmt = $dbh->prepare($cmd);
     $args = [$user_id];
     $stmt->execute($args);
 
+    // Checking if the SQL command got back the users password
     if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $currentPasswordHash = $row['password_hash'];
 
+        // Checking if both the hashed password in the database and the users entered password match
         if (!password_verify($currentPassword, $currentPasswordHash)) {
             http_response_code(401);
             echo json_encode([
@@ -82,13 +92,16 @@ try {
             exit;
         }
 
+        // Hashing new password
         $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
 
+        // Preparing SQL command to update the users password hash
         $cmd = "UPDATE users SET password_hash = ? WHERE user_id = ?";
         $stmt = $dbh->prepare($cmd);
         $args = [$newPasswordHash, $user_id];
         $success = $stmt->execute($args);
 
+        // Checking if the command was successful
         if ($success) {
             echo json_encode([
                 'success' => true,
@@ -108,15 +121,7 @@ try {
             'message' => 'User not found.'
         ]);
     }
-} catch (PDOException $e) {
-    error_log("Database Error: " . $e->getMessage());
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'message' => 'A database error occurred. Please try again later.'
-    ]);
 } catch (Exception $e) {
-    error_log("General Error: " . $e->getMessage());
     http_response_code(500);
     echo json_encode([
         'success' => false,

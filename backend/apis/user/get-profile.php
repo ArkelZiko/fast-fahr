@@ -26,11 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
+// Checking session status
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+// Checking if the user is logged in or not
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    // HTTP response 401 and JSON encoded response
     http_response_code(401);
     echo json_encode([
         'success' => false,
@@ -42,13 +45,16 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 try {
     $user_id = $_SESSION['user_id'];
 
+    // Preparing SQL command to select the users information
     $cmd = "SELECT username, email, profile_picture FROM users WHERE user_id = ?";
     $stmt = $dbh->prepare($cmd);
 
     $args = [$user_id];
     $stmt->execute($args);
 
+    // Checking if the SQL query recieved a user
     if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        // JSON encoded response with the users info.
         echo json_encode([
             'success' => true,
             'user' => [
@@ -58,6 +64,7 @@ try {
             ]
         ]);
     } else {
+        // HTTP response 404 with JSON encoded response that the User was not found
         http_response_code(404);
         echo json_encode([
             'success' => false,
@@ -65,10 +72,10 @@ try {
         ]);
     }
 } catch (Exception $e) {
-    error_log("Database Error: " . $e->getMessage());
+    // HTTP Response 500 with JSON encoded response of database error
     http_response_code(500);
     echo json_encode([
         'success' => false,
-        'message' => 'A database error occurred. Please try again later.'
+        'message' => 'An unexpected error occurred: ' . $e->getMessage()
     ]);
 }
