@@ -8,28 +8,27 @@
  *               using ListingCard, handles bookmarking, contacting seller (via MessagesPage),
  *               and viewing listing details via a modal. Adapts functionality based on
  *               user login status (redirects interaction attempts if not logged in).
-*/
+ */
 
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ListingCard from "../components/ListingCard";
 import ViewModal from "../components/buyingComponents/ViewModal";
 import "../components/css/buyingCSS/buyingpage.css";
 import filterListings from "../components/filterListingsComponent/filterListings";
-import Filters from "../components/Filters";
+import FilterModal from "../components/FilterModal";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import ListingCard from "../components/ListingCard";
 import NavBar from "../components/Navbar";
 import { useAuth } from "../hooks/useAuth";
 import { fetchBookmarks, toggleBookmark } from "../hooks/useBookmarks";
-
 
 /**
  * Renders the Buying page, displaying car listings available for purchase.
  * Includes filtering, bookmarking, contacting, and viewing functionality.
  * Allows public viewing but redirects interactions for non-logged-in users.
  * @returns {JSX.Element} The BuyingPage component.
-*/
+ */
 function BuyingPage() {
   const { currentUser, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -230,13 +229,19 @@ function BuyingPage() {
               <ListingCard
                 key={car.id}
                 title={car.title}
-                image={car.image_path ? `${process.env.REACT_APP_STATIC_BASE}${car.image_path}` : "/images/default-car.png"}
+                image={
+                  car.image_path
+                    ? `${process.env.REACT_APP_STATIC_BASE}${car.image_path}`
+                    : "/images/default-car.png"
+                }
                 price={car.price}
                 mileage={car.mileage}
                 year={car.year}
                 isBookmarked={!!currentUser && bookmarkedIds.has(car.id)}
                 onBookmarkToggle={(next) => handleBookmark(car.id)}
-                onContact={() => handleContact(car.user_id, car.creator_username)}
+                onContact={() =>
+                  handleContact(car.user_id, car.creator_username)
+                }
                 onView={() => handleView(car)}
                 context="buying"
               />
@@ -249,11 +254,10 @@ function BuyingPage() {
         </div>
       </div>
 
-
       {isFilterModalOpen && (
         <div className="modal-overlay" onClick={closeFilterModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <Filters
+            <FilterModal
               onApplyFilters={applyFilters}
               onClearFilters={clearFilters}
               isModal
@@ -283,8 +287,8 @@ function BuyingPage() {
             Location: `${selectedCar.city}, ${selectedCar.province}`,
           }}
         />
-      )}      
-      
+      )}
+
       <Footer />
     </div>
   );

@@ -6,7 +6,7 @@
  * Description:  Provides a utility function to filter an array of car listing objects
  *               based on a given set of filter criteria (make, model, price range,
  *               mileage range, year range).
-*/
+ */
 
 /**
  * Filters an array of listing objects based on provided criteria.
@@ -22,26 +22,62 @@
  * @param {number|string} [filters.yearMin] - Minimum year filter.
  * @param {number|string} [filters.yearMax] - Maximum year filter.
  * @returns {Array<object>} A new array containing only the listings that match the filter criteria.
-*/
-export const filterListings = (listings, filters) => {
-    return listings.filter((car) => {
-      if (filters.make && car.make !== filters.make) return false;
-      if (filters.model && car.model !== filters.model) return false;
-  
-      const price = parseFloat((car.price || "").toString().replace(",", ""));
-      if (filters.priceMin && price < filters.priceMin) return false;
-      if (filters.priceMax && price > filters.priceMax) return false;
-  
-      const mileage = parseFloat((car.mileage || "").toString().replace(",", ""));
-      if (filters.mileageMin && mileage < filters.mileageMin) return false;
-      if (filters.mileageMax && mileage > filters.mileageMax) return false;
-  
-      const year = parseInt(car.year);
-      if (filters.yearMin && year < parseInt(filters.yearMin)) return false;
-      if (filters.yearMax && year > parseInt(filters.yearMax)) return false;
-  
-      return true;
-    });
-  };
-  
+ */
+const filterListings = (listings, filters) => {
+  return listings.filter((car) => {
+
+    const mileage = parseFloat((car.mileage || "").toString().replace(",", ""));
+    const price = parseFloat((car.price || "").toString().replace(",", ""));
+    const year = parseInt(car.year);
+    
+    if (filters.make && car.make !== filters.make) {
+      return false;
+    }
+    if (filters.model && car.model !== filters.model) {
+      return false;
+    }
+    if (filters.priceMin && price < filters.priceMin) {
+      return false;
+    }
+    if (filters.priceMax && price > filters.priceMax) {
+      return false;
+    }
+    if (filters.mileageMin && mileage < filters.mileageMin) {
+      return false;
+    }
+    if (filters.mileageMax && mileage > filters.mileageMax) {
+      return false;
+    }
+    if (filters.yearMin && year < filters.yearMin) {
+      return false;
+    }
+    if (filters.yearMax && year > filters.yearMax) {
+      return false;
+    }
+    if (filters.transmission && car.transmission !== filters.transmission){
+      return false;
+    }
+    if (filters.driveType && car.driveType !== filters.driveType) {
+      return false;
+    }
+    if (filters.exteriorColor && car.exteriorColor !== filters.exteriorColor) {
+      return false;
+    }
+    if (filters.fuelType && car.fuelType !== filters.fuelType) {
+      return false;
+    }
+    if (filters.bodyType && car.bodyType !== filters.bodyType) {
+      return false;
+    }
+    if (filters.province && car.province !== filters.province) {
+      return false;
+    }
+    if (filters.city && car.city?.toLowerCase().indexOf(filters.city.toLowerCase()) === -1) {
+      return false;
+    }
+
+    return true;
+  });
+};
+
 export default filterListings;

@@ -32,7 +32,7 @@ export const getModelsForMake = (make) => {
  * @param {number} [startYear=1900] - The oldest year to include.
  * @returns {number[]} - An array of years.
  */
-export const getYearOptions = (startYear = 1900) => {
+export const getYearOptions = (startYear = 1950) => {
     const currentYear = new Date().getFullYear();
     const endYear = currentYear + 1; // Allow listing for next year's models
     const years = [];
