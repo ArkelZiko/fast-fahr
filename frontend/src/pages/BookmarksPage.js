@@ -1,15 +1,5 @@
-/**
- * File:         BookmarksPage.js
- * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
- * MACIDs:       alamy1, govindag, kharodg, zikoa
- * Date:         April 18th, 2025
- * Description:  Page component for displaying the listings that the currently
- *               logged-in user has bookmarked. Fetches bookmark data, handles
- *               un-bookmarking actions, and displays listings using ListingCard.
- *               Includes logic for viewing listing details via a modal.
-*/
-
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ViewModal from "../components/buyingComponents/ViewModal";
 import "../components/css/buyingCSS/buyingpage.css";
 import Footer from "../components/Footer";
@@ -19,13 +9,13 @@ import NavBar from "../components/Navbar";
 import { useAuth } from "../hooks/useAuth";
 import { fetchBookmarks, toggleBookmark } from "../hooks/useBookmarks";
 
-
 /**
  * Renders the Bookmarks page, showing saved listings for the logged-in user.
  * @returns {JSX.Element|null} The BookmarksPage component or null if redirecting.
-*/
+ */
 export default function BookmarksPage() {
   const { currentUser, isLoading: authLoading, requireAuth } = useAuth();
+  const navigate = useNavigate();
 
   const [bookmarkedListings, setBookmarkedListings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -70,8 +60,6 @@ export default function BookmarksPage() {
   }, [authLoading, currentUser, requireAuth]);
 
   const handleBookmarkToggle = async (listingId, nextState) => {
-    if (nextState) {
-    }
     try {
       await toggleBookmark(listingId, true);
       setBookmarkedListings((prev) => prev.filter((l) => l.id !== listingId));
@@ -81,12 +69,9 @@ export default function BookmarksPage() {
   };
 
   const handleView = (listing) => {
-    fetch(
-      `${process.env.REACT_APP_API_BASE}/listings/image_listings.php?post_id=${listing.id}`,
-      {
-        credentials: "include",
-      }
-    )
+    fetch(`${process.env.REACT_APP_API_BASE}/listings/image_listings.php?post_id=${listing.id}`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((images) => {
         setSelectedListing(listing);
@@ -96,21 +81,32 @@ export default function BookmarksPage() {
       .catch(() => alert("Failed to load images."));
   };
 
+  const handleContact = (creatorUserId, creatorUsername) => {
+    if (!currentUser) {
+      navigate("/login");
+      return;
+    }
+    navigate("/messages", {
+      state: {
+        openAddContactModal: true,
+        prefillUsername: creatorUsername,
+      },
+    });
+  };
+
   if (authLoading || loading) {
     return (
       <div>
         <Header />
         <NavBar />
-        <div
-          className="loading-page"
-          style={{ textAlign: "center", padding: 50 }}
-        >
+        <div className="loading-page" style={{ textAlign: "center", padding: 50 }}>
           Loading bookmarks…
         </div>
         <Footer />
       </div>
     );
   }
+
   if (!currentUser) return null;
 
   return (
@@ -139,10 +135,9 @@ export default function BookmarksPage() {
                 mileage={listing.mileage}
                 year={listing.year}
                 isBookmarked={true}
-                onBookmarkToggle={(next) =>
-                  handleBookmarkToggle(listing.id, next)
-                }
+                onBookmarkToggle={(next) => handleBookmarkToggle(listing.id, next)}
                 onView={() => handleView(listing)}
+                onContact={() => handleContact(listing.user_id, listing.creator_username)} // 🚀 ADDED THIS
                 context="buying"
               />
             ))}
@@ -163,7 +158,7 @@ export default function BookmarksPage() {
           specs={{
             Make: selectedListing.make,
             Model: selectedListing.model,
-            kilomterers: Number(selectedListing.mileage).toLocaleString(),
+            Kilometers: `${Number(selectedListing.mileage).toLocaleString()} km`,
             Transmission: selectedListing.transmission,
             Drive: selectedListing.driveType,
             Fuel: selectedListing.fuelType,
