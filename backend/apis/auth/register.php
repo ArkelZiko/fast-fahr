@@ -1,14 +1,14 @@
 <?php
 
 /**
- * File:         register.php
- * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
- * MACIDs:       alamy1, govindag, kharodg, zikoa
- * Date:         March 20th, 2025
- * Description:  Handles new user registration requests. Validates input, checks for
- *               existing email/username, hashes the password, and inserts the new
- *               user into the database.
- */
+* File:         register.php
+* Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+* MACIDs:       alamy1, govindag, kharodg, zikoa
+* Date:         March 20th, 2025
+* Description:  Handles new user registration requests. Validates input, checks for
+*               existing email/username, hashes the password, and inserts the new
+*               user into the database.
+*/
 
 include "../../config/connect.php";
 include __DIR__ . '/../../vendor/autoload.php';
@@ -31,12 +31,14 @@ $username = filter_input(INPUT_POST, "username", FILTER_SANITIZE_SPECIAL_CHARS);
 $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_SPECIAL_CHARS);
 $datetime = date("Y-m-d H:i:s");
 
+// Declaring an empty errors array.
 $errors = [];
 if (empty($username)) { $errors[] = 'Username is required'; }
 if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) { $errors[] = 'Valid email is required'; }
 if (empty($password)) { $errors[] = 'Password is required'; }
 elseif (strlen($password) < 8) { $errors[] = 'Password must be at least 8 characters long'; }
 
+// Checking if there were any errors stored in the array
 if (!empty($errors)) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => implode(', ', $errors)]);
@@ -47,6 +49,7 @@ $cmd_email = "SELECT COUNT(*) FROM users WHERE email = ?";
 $stmt_email = $dbh->prepare($cmd_email);
 $params_email = [$email];
 $stmt_email->execute($params_email);
+
 if ($stmt_email->fetchColumn() > 0) {
     http_response_code(409);
     echo json_encode(['success' => false, 'message' => 'Email already in use.']);
@@ -72,7 +75,7 @@ $success = $stmt_insert->execute($params_insert);
 
 if ($success) {
     http_response_code(201);
-    echo json_encode(['success' => true, 'message' => 'Registration successful! You will be redirected.']);
+    echo json_encode(['success' => true, 'message' => 'Registration successful!']);
 } else {
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Registration failed due to a server error.']);

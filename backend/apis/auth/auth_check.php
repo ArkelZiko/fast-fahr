@@ -35,5 +35,3 @@ function require_login()
 
     return $_SESSION['user_id'];
 }
-
-exit;

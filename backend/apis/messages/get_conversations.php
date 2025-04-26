@@ -4,7 +4,7 @@
  * File:         get_conversations.php
  * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
  * MACIDs:       alamy1, govindag, kharodg, zikoa
- * Date:         April 3rd, 2025
+ * Date:         April 3rd, 2025 (Refactored April 23rd, 2025)
  * Description:  Fetches a list of conversations for the logged-in user.
  */
 

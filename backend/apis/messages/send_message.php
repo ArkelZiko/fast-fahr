@@ -28,6 +28,16 @@ include '../../config/connect.php';
 include '../../models/MessageModel.php';
 include '../auth/auth_check.php';
 
+$loggedInUserId = null;
+if (function_exists('require_login')) {
+   try { $loggedInUserId = require_login(); }
+   catch (Exception $e) {
+      http_response_code(401); echo json_encode(['success' => false, 'error' => 'Not authenticated']); exit;
+   }
+} else {
+   http_response_code(500); echo json_encode(['success' => false, 'error' => 'Auth system error.']); exit;
+}
+
 $data = json_decode(file_get_contents('php://input'), true);
 $receiverId = filter_var($data['receiver_id'] ?? null, FILTER_VALIDATE_INT);
 $content = trim($data['content'] ?? '');
@@ -73,7 +83,13 @@ if ($newMessageId) {
 
         http_response_code(201);
         echo json_encode(['success' => true, 'message' => 'Message sent.', 'newMessage' => $formattedMessage]);
-    } 
+    } else {
+        http_response_code(200);
+        echo json_encode(['success' => true, 'message' => 'Message sent, but retrieval failed.']);
+    }
+} else {
+    http_response_code(500);
+    echo json_encode(['success' => false, 'error' => 'Failed to save message.']);
 }
 
 exit;

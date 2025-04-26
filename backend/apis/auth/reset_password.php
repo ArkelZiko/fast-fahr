@@ -1,13 +1,13 @@
 <?php
 
 /**
- * File:         reset_password.php
- * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
- * MACIDs:       alamy1, govindag, kharodg, zikoa
- * Date:         April 6th, 2025 
- * Description:  Handles the actual password reset action. Validates token/password,
- *               updates the password hash, and deletes the used token.
- */
+* File:         reset_password.php
+* Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+* MACIDs:       alamy1, govindag, kharodg, zikoa
+* Date:         April 6th, 2025
+* Description:  Handles the actual password reset action. Validates token/password,
+*               updates the password hash, and deletes the used token.
+*/
 
 include "../../config/connect.php";
 include "../../models/UserModel.php";
@@ -57,7 +57,6 @@ if ($resetData !== false) {
         $passwordResetModel->deleteTokenById($resetId);
         echo json_encode(['success' => true, 'message' => 'Password updated successfully.']);
     } else {
-
         http_response_code(500);
         echo json_encode(['success' => false, 'message' => 'Failed to update password.']);
     }

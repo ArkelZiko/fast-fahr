@@ -36,16 +36,21 @@ if (function_exists('require_login')) {
    http_response_code(500); echo json_encode(['success' => false, 'error' => 'Auth system error.']); exit;
 }
 
+// Read and parse JSON data sent in the request body
 $data = json_decode(file_get_contents('php://input'), true);
 
+// Checking if both required password fields are in the request
 if (!isset($data['currentPassword']) || !isset($data['newPassword'])) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Current password and new password are required.']);
     exit;
 }
+
+// Setting variables based on the users input.
 $currentPassword = $data['currentPassword'];
 $newPassword = $data['newPassword'];
 
+// Checking if the length of the password is valid.
 if (strlen($newPassword) < 8) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'New password must be at least 8 characters long.']);
