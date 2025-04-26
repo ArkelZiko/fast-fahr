@@ -42,12 +42,11 @@ try {
             $convo['lastMessageTimestamp'] = $date->format('M d, H:i');
         }
 
-         $convo['unread'] = ($convo['unreadCount'] ?? 0) > 0;
-         unset($convo['unreadCount']);
+        $convo['unread'] = ($convo['unreadCount'] ?? 0) > 0;
+        unset($convo['unreadCount']);
     }
 
     echo json_encode($conversations);
-
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
@@ -55,4 +54,3 @@ try {
     http_response_code(500);
     echo json_encode(['error' => 'Server error: ' . $e->getMessage()]);
 }
-?>

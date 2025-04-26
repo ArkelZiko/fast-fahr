@@ -20,8 +20,9 @@
  *
  * @return int The user ID of the logged-in user.
  * @throws void Exits script if user is not logged in.
-*/
-function require_login() {
+ */
+function require_login()
+{
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
@@ -31,7 +32,6 @@ function require_login() {
         echo json_encode(['error' => 'Authentication required. Please log in.']);
         exit;
     }
-    
-     return $_SESSION['user_id'];
+
+    return $_SESSION['user_id'];
 }
-?>

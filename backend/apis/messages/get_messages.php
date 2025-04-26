@@ -45,23 +45,21 @@ try {
 
     $formattedMessages = [];
     foreach ($messages as $msg) {
-         $date = new DateTime($msg['sent_at']);
-         $formattedMessages[] = [
-             'id' => $msg['message_id'],
-             'senderId' => $msg['sender_id'],
-             'receiverId' => $msg['receiver_id'],
-             'senderName' => $msg['senderName'],
-             'senderAvatar' => $msg['senderAvatar'] ?? 'https://i.pravatar.cc/150?img=10',
-             'text' => $msg['content'],
-             'timestamp' => $date->format('H:i A'),
-             'isRead' => (bool)$msg['is_read']
-         ];
+        $date = new DateTime($msg['sent_at']);
+        $formattedMessages[] = [
+            'id' => $msg['message_id'],
+            'senderId' => $msg['sender_id'],
+            'receiverId' => $msg['receiver_id'],
+            'senderName' => $msg['senderName'],
+            'senderAvatar' => $msg['senderAvatar'] ?? 'https://i.pravatar.cc/150?img=10',
+            'text' => $msg['content'],
+            'timestamp' => $date->format('H:i A'),
+            'isRead' => (bool)$msg['is_read']
+        ];
     }
 
     echo json_encode($formattedMessages);
     $messageModel->markMessagesAsRead($loggedInUserId, $otherUserId);
-
-
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
@@ -69,4 +67,3 @@ try {
     http_response_code(500);
     echo json_encode(['error' => 'Server error: ' . $e->getMessage()]);
 }
-?>

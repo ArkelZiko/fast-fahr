@@ -26,12 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-// Start session if not already started
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Check if user is logged in
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     http_response_code(401);
     echo json_encode([
@@ -41,14 +39,11 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     exit;
 }
 
-// Get user ID from session
 $user_id = $_SESSION['user_id'];
 
-// Get and sanitize form data
 $username = filter_input(INPUT_POST, "username", FILTER_SANITIZE_SPECIAL_CHARS);
 $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
 
-// Validate input
 $errors = [];
 
 if (empty($username)) {
@@ -69,15 +64,14 @@ if (!empty($errors)) {
 }
 
 try {
-    // Check if the new email already exists (for a different user)
     if ($email !== $_SESSION['user_email']) {
         $cmd = "SELECT COUNT(*) FROM users WHERE email = ? AND user_id != ?";
         $stmt = $dbh->prepare($cmd);
         $args = [$email, $user_id];
         $stmt->execute($args);
-        
+
         if ($stmt->fetchColumn() > 0) {
-            http_response_code(409); // Conflict
+            http_response_code(409); 
             echo json_encode([
                 'success' => false,
                 'message' => 'Email already in use by another account.'
@@ -85,16 +79,15 @@ try {
             exit;
         }
     }
-    
-    // Check if the new username already exists (for a different user)
+
     if ($username !== $_SESSION['user_username']) {
         $cmd = "SELECT COUNT(*) FROM users WHERE username = ? AND user_id != ?";
         $stmt = $dbh->prepare($cmd);
         $args = [$username, $user_id];
         $stmt->execute($args);
-        
+
         if ($stmt->fetchColumn() > 0) {
-            http_response_code(409); // Conflict
+            http_response_code(409); 
             echo json_encode([
                 'success' => false,
                 'message' => 'Username already taken by another account.'
@@ -102,18 +95,16 @@ try {
             exit;
         }
     }
-    
-    // Update user information
+
     $cmd = "UPDATE users SET username = ?, email = ? WHERE user_id = ?";
     $stmt = $dbh->prepare($cmd);
     $args = [$username, $email, $user_id];
     $success = $stmt->execute($args);
-    
+
     if ($success) {
-        // Update session variables
         $_SESSION['user_username'] = $username;
         $_SESSION['user_email'] = $email;
-        
+
         echo json_encode([
             'success' => true,
             'message' => 'Profile information updated successfully!'
@@ -140,4 +131,3 @@ try {
         'message' => 'An unexpected error occurred: ' . $e->getMessage()
     ]);
 }
-?>

@@ -92,18 +92,15 @@ try {
             'success' => true,
             'message' => 'Registration successful! You can now log in with your credentials.'
         ]);
-    }
-    else {
+    } else {
         echo json_encode([
             'success' => true,
             'message' => 'Registration failed due to a system error. Please try again later.'
         ]);
     }
-
 } catch (Exception $e) {
     echo json_encode([
         'success' => false,
         'message' => "Registration failed due to a system error. Please try again later. $datetime"
     ]);
 }
-?>

@@ -28,7 +28,10 @@ header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Content-Type: application/json');
 
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') { http_response_code(204); exit; }
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
 
 $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
 
@@ -42,10 +45,10 @@ try {
     $userModel = new User($dbh);
     $passwordResetModel = new PasswordReset($dbh);
 } catch (InvalidArgumentException | PDOException $e) {
-     error_log("Error instantiating models or DB connection: " . $e->getMessage());
-     http_response_code(500);
-     echo json_encode(['success' => false, 'message' => 'Server configuration error.']);
-     exit;
+    error_log("Error instantiating models or DB connection: " . $e->getMessage());
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Server configuration error.']);
+    exit;
 }
 
 
@@ -54,54 +57,50 @@ try {
 
     if ($user) {
         $userId = $user['user_id'];
-        
+
         // Note: Below is code from the phpmailer documentation
         $plainToken = $passwordResetModel->createResetToken($userId, $email);
 
         if ($plainToken) {
-             $mail = new PHPMailer(true);
-             try {
-                 // --- Server settings ---
-                 $mail->isSMTP();
-                 $mail->Host = 'smtp.gmail.com';
-                 $mail->SMTPAuth = true;
-                 $mail->Username = 'fast.fahr.help@gmail.com';
-                 $mail->Password = 'kuhq dpao ftye ejxg';
-                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-                 $mail->Port = 465;
+            $mail = new PHPMailer(true);
+            try {
+                // --- Server settings ---
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPAuth = true;
+                $mail->Username = 'fast.fahr.help@gmail.com';
+                $mail->Password = 'kuhq dpao ftye ejxg';
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+                $mail->Port = 465;
 
-                 // --- Recipients ---
-                 $mail->setFrom('fast.fahr.help@gmail.com', 'FastFahr');
-                 $mail->addAddress($email);
+                // --- Recipients ---
+                $mail->setFrom('fast.fahr.help@gmail.com', 'FastFahr');
+                $mail->addAddress($email);
 
-                 // --- Content ---
-                 $mail->isHTML(true);
-                 $mail->Subject = 'FastFahr Password Reset Request';
+                // --- Content ---
+                $mail->isHTML(true);
+                $mail->Subject = 'FastFahr Password Reset Request';
 
-                 $mail->Body    = "Hello,<br><br>You requested a password reset. Use the code below (expires in 1 hour):<br><br>"
-                                . "<b>Code: " . htmlspecialchars($plainToken) . "</b><br><br>"
-                                . "If you didn't request this, please ignore this email.<br><br>Thanks,<br>The FastFahr Team";
-                 $mail->AltBody = "Hello,\n\nYou requested a password reset. Use the code below (expires in 1 hour):\n\n"
-                                . "Code: " . $plainToken . "\n\n"
-                                . "If you didn't request this, ignore this email.\n\nThanks,\nThe FastFahr Team";
+                $mail->Body    = "Hello,<br><br>You requested a password reset. Use the code below (expires in 1 hour):<br><br>"
+                    . "<b>Code: " . htmlspecialchars($plainToken) . "</b><br><br>"
+                    . "If you didn't request this, please ignore this email.<br><br>Thanks,<br>The FastFahr Team";
+                $mail->AltBody = "Hello,\n\nYou requested a password reset. Use the code below (expires in 1 hour):\n\n"
+                    . "Code: " . $plainToken . "\n\n"
+                    . "If you didn't request this, ignore this email.\n\nThanks,\nThe FastFahr Team";
 
-                 $mail->send();
-
-             } catch (Exception $e) {
-                 error_log("PHPMailer Error sending reset email to $email: {$mail->ErrorInfo}");
-                 //Delete the token if email failed critically
-                 $passwordResetModel->deleteTokensForUser($userId);
-             }
+                $mail->send();
+            } catch (Exception $e) {
+                error_log("PHPMailer Error sending reset email to $email: {$mail->ErrorInfo}");
+                $passwordResetModel->deleteTokensForUser($userId);
+            }
         } else {
-             error_log("Failed to generate password reset token for email: $email");
+            error_log("Failed to generate password reset token for email: $email");
         }
     }
 
     echo json_encode(['success' => true, 'message' => 'If an account with that email exists, a password reset link has been sent.']);
-
 } catch (Exception $e) {
     error_log("General Error in request_reset.php: " . $e->getMessage());
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'An unexpected server error occurred.']);
 }
-?>

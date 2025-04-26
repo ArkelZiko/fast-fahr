@@ -7,7 +7,7 @@
  * Date:         April 22nd, 2025
  * Description:  Taking all the images for a gievn listing from the post_images table
  *               so it can be used for when user presses "view" on a given listing
-*/
+ */
 
 include '../../config/connect.php';
 include __DIR__ . '/../../vendor/autoload.php';

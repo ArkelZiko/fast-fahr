@@ -2,16 +2,12 @@
  * File:         SellingPage.js
  * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
  * MACIDs:       alamy1, govindag, kharodg, zikoa
- * Date:         April 10th, 2025 (Assumed date for initial Selling Page)
+ * Date:         April 10th, 2025 (Updated April 23rd, 2025)
  * Description:  Page component for users to manage their own listings.
- *               Fetches and displays only the listings created by the logged-in user.
- *               Allows users to create new listings via a modal form and delete
- *               their existing listings via a confirmation modal. Includes
- *               placeholder for edit functionality.
-*/
+ *               Fetches, displays, allows creation, editing, and deletion of listings.
+ */
 
 import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import ListingCard from "../components/ListingCard.js";
@@ -20,100 +16,130 @@ import ViewModal from "../components/buyingComponents/ViewModal";
 import "../components/css/sellingCSS/sellingpage.css";
 import CreateListingForm from "../components/sellingComponents/CreateListingForm.js";
 import DeleteListingModal from "../components/sellingComponents/DeleteListingModal.js";
+import EditListingForm from "../components/sellingComponents/EditListingForm.js";
 import { useAuth } from "../hooks/useAuth";
-
 
 /**
  * Renders the Selling page, displaying and managing the user's own listings.
  * @returns {JSX.Element|null} The SellingPage component or null if redirecting.
-*/
+ */
 function SellingPage() {
   const { currentUser, isLoading: authLoading, requireAuth } = useAuth();
-  const navigate = useNavigate();
 
   const [myListings, setMyListings] = useState([]);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
   const [fetchError, setFetchError] = useState("");
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [listingToEdit, setListingToEdit] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [listingToDelete, setListingToDelete] = useState(null);
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
+  const [selectedListing, setSelectedListing] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState("");
-  const [selectedListing, setSelectedListing] = useState(null);
   const [viewerImages, setViewerImages] = useState([]);
-  const [isViewerOpen, setIsViewerOpen] = useState(false);
+
+
+  const fetchMyListings = useCallback(async () => {
+    if (!currentUser) return;
+
+    setFetchError("");
+    setPageLoading(true);
+    try {
+       const response = await fetch(`${process.env.REACT_APP_API_BASE}/listings/get_listings.php`, {
+            credentials: "include",
+       });
+
+       if (!response.ok) {
+           const errorText = await response.text();
+           throw new Error(`HTTP error! status: ${response.status}, response: ${errorText}`);
+       }
+
+       const allListingsData = await response.json();
+
+       if (!Array.isArray(allListingsData)) {
+           console.error("Received non-array data for listings:", allListingsData);
+           throw new Error("Invalid data format received for listings.");
+       }
+
+       const userSpecificListings = allListingsData.filter(listing => listing.user_id === currentUser.id);
+       setMyListings(userSpecificListings);
+
+
+    } catch (error) {
+       console.error("Failed to load listings:", error);
+       setFetchError(`Failed to load listings: ${error.message}`);
+       setMyListings([]);
+    } finally {
+       setPageLoading(false);
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     let isMounted = true;
     if (!authLoading) {
       if (!requireAuth()) {
         if (isMounted) setPageLoading(false);
-        return;
+        return () => { isMounted = false; };
       }
-
-      setFetchError("");
-      setPageLoading(true);
-      fetch(`${process.env.REACT_APP_API_BASE}/listings/get_listings.php`, {
-        credentials: "include",
-      })
-        .then((res) => {
-          if (!res.ok) {
-            return res.text().then((text) => {
-              throw new Error(
-                `HTTP error! status: ${res.status}, response: ${text}`
-              );
-            });
-          }
-          return res.json();
-        })
-        .then((allListingsData) => {
-          if (isMounted) {
-            if (Array.isArray(allListingsData)) {
-              const userSpecificListings = allListingsData.filter(
-                (listing) => listing.user_id === currentUser.id
-              );
-              setMyListings(userSpecificListings);
-            } else {
-              setFetchError("Failed to load listings data.");
-              setMyListings([]);
-            }
-          }
-        })
-        .catch((error) => {
-          if (isMounted) {
-            setFetchError(`Failed to load listings: ${error.message}`);
-            setMyListings([]);
-          }
-        })
-        .finally(() => {
-          if (isMounted) setPageLoading(false);
-        });
+      if (currentUser && isMounted) {
+        fetchMyListings();
+      } else if (!currentUser && isMounted) {
+          setPageLoading(false);
+          setFetchError("User data not available.");
+      }
     }
-    return () => {
-      isMounted = false;
-    };
-  }, [authLoading, currentUser, requireAuth]);
+    return () => { isMounted = false; };
+  }, [authLoading, currentUser, requireAuth, fetchMyListings]);
 
   const openCreateModal = () => {
-    if (!currentUser) {
-      requireAuth();
-      return;
-    }
+    if (!requireAuth()) return;
     setIsCreateModalOpen(true);
   };
   const closeCreateModal = () => setIsCreateModalOpen(false);
 
-  const openDeleteConfirmModal = useCallback(
-    (id, title) => {
-      if (!currentUser) {
-        requireAuth();
-        return;
+  const handleListingCreated = (newListing) => {
+    if (newListing && newListing.id) {
+        setMyListings(prevListings => [newListing, ...prevListings]);
+        closeCreateModal();
+    } else {
+        console.error("handleListingCreated missing data");
+        closeCreateModal();
+    }
+  };
+
+  const openEditModal = useCallback((listing) => {
+      if (!requireAuth()) return;
+      setListingToEdit(listing);
+      setIsEditModalOpen(true);
+  }, [requireAuth]);
+
+  const closeEditModal = useCallback(() => {
+      setIsEditModalOpen(false);
+      setListingToEdit(null);
+  }, []);
+
+  const handleListingUpdated = useCallback((updatedListing) => {
+      if (updatedListing && updatedListing.id) {
+          setMyListings(prevListings =>
+              prevListings.map(listing =>
+                  listing.id === updatedListing.id ? updatedListing : listing
+              )
+          );
+          closeEditModal();
+      } else {
+           console.error("handleListingUpdated missing data");
+           closeEditModal();
       }
+  }, [closeEditModal]);
+
+  const openDeleteConfirmModal = useCallback( (id, title) => {
+      if (!requireAuth()) return;
       setListingToDelete({ id, title });
       setDeleteError("");
       setIsDeleteModalOpen(true);
-    },
-    [currentUser, requireAuth]
+    }, [requireAuth]
   );
 
   const closeDeleteConfirmModal = useCallback(() => {
@@ -124,63 +150,25 @@ function SellingPage() {
   }, [isDeleting]);
 
   const handleConfirmDelete = useCallback(async () => {
-    if (!currentUser || !listingToDelete) return;
+     if (!currentUser || !listingToDelete) return;
+     setIsDeleting(true);
+     setDeleteError("");
+     try {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE}/listings/delete_listings.php`, {
+             method: "POST", headers: { "Content-Type": "application/json", },
+             credentials: "include", body: JSON.stringify({ listing_id: listingToDelete.id }),
+         });
+         const result = await response.json();
+         if (!response.ok || !result.success) { throw new Error( result.error || `HTTP error ${response.status}` ); }
+         setMyListings((current) => current.filter((listing) => listing.id !== listingToDelete.id) );
+         closeDeleteConfirmModal();
+     } catch (error) { setDeleteError(error.message || "Deletion error."); }
+     finally { setIsDeleting(false); }
+  }, [currentUser, listingToDelete, closeDeleteConfirmModal]);
 
-    setIsDeleting(true);
-    setDeleteError("");
-
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_BASE}/listings/delete_listings.php`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({ listing_id: listingToDelete.id }),
-        }
-      );
-
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-        throw new Error(
-          result.error || `Failed to delete listing (HTTP ${response.status})`
-        );
-      }
-
-      setMyListings((currentListings) =>
-        currentListings.filter((listing) => listing.id !== listingToDelete.id)
-      );
-      closeDeleteConfirmModal();
-    } catch (error) {
-      setDeleteError(error.message || "An error occurred during deletion.");
-    } finally {
-      setIsDeleting(false);
-    }
-  }, [currentUser, requireAuth, listingToDelete, closeDeleteConfirmModal]);
-
-  const handleEditListing = useCallback(
-    (id) => {
-      if (!currentUser) {
-        requireAuth();
-        return;
-      }
-      alert(
-        `Edit action for listing ${id} triggered (simulation). Implement edit functionality.`
-      );
-    },
-    [currentUser, requireAuth]
-  );
 
   const handleView = useCallback((listing) => {
-    fetch(
-      `${process.env.REACT_APP_API_BASE}/listings/image_listings.php?post_id=${listing.id}`,
-      {
-        credentials: "include",
-      }
-    )
+    fetch( `${process.env.REACT_APP_API_BASE}/listings/image_listings.php?post_id=${listing.id}`, { credentials: "include", } )
       .then((res) => res.json())
       .then((images) => {
         setSelectedListing(listing);
@@ -190,138 +178,89 @@ function SellingPage() {
       .catch(() => alert("Failed to load images."));
   }, []);
 
-  const handlePublishListing = useCallback(
-    async (formData) => {
-      if (!currentUser) {
-        requireAuth();
-        return;
-      }
-      try {
-        alert("Listing submitted (simulation)! Implement API call.");
-
-        const simulatedNewListing = {
-          id: Date.now(),
-          user_id: currentUser.id,
-          title: formData.get("title") || "New Listing",
-          image_path: "/images/default-car.png",
-          price: formData.get("price") || 0,
-          mileage: formData.get("mileage") || 0,
-          year: formData.get("year") || new Date().getFullYear(),
-        };
-        setMyListings((prevListings) => [simulatedNewListing, ...prevListings]);
-        closeCreateModal();
-      } catch (error) {
-        alert(`Failed to publish listing: ${error.message}. Please try again.`);
-      }
-    },
-    [currentUser, requireAuth, closeCreateModal]
-  );
-
-  if (authLoading || pageLoading) {
-    return (
-      <div className="selling-page">
-        <Header /> <NavBar />
-        <div className="loading-page">Loading your listings...</div>
-        <Footer />
-      </div>
-    );
-  }
-  if (!currentUser) {
-    return null;
-  }
+  if (authLoading) { return <div className="selling-page"><Header /><NavBar /><div className="loading-page">Checking auth...</div><Footer /></div>; }
+  if (!currentUser) { return <div className="selling-page"><Header /><NavBar /><div className="loading-page">Redirecting...</div><Footer /></div>; }
+  if (pageLoading) { return <div className="selling-page"><Header /><NavBar /><div className="loading-page">Loading listings...</div><Footer /></div>; }
 
   return (
-    <div className="selling-page">
+    <div className="page-wrapper">
       <Header />
       <NavBar />
-      <div className="selling-content-wrapper">
-        <div className="my-listings-header">
-          <h2>My Listings</h2>
-          <button
-            className="create-listing-btn-trigger"
-            onClick={openCreateModal}
-          >
-            <i className="fas fa-plus"></i> Create Listing
-          </button>
-        </div>
-
-        {fetchError && <div className="error-banner">{fetchError}</div>}
-
-        <section className="my-listings-section">
-          {!fetchError && myListings.length > 0 ? (
-            <div className="my-listings-grid">
-              {myListings.map((listing) => (
-                <ListingCard
-                  key={listing.id}
-                  title={listing.title}
-                  image={
-                    listing.image_path
-                      ? `${process.env.REACT_APP_STATIC_BASE}${listing.image_path}`
-                      : "/images/default-car.png"
-                  }
-                  price={listing.price}
-                  mileage={listing.mileage}
-                  year={listing.year}
-                  onView={() => handleView(listing)}
-                  onEdit={() => handleEditListing(listing.id)}
-                  onDelete={() =>
-                    openDeleteConfirmModal(listing.id, listing.title)
-                  }
-                  context="selling"
-                />
-              ))}
+      <div className="page-content">
+        <div className="selling-page">
+          <div className="selling-content-wrapper">
+            <div className="my-listings-header">
+              <h2>My Listings</h2>
+              <button className="create-listing-btn-trigger" onClick={openCreateModal}>
+                <i className="fas fa-plus"></i> Create Listing
+              </button>
             </div>
-          ) : !fetchError ? (
-            <p className="no-listings-message">
-              You haven't created any listings yet.
-            </p>
-          ) : null}
-        </section>
 
-        {isCreateModalOpen && (
-          <div className="modal-overlay" onClick={closeCreateModal}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <CreateListingForm
-                onSubmit={handlePublishListing}
-                onClose={closeCreateModal}
-              />
-            </div>
+            {fetchError && <div className="error-banner">{fetchError}</div>}
+
+            <section className="my-listings-section">
+              {!fetchError && myListings.length > 0 ? (
+                <div className="my-listings-grid">
+                  {myListings.map((listing) => (
+                    <ListingCard
+                      key={listing.id}
+                      listing={listing}
+                      title={listing.title}
+                      image={ listing.image_path && listing.image_path !== '/images/default-car.png' ? `${process.env.REACT_APP_STATIC_BASE || ''}${listing.image_path}` : "/images/default-car.png" }
+                      price={listing.price}
+                      mileage={listing.mileage}
+                      year={listing.year}
+                      onView={() => handleView(listing)}
+                      onEdit={() => openEditModal(listing)}
+                      onDelete={() => openDeleteConfirmModal(listing.id, listing.title)}
+                      context="selling"
+                    />
+                  ))}
+                </div>
+              ) : !fetchError ? (
+                <p className="no-listings-message">You haven't created any listings yet. Click "Create Listing" to start!</p>
+              ) : null}
+            </section>
+
+            {isCreateModalOpen && (
+              <div className="modal-overlay" onClick={closeCreateModal}>
+                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                  <CreateListingForm onSubmitSuccess={handleListingCreated} onClose={closeCreateModal} />
+                </div>
+              </div>
+            )}
+
+            {isEditModalOpen && listingToEdit && (
+              <div className="modal-overlay" onClick={closeEditModal}>
+                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                  <EditListingForm listingToEdit={listingToEdit} onSubmitSuccess={handleListingUpdated} onClose={closeEditModal} />
+                </div>
+              </div>
+            )}
+
+            {isDeleteModalOpen && listingToDelete && (
+               <DeleteListingModal listingTitle={listingToDelete.title} onClose={closeDeleteConfirmModal} onConfirmDelete={handleConfirmDelete} isLoading={isDeleting} error={deleteError} />
+            )}
           </div>
-        )}
 
-        {isDeleteModalOpen && listingToDelete && (
-          <DeleteListingModal
-            listingTitle={listingToDelete.title}
-            onClose={closeDeleteConfirmModal}
-            onConfirmDelete={handleConfirmDelete}
-            isLoading={isDeleting}
-            error={deleteError}
-          />
-        )}
+          {isViewerOpen && selectedListing && (
+             <ViewModal
+                images={viewerImages}
+                onClose={() => setIsViewerOpen(false)}
+                title={selectedListing.title} year={selectedListing.year} price={selectedListing.price}
+                description={selectedListing.description}
+                specs={{
+                    Make: selectedListing.make, Model: selectedListing.model,
+                    Kilometers: Number(selectedListing.mileage).toLocaleString(),
+                    Transmission: selectedListing.transmission, Drive: selectedListing.driveType,
+                    Fuel: selectedListing.fuelType, Body: selectedListing.bodyType,
+                    Exterior: selectedListing.exteriorColor,
+                    Location: `${selectedListing.city}, ${selectedListing.province}`,
+                }}
+             />
+          )}
+        </div>
       </div>
-
-      {isViewerOpen && selectedListing && (
-        <ViewModal
-          images={viewerImages}
-          onClose={() => setIsViewerOpen(false)}
-          title={selectedListing.title}
-          year={selectedListing.year}
-          price={selectedListing.price}
-          description={selectedListing.description}
-          specs={{
-            Make: selectedListing.make,
-            Model: selectedListing.model,
-            Kilometers: Number(selectedListing.mileage).toLocaleString(),
-            Transmission: selectedListing.transmission,
-            Drive: selectedListing.driveType,
-            Fuel: selectedListing.fuelType,
-            Body: selectedListing.bodyType,
-            Exterior: selectedListing.exteriorColor,
-            Location: `${selectedListing.city}, ${selectedListing.province}`,
-          }}
-        />
-      )}
-
       <Footer />
     </div>
   );

@@ -10,7 +10,11 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.1rem 2rem;
-  background: linear-gradient(to right, #cecece, #444444); /*addition of the gradient*/
+  background: linear-gradient(
+    to right,
+    #cecece,
+    #444444
+  ); /*addition of the gradient*/
   border-bottom: 2px solid #ff9800;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -107,7 +111,6 @@
 }
 
 .header-actions {
-  /* Basic container for alignment if needed */
   display: flex;
   align-items: center;
 }
@@ -115,8 +118,8 @@
 .header-user-info {
   display: flex;
   align-items: center;
-  gap: 1rem; /* Space between username and logout button */
-  color: #333; /* Or your desired text color */
+  gap: 1rem; 
+  color: #333; 
   font-family: "Poppins", sans-serif;
 }
 
@@ -140,5 +143,5 @@
 }
 
 .logout-btn:hover {
-   background-color: #a00000;
+  background-color: #a00000;
 }

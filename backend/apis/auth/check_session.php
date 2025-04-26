@@ -41,4 +41,3 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true && isset($_
 } else {
     echo json_encode(['isLoggedIn' => false]);
 }
-?>

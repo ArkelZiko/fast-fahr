@@ -26,12 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-// Start session if not already started
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Check if user is logged in
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     http_response_code(401);
     echo json_encode([
@@ -41,13 +39,10 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     exit;
 }
 
-// Get user ID from session
 $user_id = $_SESSION['user_id'];
 
-// Get JSON data from the request body
 $data = json_decode(file_get_contents('php://input'), true);
 
-// Validate input
 if (!isset($data['currentPassword']) || !isset($data['newPassword'])) {
     http_response_code(400);
     echo json_encode([
@@ -60,7 +55,6 @@ if (!isset($data['currentPassword']) || !isset($data['newPassword'])) {
 $currentPassword = $data['currentPassword'];
 $newPassword = $data['newPassword'];
 
-// Validate new password
 if (strlen($newPassword) < 8) {
     http_response_code(400);
     echo json_encode([
@@ -71,16 +65,14 @@ if (strlen($newPassword) < 8) {
 }
 
 try {
-    // Get the current password hash from the database
     $cmd = "SELECT password_hash FROM users WHERE user_id = ?";
     $stmt = $dbh->prepare($cmd);
     $args = [$user_id];
     $stmt->execute($args);
-    
+
     if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $currentPasswordHash = $row['password_hash'];
-        
-        // Verify the current password
+
         if (!password_verify($currentPassword, $currentPasswordHash)) {
             http_response_code(401);
             echo json_encode([
@@ -89,16 +81,14 @@ try {
             ]);
             exit;
         }
-        
-        // Hash the new password
+
         $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
-        
-        // Update the password in the database
+
         $cmd = "UPDATE users SET password_hash = ? WHERE user_id = ?";
         $stmt = $dbh->prepare($cmd);
         $args = [$newPasswordHash, $user_id];
         $success = $stmt->execute($args);
-        
+
         if ($success) {
             echo json_encode([
                 'success' => true,
@@ -133,4 +123,3 @@ try {
         'message' => 'An unexpected error occurred.'
     ]);
 }
-?>

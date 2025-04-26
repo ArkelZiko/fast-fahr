@@ -16,9 +16,9 @@ import MessagesPage from "./pages/MessagesPage";
 import SellingPage from "./pages/SellingPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import ForgotPasswordPage from './pages/ForgotPasswordPage';
-import ResetCodePage from './pages/ResetCodePage';
-import ResetPasswordPage from './pages/ResetPasswordPage';
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetCodePage from "./pages/ResetCodePage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import BookmarksPage from "./pages/BookmarksPage";
 import ManageAccount from "./pages/ManageAccount";
 
@@ -26,7 +26,7 @@ import ManageAccount from "./pages/ManageAccount";
  * The root component of the FastFahr application.
  * Initializes the router, authentication context, and defines routes for all pages.
  * @returns {JSX.Element} The main application structure with routing.
-*/
+ */
 function App() {
   return (
     <Router basename="/fastfahr">

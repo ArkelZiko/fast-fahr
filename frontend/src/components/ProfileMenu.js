@@ -17,13 +17,11 @@ function ProfileMenu({ user, onLogout }) {
   let menuRef = useRef(null);
   let profileRef = useRef(null);
 
-  // Log the user data to check the profile picture URL
   console.log("ProfileMenu user data:", user);
   if (user && user.profile_picture) {
     console.log("Profile picture URL:", user.profile_picture);
   }
 
-  // Close menu when clicking outside
   useEffect(() => {
     let handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target) && 
@@ -38,18 +36,15 @@ function ProfileMenu({ user, onLogout }) {
     };
   }, []);
 
-  // Handle profile image click
   let toggleMenu = () => {
     setShowMenu(!showMenu);
   };
 
-  // Handle logout
   let handleLogout = () => {
     onLogout();
     setShowMenu(false);
   };
 
-  // Handle manage account click
   let handleManageAccount = () => {
     navigate('/account');
     setShowMenu(false);
@@ -57,7 +52,6 @@ function ProfileMenu({ user, onLogout }) {
 
   if (!user) return null;
 
-  // Determine if we should try to display a profile picture
   const hasProfilePicture = user.profile_picture && !imageFailed;
 
   return (

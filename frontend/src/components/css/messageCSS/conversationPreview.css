@@ -28,7 +28,7 @@ body {
   }
   
   .conversation-preview.active {
-    background-color: #fff3e0; /* Light orange for selected */
+    background-color: #fff3e0; 
   }
   
   .preview-avatar {
@@ -36,12 +36,12 @@ body {
     height: 45px;
     border-radius: 50%;
     object-fit: cover;
-    flex-shrink: 0; /* Prevent avatar from shrinking */
+    flex-shrink: 0; 
   }
   
   .preview-details {
     flex-grow: 1;
-    overflow: hidden; /* Prevent text overflow */
+    overflow: hidden; 
   }
   
   .preview-username {
@@ -58,9 +58,9 @@ body {
     font-size: 0.85rem;
     color: #666;
     margin: 0;
-    white-space: nowrap; /* Prevent wrapping */
-    overflow: hidden; /* Hide overflow */
-    text-overflow: ellipsis; /* Add ellipsis (...) */
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
   }
   
   .preview-meta {
@@ -69,7 +69,7 @@ body {
     align-items: flex-end;
     font-size: 0.75rem;
     color: #999;
-    flex-shrink: 0; /* Prevent meta from shrinking */
+    flex-shrink: 0; 
   }
   
   .preview-timestamp {
@@ -77,7 +77,7 @@ body {
   }
   
   .unread-indicator {
-    background-color: #cc0000; /* Theme color */
+    background-color: #cc0000; 
     color: white;
     font-weight: bold;
     border-radius: 50%;
@@ -87,16 +87,15 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 0.75rem;
-    line-height: 1; /* Adjust for better vertical centering */
+    line-height: 1; 
   }
   
-  /* Style changes when unread */
   .conversation-preview.unread .preview-username {
-    font-weight: 700; /* Bold username for unread */
+    font-weight: 700; 
      color: #111;
   }
   
   .conversation-preview.unread .preview-message {
-    color: #333; /* Darker preview for unread */
+    color: #333; 
     font-weight: 500;
   }

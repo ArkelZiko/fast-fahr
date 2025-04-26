@@ -26,8 +26,16 @@ function Footer() {
 
         {/* Center Section - Social Links */}
         <div className="footer-center">
-          <p className="follow-text">Follow Us</p>
+          <p className="follow-text">Contact Us</p>
           <div className="social-icons">
+          <a
+              href="mailto:fast.fahr.help@gmail.com/"
+              target="_blank"
+              
+            >
+              <i className="fas fa-envelope"></i>
+          </a>
+
             <a
               href="https://twitter.com/"
               target="_blank"
@@ -58,7 +66,6 @@ function Footer() {
             <a
               href="https://www.iseecars.com/german-cars"
               target="_blank"
-            //   
               className="learn-more"
             >
               Learn More

@@ -15,7 +15,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Ensure it's above other content */
+    z-index: 1000; 
 }
 
 .modal-content {
@@ -23,26 +23,26 @@
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     width: 90%;
-    max-width: 500px; /* Adjust max-width as needed */
-    max-height: 90vh; /* Limit height */
-    overflow-y: auto; /* Allow scrolling if content overflows */
+    max-width: 500px; 
+    max-height: 90vh; 
+    overflow-y: auto; 
     font-family: 'Poppins', sans-serif;
-    display: flex; /* Use flexbox for layout */
-    flex-direction: column; /* Stack header, body, footer */
+    display: flex;
+    flex-direction: column; 
 }
 
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 1.5rem; /* Adjust padding */
+    padding: 1rem 1.5rem; 
     border-bottom: 1px solid #eee;
-    flex-shrink: 0; /* Prevent header from shrinking */
+    flex-shrink: 0; 
 }
 
 .modal-header h2 {
     margin: 0;
-    font-size: 1.4rem; /* Adjust size */
+    font-size: 1.4rem; 
     font-weight: 700;
     color: #111;
 }
@@ -50,7 +50,7 @@
 .close-modal-btn {
     background: none;
     border: none;
-    font-size: 1.8rem; /* Adjust size */
+    font-size: 1.8rem; 
     line-height: 1;
     color: #888;
     cursor: pointer;
@@ -65,9 +65,9 @@
  }
 
 .modal-body {
-   padding: 1.5rem; /* Adjust padding */
-   flex-grow: 1; /* Allow body to take up space */
-   overflow-y: auto; /* Allow body to scroll if needed */
+   padding: 1.5rem; 
+   flex-grow: 1; 
+   overflow-y: auto; 
 }
 
  .modal-body p {
@@ -82,11 +82,11 @@
  }
  .modal-body .warning-text {
      font-size: 0.9rem;
-     color: #cc0000; /* Theme color for warnings */
+     color: #cc0000; 
      font-weight: 500;
  }
 
-/* Input specific to add contact modal */
+
 .modal-body .username-input {
     width: 100%;
     padding: 0.75rem 1rem;
@@ -100,10 +100,10 @@
      border-color: #ff9800;
  }
 
-/* Error message styling */
+
 .modal-error {
-    color: #D8000C; /* Error red */
-    background-color: #FFD2D2; /* Light red background */
+    color: #D8000C; 
+    background-color: #FFD2D2; 
     border: 1px solid #D8000C;
     padding: 0.75rem;
     margin-top: 1rem;
@@ -117,16 +117,16 @@
     display: flex;
     justify-content: flex-end;
     gap: 0.8rem;
-    padding: 1rem 1.5rem; /* Adjust padding */
+    padding: 1rem 1.5rem; 
     border-top: 1px solid #eee;
-    background-color: #f9f9f9; /* Slight background */
-    border-bottom-left-radius: 8px; /* Match content radius */
+    background-color: #f9f9f9; 
+    border-bottom-left-radius: 8px; 
     border-bottom-right-radius: 8px;
-    flex-shrink: 0; /* Prevent footer from shrinking */
+    flex-shrink: 0; 
 }
 
 .modal-actions button {
-    padding: 0.6rem 1.2rem; /* Adjust padding */
+    padding: 0.6rem 1.2rem; 
     border: none;
     border-radius: 6px;
     font-size: 0.9rem;
@@ -143,7 +143,7 @@
     cursor: not-allowed;
 }
 .modal-actions button i {
-    font-size: 0.9em; /* Icon size relative to button text */
+    font-size: 0.9em; 
     line-height: 1;
 }
 
@@ -158,16 +158,16 @@
 }
 
 .modal-confirm-btn {
-    background-color: #1a1a1a; /* Default confirm: Black */
+    background-color: #1a1a1a; 
     color: white;
 }
 .modal-confirm-btn:not(:disabled):hover {
     background-color: #000000;
 }
 
-/* Specific overrides for button types */
+
 .modal-confirm-btn.add-btn {
-    background-color: #ff9800; /* Orange for add/find */
+    background-color: #ff9800; 
      color: #1a1a1a;
 }
  .modal-confirm-btn.add-btn:not(:disabled):hover {
@@ -175,7 +175,7 @@
 }
 
 .modal-confirm-btn.delete-btn {
-    background-color: #cc0000; /* Red for delete */
+    background-color: #cc0000;
      color: white;
 }
  .modal-confirm-btn.delete-btn:not(:disabled):hover {

@@ -60,17 +60,14 @@ try {
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     echo json_encode([
-      'success' => true,
-      'data'    => $rows
+        'success' => true,
+        'data'    => $rows
     ]);
-
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Database error occurred while fetching bookmarks.']);
-
 } catch (Exception $e) {
     error_log("General Error in bookmarks/list.php: " . $e->getMessage());
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'An unexpected server error occurred.']);
 }
-?>

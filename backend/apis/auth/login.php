@@ -89,21 +89,18 @@ try {
             'message' => 'Invalid email or password. Please try again.'
         ]);
     }
-}
-catch (PDOException $e) {
+} catch (PDOException $e) {
     error_log("Database Error: " . $e->getMessage());
     http_response_code(500);
     echo json_encode([
         'success' => false,
         'message' => 'Login Failed! A server error occurred.'
     ]);
-}
-catch (Exception $e) {
+} catch (Exception $e) {
     error_log("General Error: " . $e->getMessage());
     http_response_code(500);
-     echo json_encode([
+    echo json_encode([
         'success' => false,
         'message' => 'Login Failed! An unexpected error occurred.'
     ]);
 }
-?>

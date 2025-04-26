@@ -1,15 +1,5 @@
-/**
- * File:         BookmarksPage.js
- * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
- * MACIDs:       alamy1, govindag, kharodg, zikoa
- * Date:         April 18th, 2025
- * Description:  Page component for displaying the listings that the currently
- *               logged-in user has bookmarked. Fetches bookmark data, handles
- *               un-bookmarking actions, and displays listings using ListingCard.
- *               Includes logic for viewing listing details via a modal.
-*/
-
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ViewModal from "../components/buyingComponents/ViewModal";
 import "../components/css/buyingCSS/buyingpage.css";
 import Footer from "../components/Footer";
@@ -19,13 +9,13 @@ import NavBar from "../components/Navbar";
 import { useAuth } from "../hooks/useAuth";
 import { fetchBookmarks, toggleBookmark } from "../hooks/useBookmarks";
 
-
 /**
  * Renders the Bookmarks page, showing saved listings for the logged-in user.
  * @returns {JSX.Element|null} The BookmarksPage component or null if redirecting.
-*/
+ */
 export default function BookmarksPage() {
   const { currentUser, isLoading: authLoading, requireAuth } = useAuth();
+  const navigate = useNavigate();
 
   const [bookmarkedListings, setBookmarkedListings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -64,14 +54,13 @@ export default function BookmarksPage() {
       .finally(() => {
         if (isMounted) setLoading(false);
       });
+
     return () => {
       isMounted = false;
     };
   }, [authLoading, currentUser, requireAuth]);
 
   const handleBookmarkToggle = async (listingId, nextState) => {
-    if (nextState) {
-    }
     try {
       await toggleBookmark(listingId, true);
       setBookmarkedListings((prev) => prev.filter((l) => l.id !== listingId));
@@ -96,60 +85,85 @@ export default function BookmarksPage() {
       .catch(() => alert("Failed to load images."));
   };
 
+  const handleContact = (creatorUserId, creatorUsername) => {
+    if (!currentUser) {
+      navigate("/login");
+      return;
+    }
+    navigate("/messages", {
+      state: {
+        openAddContactModal: true,
+        prefillUsername: creatorUsername,
+      },
+    });
+  };
+
   if (authLoading || loading) {
     return (
-      <div>
+      <div className="page-wrapper">
         <Header />
         <NavBar />
-        <div
-          className="loading-page"
-          style={{ textAlign: "center", padding: 50 }}
-        >
-          Loading bookmarks…
+        <div className="page-content">
+          <div
+            className="loading-page"
+            style={{ textAlign: "center", padding: 50 }}
+          >
+            Loading bookmarks…
+          </div>
         </div>
         <Footer />
       </div>
     );
   }
+
   if (!currentUser) return null;
 
   return (
-    <div className="buying-page">
+    <div className="page-wrapper">
       <Header />
       <NavBar />
-      <div className="buying-content-wrapper">
-        <div className="my-listings-header">
-          <h2>My Bookmarks</h2>
-        </div>
+      <div className="page-content">
+        <div className="buying-page">
+          <div className="buying-content-wrapper">
+            <div className="my-listings-header">
+              <h2>My Bookmarks</h2>
+            </div>
 
-        {error && <div className="error-banner">{error}</div>}
+            {error && <div className="error-banner">{error}</div>}
 
-        {!error && bookmarkedListings.length > 0 ? (
-          <div className="my-listings-grid">
-            {bookmarkedListings.map((listing) => (
-              <ListingCard
-                key={listing.id}
-                title={listing.title}
-                image={
-                  listing.image_path
-                    ? `${process.env.REACT_APP_STATIC_BASE}${listing.image_path}`
-                    : "/images/default-car.png"
-                }
-                price={listing.price}
-                mileage={listing.mileage}
-                year={listing.year}
-                isBookmarked={true}
-                onBookmarkToggle={(next) =>
-                  handleBookmarkToggle(listing.id, next)
-                }
-                onView={() => handleView(listing)}
-                context="bookmarks"
-              />
-            ))}
+            {!error && bookmarkedListings.length > 0 ? (
+              <div className="my-listings-grid">
+                {bookmarkedListings.map((listing) => (
+                  <ListingCard
+                    key={listing.id}
+                    title={listing.title}
+                    image={
+                      listing.image_path
+                        ? `${process.env.REACT_APP_STATIC_BASE}${listing.image_path}`
+                        : "/images/default-car.png"
+                    }
+                    price={listing.price}
+                    mileage={listing.mileage}
+                    year={listing.year}
+                    isBookmarked={true}
+                    onBookmarkToggle={(next) =>
+                      handleBookmarkToggle(listing.id, next)
+                    }
+                    onView={() => handleView(listing)}
+                    onContact={() =>
+                      handleContact(listing.user_id, listing.creator_username)
+                    }
+                    context="buying"
+                  />
+                ))}
+              </div>
+            ) : !error ? (
+              <p className="no-listings-message">
+                You have no bookmarks saved.
+              </p>
+            ) : null}
           </div>
-        ) : !error ? (
-          <p className="no-listings-message">You have no bookmarks saved.</p>
-        ) : null}
+        </div>
       </div>
 
       {isViewerOpen && selectedListing && (
@@ -163,7 +177,9 @@ export default function BookmarksPage() {
           specs={{
             Make: selectedListing.make,
             Model: selectedListing.model,
-            kilomterers: Number(selectedListing.mileage).toLocaleString(),
+            Kilometers: `${Number(
+              selectedListing.mileage
+            ).toLocaleString()} km`,
             Transmission: selectedListing.transmission,
             Drive: selectedListing.driveType,
             Fuel: selectedListing.fuelType,
