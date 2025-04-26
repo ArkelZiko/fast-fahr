@@ -2,11 +2,9 @@
  * File:         ListingCard.js
  * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
  * MACIDs:       alamy1, govindag, kharodg, zikoa
- * Date:         March 20th, 2025
- * Description:  A general-purpose listing card component. Intended to display
- *               vehicle information and conditionally render action buttons
- *               (View, Edit, Delete, Bookmark, Contact) based on the 'context' prop.
- *               (Note: This component seems less used now in favor of Buy/Sell specific cards).
+ * Date:         March 20th, 2025 (Updated April 23rd, 2025)
+ * Description:  A general-purpose listing card component. Displays vehicle info
+ *               and conditionally renders action buttons based on context.
 */
 
 import React, { useState, useEffect } from "react";
@@ -15,13 +13,14 @@ import "./css/listingcard.css";
 /**
  * Renders a generic listing card with conditional action buttons.
  * @param {object} props - Component properties.
+ * @param {object} props.listing - The full listing object (used for Edit action).
  * @param {string} props.title - Listing title.
  * @param {string} props.image - Image URL.
  * @param {number|string} props.price - Listing price.
  * @param {number|string} props.mileage - Vehicle mileage.
  * @param {number|string} props.year - Vehicle year.
  * @param {function} [props.onView] - Callback function for View action.
- * @param {function} [props.onEdit] - Callback function for Edit action.
+ * @param {function} [props.onEdit] - Callback function for Edit action (expects listing object).
  * @param {function} [props.onDelete] - Callback function for Delete action.
  * @param {function} [props.onContact] - Callback function for Contact action.
  * @param {function} [props.onBookmarkToggle] - Callback function when bookmark state changes.
@@ -30,6 +29,7 @@ import "./css/listingcard.css";
  * @returns {JSX.Element} The ListingCard component.
 */
 function ListingCard({
+  listing, // Added listing prop
   title,
   image,
   price,
@@ -41,7 +41,7 @@ function ListingCard({
   onContact,
   onBookmarkToggle,
   isBookmarked = false,
-  context = "buying", // can be "buying", "selling", or "bookmarks"
+  context = "buying",
 }) {
   const [bookmarked, setBookmarked] = useState(isBookmarked);
 
@@ -87,7 +87,8 @@ function ListingCard({
         )}
 
         {context === "selling" && onEdit && (
-          <button className="edit-btn" onClick={onEdit}>
+          // ***MODIFIED HERE*** Pass the listing object to onEdit
+          <button className="edit-btn" onClick={() => onEdit(listing)}>
             <i className="fas fa-pencil-alt"></i> Edit
           </button>
         )}
@@ -104,7 +105,7 @@ function ListingCard({
           </button>
         )}
 
-        {context === "bookmarks" && (
+        {context === "bookmarks" && onBookmarkToggle && ( // Ensure onBookmarkToggle exists for remove
           <button
             className="remove-bookmark-btn"
             onClick={handleBookmarkClick}
