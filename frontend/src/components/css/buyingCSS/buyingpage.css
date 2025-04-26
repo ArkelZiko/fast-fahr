@@ -5,7 +5,6 @@
  Description: Formatting to the buying page (similar to that of selling Page)
 */
 
-
 .buying-content-wrapper {
   padding: 2rem;
   max-width: 1200px;
@@ -37,11 +36,11 @@ body {
 
 .my-listings-header {
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
   padding-bottom: 0.8rem;
-  border-bottom: 2px solid #ff9800; 
+  border-bottom: 2px solid #ffa200;
 }
 
 .my-listings-header h2 {
@@ -50,7 +49,6 @@ body {
   color: #111;
   margin: 0;
 }
-
 
 .create-listing-btn-trigger {
   display: inline-flex;

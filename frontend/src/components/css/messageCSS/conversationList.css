@@ -42,9 +42,28 @@ body {
     line-height: 1;
     transition: color 0.2s ease;
   }
+
+  .add-contact-btn,
+  .add-contact-btn:focus,
+  .add-contact-btn:hover,
+  .add-contact-btn:active {
+    background: none !important;
+    background-color: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
   
-  .add-contact-btn:hover {
-    color: #a00000; 
+  .add-contact-btn i {
+    color: #cc0000;
+    transition: color 0.2s ease;
+  }
+  
+  .add-contact-btn:hover i {
+
+    border-radius: 15px;
+    background-color: #eeeeee;
+    color: #a00000;
   }
   
   .conversation-list {

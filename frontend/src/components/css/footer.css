@@ -23,16 +23,13 @@ body {
 }
 
 .footer {
-  background: linear-gradient(
-    to left,
-    #393939,
-    #1b1b1b
-  ); /* How we feelin about the gradient */
+  background: linear-gradient(to left, #393939, #1b1b1b);
   color: #ffffff;
   font-family: "Poppins", sans-serif;
   padding: 20px 0;
   width: 100%;
   margin-top: auto;
+  border-top: 2px solid #ffa200;
 }
 
 .footer-container {
@@ -68,7 +65,7 @@ body {
   font-size: 1rem;
   margin-bottom: 5px;
   font-weight: bold;
-  color: #f9b73c;
+  color: #ffa200;
 }
 
 .social-icons {
@@ -78,13 +75,13 @@ body {
 }
 
 .social-icons a {
-  color: #f6ce2f;
+  color: #ffa200;
   font-size: 1.2rem;
   transition: opacity 0.3s ease;
 }
 
 .social-icons a:hover {
-  color: #cc1a1d;
+  color: #f88d00;
   opacity: 0.8;
 }
 
@@ -97,18 +94,18 @@ body {
 
 .footer-text {
   font-size: 0.9rem;
-  color: #f6ce2f;
+  color: #ffa200;
   line-height: 1.5;
 }
 
 .learn-more {
-  color: #f9b73c;
+  color: #ffa200;
   font-weight: bold;
   text-decoration: none;
 }
 
 .learn-more:hover {
-  color: #cc1a1d;
+  color: #f88d00;
   text-decoration: underline;
 }
 
@@ -116,6 +113,6 @@ body {
   text-align: center;
   padding-top: 10px;
   font-size: 0.8rem;
-  border-top: 1px solid #f9b73c;
-  color: #f6ce2f;
+  border-top: 1px solid #ffa200;
+  color: #ffa200;
 }

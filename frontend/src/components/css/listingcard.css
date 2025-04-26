@@ -79,48 +79,48 @@
 }
 
 .view-btn {
-  background-color: #f0f0f0;
+  background-color: #dddddd;
   color: #333;
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc;
 }
 
 .view-btn:hover {
-  background-color: #e0e0e0;
+  background-color: #cccccc;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .bookmark-btn,
 .remove-bookmark-btn {
-  background-color: #ff9800;
+  background-color: #ffa200;
   color: white;
   border: none;
 }
 
 .bookmark-btn:hover,
 .remove-bookmark-btn:hover {
-  background-color: #e67e00;
+  background-color: #f88d00;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .message-btn {
-  background-color: #cc0000;
+  background-color: #ff4d00;
   color: white;
   border: none;
 }
 
 .message-btn:hover {
-  background-color: #a00000;
+  background-color: #ff3300;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .edit-btn {
-  background-color: #ff9800;
+  background-color: #ffa200;
   color: white;
   border: none;
 }
 
 .edit-btn:hover {
-  background-color: #e67e00;
+  background-color: #f88d00;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 

@@ -7,13 +7,13 @@
 */
 
 :root {
-  --primary-red: #cc1a1d;
-  --primary-yellow: #f9b73c;
-  --secondary-yellow: #e59a3bff;
+  --primary-red: #cc0000;
+  --primary-yellow: #ffa200;
+  --secondary-yellow: #f88d00;
   --light-gray: #f8f8f8;
   --border-color: #e5e5e5;
-  --text-dark: #333;
-  --text-medium: #555;
+  --text-dark: #000000;
+  --text-medium: #000000;
 }
 
 .modal-overlay {
@@ -77,7 +77,7 @@
 }
 
 .close-button:hover {
-  background-color: #e62a2d;
+  background-color: #a00000;
 }
 
 .modal-body {
@@ -133,6 +133,7 @@
 
 .nav-button:hover {
   background-color: var(--secondary-yellow);
+  color: white;
 }
 
 .nav-button.prev {
@@ -181,18 +182,6 @@
   height: 100%;
   object-fit: cover;
 }
-
-/* 
-.main-badge {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: var(--primary-red);
-  color: white;
-  font-size: 0.7rem;
-  padding: 2px 6px;
-  border-bottom-right-radius: 6px;
-} */
 
 .car-price-section {
   background-color: var(--primary-yellow);

@@ -10,12 +10,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.1rem 2rem;
-  background: linear-gradient(
-    to right,
-    #cecece,
-    #444444
-  ); /*addition of the gradient*/
-  border-bottom: 2px solid #ff9800;
+  background: linear-gradient(to right, #cecece, #444444);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -58,7 +53,7 @@
 
 .search-box:focus {
   outline: none;
-  border-color: #ff9800;
+  border-color: #ffa200;
 }
 
 .sign-in-btn {
@@ -94,7 +89,7 @@
 }
 
 .search-btn {
-  background-color: #ff9800;
+  background-color: #ffa200;
   color: white;
   border: none;
   border-radius: 6px;
@@ -107,7 +102,7 @@
 }
 
 .search-btn:hover {
-  background-color: #e67e00;
+  background-color: #f88d00;
 }
 
 .header-actions {
@@ -118,8 +113,8 @@
 .header-user-info {
   display: flex;
   align-items: center;
-  gap: 1rem; 
-  color: #333; 
+  gap: 1rem;
+  color: #333;
   font-family: "Poppins", sans-serif;
 }
 

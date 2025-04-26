@@ -38,7 +38,7 @@ body {
   align-items: center; /* Vertically aligns them */
   margin-bottom: 1.5rem;
   padding-bottom: 0.8rem;
-  border-bottom: 2px solid #ff9800; /* Makes it look underlined with that orange line */
+  border-bottom: 2px solid #ffa200; /* Makes it look underlined with that orange line */
 }
 
 .my-listings-header h2 {

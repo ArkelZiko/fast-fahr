@@ -43,7 +43,7 @@ input {
 
 input:focus {
   outline: none;
-  border-color: #4a90e2;
+  border-color: #ffa200;
   box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
 }
 
@@ -55,7 +55,7 @@ input::placeholder {
   display: block;
   width: 100%;
   padding: 14px;
-  background-color: #4a90e2;
+  background-color: #ffa200;
   color: white;
   border: none;
   border-radius: 6px;
@@ -67,7 +67,7 @@ input::placeholder {
 }
 
 .login-button:hover {
-  background-color: #3a7bc8;
+  background-color: #f88d00;
 }
 
 .login-button:disabled {
@@ -101,7 +101,7 @@ input::placeholder {
 }
 
 .form-footer a {
-  color: #4a90e2;
+  color: #000000;
   text-decoration: none;
 }
 

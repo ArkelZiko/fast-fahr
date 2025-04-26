@@ -11,7 +11,7 @@
   background-color: #ffffff;
   border-radius: 8px;
   max-height: 85vh;
-  overflow-y: auto; /* Allow scrolling if content exceeds height */
+  overflow-y: auto; 
   font-family: "Poppins", sans-serif;
 }
 
@@ -31,19 +31,25 @@
   color: #111;
 }
 
-.close-modal-btn {
-  background: none;
+.create-listing-form .close-modal-btn {
+  background: var(--primary-red);
   border: none;
-  font-size: 2rem;
-  line-height: 1;
-  color: #888;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
   cursor: pointer;
-  padding: 0.2rem 0.5rem;
+  color: white;
+  transition: background-color 0.2s;
 }
 
-.close-modal-btn:hover {
-  color: #333;
+.create-listing-form .close-modal-btn:hover {
+  background-color: #a00000;
 }
+
 
 .create-listing-form .form-group {
   margin-bottom: 1rem;
@@ -76,7 +82,7 @@
 .create-listing-form select:focus,
 .create-listing-form textarea:focus {
   outline: none;
-  border-color: #ff9800;
+  border-color: #ffa200;
   background-color: #fff;
 }
 
@@ -110,14 +116,13 @@
 }
 
 .form-row .form-group {
-  flex: 1; /* Make groups share space equally */
+  flex: 1; 
   margin-bottom: 0;
 }
 
-/* Form Actions (Buttons) */
 .form-actions {
   display: flex;
-  justify-content: flex-end; /* Align buttons to the right */
+  justify-content: flex-end; 
   gap: 0.8rem;
   margin-top: 1.5rem;
   padding-top: 1rem;
@@ -149,13 +154,14 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #1a1a1a; /* Black */
+  background-color: #1a1a1a;
   color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .publish-btn:hover {
-  background-color: #000000;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  background-color: #f88d00;
+  transition: all 0.6s ease;  
 }
 
 .publish-btn i {
@@ -203,7 +209,7 @@
 }
 
 .preview-item.main-photo {
-  border: 2.5px solid #ff9800;
+  border: 2.5px solid #ffa200;
   box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
 }
 
@@ -225,7 +231,7 @@
   background-color: rgba(0, 0, 0, 0.85);
 }
 .set-main-photo-btn:disabled {
-  background-color: #ff9800;
+  background-color: #ffa200;
   color: black;
   font-weight: bold;
   cursor: default;
