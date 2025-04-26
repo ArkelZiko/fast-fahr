@@ -6,7 +6,7 @@
  * Description:  Page component for the website's homepage. Displays the main
  *               header, navigation bar, a promotional card, a section for news
  *               articles (using sample data), and the footer.
-*/
+ */
 
 import React from "react";
 import Header from "../components/Header.js";
@@ -15,20 +15,18 @@ import Card from "../components/Card.js";
 import NewsArticleCard from "../components/NewsArticleCard.js";
 import Footer from "../components/Footer.js";
 import sampleNewsData from "../components/data/sampleNewsData.js";
-import '../components/css/homeCSS/homepage.css';
+import "../components/css/homeCSS/homepage.css";
 
 /**
  * Renders the homepage of the application.
  * @returns {JSX.Element} The HomePage component.
-*/
+ */
 function HomePage() {
-
   return (
     <div className="home-page">
       <Header />
       <NavBar />
       <Card />
-
 
       {/* News Feed Section */}
       <div className="news-feed-section">
@@ -47,7 +45,13 @@ function HomePage() {
               />
             ))
           ) : (
-            <p style={{ padding: "2rem", textAlign: "center", gridColumn: "1 / -1" }}>
+            <p
+              style={{
+                padding: "2rem",
+                textAlign: "center",
+                gridColumn: "1 / -1",
+              }}
+            >
               No news articles available at the moment.
             </p>
           )}

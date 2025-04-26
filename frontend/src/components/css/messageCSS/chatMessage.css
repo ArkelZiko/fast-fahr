@@ -5,88 +5,87 @@
  Description: Styles for the back-and-forth messages sent between users
 */
 body {
-  font-family: "Poppins", sans-serif;;
+  font-family: "Poppins", sans-serif;
 }
 
 .chat-message {
-    display: flex;
-    align-items: flex-start; /* Align avatar with top of message */
-    max-width: 75%; /* Limit message width */
-    gap: 0.75rem;
-    font-family: "Poppins", sans-serif;;
-  }
-  
-  .message-avatar {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-top: 0.1rem; /* Slight adjustment */
-  }
-  
-  .message-content {
-      display: flex;
-      flex-direction: column;
-  }
-  
-  .message-sender-name {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #555;
-      margin-bottom: 0.1rem;
-  }
-  
-  .message-bubble {
-    padding: 0.6rem 0.9rem;
-    border-radius: 18px; /* Rounded corners for bubble */
-    word-wrap: break-word; /* Wrap long words */
-  }
-  
-  .message-text {
-    margin: 0;
-    font-size: 0.95rem;
-    line-height: 1.4;
-    color: #1a1a1a; /* Default text color */
-  }
-  
-  .message-timestamp {
-    font-size: 0.7rem;
-    color: #999;
-    margin-top: 0.2rem; /* Space between bubble and timestamp */
-  }
-  
-  
-  /* Styles for messages sent BY the current user */
-  .chat-message.sent {
-    align-self: flex-end; /* Align message to the right */
-    flex-direction: row-reverse; /* Reverse order (content then avatar) */
-  }
-  
-  .chat-message.sent .message-content {
-      align-items: flex-end; /* Align text/timestamp to the right */
-  }
-  
-  .chat-message.sent .message-bubble {
-    background-color: #cc0000; /* Theme color */
-    color: white; /* Text color for sent messages */
-    border-bottom-right-radius: 4px; /* Slightly less rounded corner */
-  }
-  .chat-message.sent .message-text {
-      color: white; /* Ensure text inside is white */
-  }
-  
-  /* Styles for messages RECEIVED from others */
-  .chat-message.received {
-    align-self: flex-start; /* Align message to the left */
-    flex-direction: row; /* Default order (avatar then content) */
-  }
-  
-  .chat-message.received .message-content {
-      align-items: flex-start; /* Align text/timestamp to the left */
-  }
-  
-  .chat-message.received .message-bubble {
-    background-color: #e5e5ea; /* Gray background for received */
-    color: #1a1a1a; /* Default text color */
-    border-bottom-left-radius: 4px; /* Slightly less rounded corner */
-  }
+  display: flex;
+  align-items: flex-start; /* Align avatar with top of message */
+  max-width: 75%; /* Limit message width */
+  gap: 0.75rem;
+  font-family: "Poppins", sans-serif;
+}
+
+.message-avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-top: 0.1rem; /* Slight adjustment */
+}
+
+.message-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.message-sender-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 0.1rem;
+}
+
+.message-bubble {
+  padding: 0.6rem 0.9rem;
+  border-radius: 18px; /* Rounded corners for bubble */
+  word-wrap: break-word; /* Wrap long words */
+}
+
+.message-text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: #1a1a1a; /* Default text color */
+}
+
+.message-timestamp {
+  font-size: 0.7rem;
+  color: #999;
+  margin-top: 0.2rem; /* Space between bubble and timestamp */
+}
+
+/* Styles for messages sent BY the current user */
+.chat-message.sent {
+  align-self: flex-end; /* Align message to the right */
+  flex-direction: row-reverse; /* Reverse order (content then avatar) */
+}
+
+.chat-message.sent .message-content {
+  align-items: flex-end; /* Align text/timestamp to the right */
+}
+
+.chat-message.sent .message-bubble {
+  background-color: #cc0000; /* Theme color */
+  color: white; /* Text color for sent messages */
+  border-bottom-right-radius: 4px; /* Slightly less rounded corner */
+}
+.chat-message.sent .message-text {
+  color: white; /* Ensure text inside is white */
+}
+
+/* Styles for messages RECEIVED from others */
+.chat-message.received {
+  align-self: flex-start; /* Align message to the left */
+  flex-direction: row; /* Default order (avatar then content) */
+}
+
+.chat-message.received .message-content {
+  align-items: flex-start; /* Align text/timestamp to the left */
+}
+
+.chat-message.received .message-bubble {
+  background-color: #e5e5ea; /* Gray background for received */
+  color: #1a1a1a; /* Default text color */
+  border-bottom-left-radius: 4px; /* Slightly less rounded corner */
+}

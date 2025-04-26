@@ -36,7 +36,7 @@ function BuyingPage() {
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [selectedCar, setSelectedCar] = useState(null);
 
-  const normalize = (str) => str.toLowerCase().replace(/[\s-]/g, '');
+  const normalize = (str) => str.toLowerCase().replace(/[\s-]/g, "");
 
   useEffect(() => {
     if (!authLoading) {
@@ -56,7 +56,9 @@ function BuyingPage() {
         .then((res) => {
           if (!res.ok) {
             return res.text().then((text) => {
-              throw new Error(`HTTP error! status: ${res.status}, response: ${text}`);
+              throw new Error(
+                `HTTP error! status: ${res.status}, response: ${text}`
+              );
             });
           }
           return res.json();
@@ -74,7 +76,8 @@ function BuyingPage() {
           }
         })
         .catch((error) => {
-          if (isMounted) setFetchError(`Failed to load listings: ${error.message}`);
+          if (isMounted)
+            setFetchError(`Failed to load listings: ${error.message}`);
         })
         .finally(() => {
           if (isMounted) setPageLoading(false);
@@ -153,9 +156,12 @@ function BuyingPage() {
   );
 
   const handleView = useCallback((car) => {
-    fetch(`${process.env.REACT_APP_API_BASE}/listings/image_listings.php?post_id=${car.id}`, {
-      credentials: "include",
-    })
+    fetch(
+      `${process.env.REACT_APP_API_BASE}/listings/image_listings.php?post_id=${car.id}`,
+      {
+        credentials: "include",
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
@@ -186,9 +192,9 @@ function BuyingPage() {
     closeFilterModal();
   }, [listings]);
 
-  const searchParam = new URLSearchParams(location.search).get('search') || '';
+  const searchParam = new URLSearchParams(location.search).get("search") || "";
 
-  const visibleListings = filteredListings.filter(car => {
+  const visibleListings = filteredListings.filter((car) => {
     if (!searchParam) return true;
     return normalize(car.title).includes(searchParam);
   });
@@ -211,7 +217,10 @@ function BuyingPage() {
       <div className="buying-content-wrapper">
         <div className="my-listings-header">
           <h2>Current Listings</h2>
-          <button className="create-listing-btn-trigger" onClick={openFilterModal}>
+          <button
+            className="create-listing-btn-trigger"
+            onClick={openFilterModal}
+          >
             <i className="fas fa-filter"></i> Filter Listings
           </button>
         </div>
@@ -234,7 +243,9 @@ function BuyingPage() {
                 year={car.year}
                 isBookmarked={!!currentUser && bookmarkedIds.has(car.id)}
                 onBookmarkToggle={(next) => handleBookmark(car.id)}
-                onContact={() => handleContact(car.user_id, car.creator_username)}
+                onContact={() =>
+                  handleContact(car.user_id, car.creator_username)
+                }
                 onView={() => handleView(car)}
                 context="buying"
               />
