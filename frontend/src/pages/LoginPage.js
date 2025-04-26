@@ -12,7 +12,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../components/css/login.css';
-import LoginHeader from '../components/loginElements/LoginHeader';
+import Header from '../components/Header';
 import { useAuth } from '../hooks/useAuth';
 
 /**
@@ -86,7 +86,7 @@ function LoginPage() {
 
   return (
     <div className="login-page">
-      <LoginHeader />
+      <Header />
       <div className="login-container">
         <h2>Login</h2>
 

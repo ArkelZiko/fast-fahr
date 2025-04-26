@@ -11,7 +11,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import LoginHeader from '../components/loginElements/LoginHeader';
+import Header from '../components/Header';
 import '../components/css/login.css';
 
 /**
@@ -85,7 +85,7 @@ function ResetPasswordPage() {
 
     return (
         <div className="login-page">
-            <LoginHeader />
+            <Header />
             <div className="login-container">
                 <h2>Set New Password</h2>
 
