@@ -4,7 +4,7 @@
  * File:         update_info.php
  * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
  * MACIDs:       alamy1, govindag, kharodg, zikoa
- * Date:         April 25th, 2025 (Refactored April 23rd, 2025)
+ * Date:         April 25th, 2025
  * Description:  Updates a user's profile information (username and email).
  */
 

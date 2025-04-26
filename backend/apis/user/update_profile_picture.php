@@ -4,7 +4,7 @@
  * File:         update_profile_picture.php
  * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
  * MACIDs:       alamy1, govindag, kharodg, zikoa
- * Date:         April 25th, 2025 (Refactored April 23rd, 2025)
+ * Date:         April 25th, 2025
  * Description:  Handles profile picture uploads.
  */
 
@@ -30,16 +30,6 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start(); 
 }
 
-$loggedInUserId = null;
-if (function_exists('require_login')) {
-   try { $loggedInUserId = require_login(); }
-   catch (Exception $e) {
-      http_response_code(401); echo json_encode(['success' => false, 'error' => 'Not authenticated']); exit;
-   }
-} else {
-   http_response_code(500); echo json_encode(['success' => false, 'error' => 'Auth system error.']); exit;
-}
-
 if (!isset($_FILES['profilePicture']) || $_FILES['profilePicture']['error'] !== UPLOAD_ERR_OK) {
     http_response_code(400);
     $uploadErrors = [
@@ -51,6 +41,7 @@ if (!isset($_FILES['profilePicture']) || $_FILES['profilePicture']['error'] !== 
         UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.',
         UPLOAD_ERR_EXTENSION  => 'PHP extension stopped the upload.',
     ];
+
     $errorCode = $_FILES['profilePicture']['error'] ?? UPLOAD_ERR_NO_FILE;
     $message = $uploadErrors[$errorCode] ?? 'Unknown upload error.';
     echo json_encode(['success' => false, 'message' => $message]);
@@ -65,7 +56,6 @@ $web_path_subdir = '/profile_pictures/';
 $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
 $max_size = 5 * 1024 * 1024; // 5 MB
 
-// Create directory if needed
 if (!is_dir($upload_dir) && !mkdir($upload_dir, 0755, true) && !is_dir($upload_dir)) {
      http_response_code(500);
      echo json_encode(['success' => false, 'message' => 'Failed to create upload directory.']);
@@ -104,7 +94,6 @@ if (move_uploaded_file($file_tmp, $upload_path)) {
     $success_db = $stmt_update->execute($params_update);
 
     if ($success_db) {
-        // Update successful, update session
         $_SESSION['user_profile_picture'] = $image_url;
         echo json_encode([
             'success' => true,

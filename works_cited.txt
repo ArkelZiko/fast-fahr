@@ -36,6 +36,7 @@ YouTube:
 -Full React Hooks Tutorial We Used For Understanding React Hooks: https://www.youtube.com/watch?v=6wf5dIrryoQ
 -Basic CRUD Tutorial W/ PHP + React (This series gave us the basic/fundamental idea of how we were going to setup our project):
 https://www.youtube.com/watch?v=XjjfpNsChhI&list=PLCakfctNSHkFDTFczqhXNv-nYMHvLMT1H 
+-PHP REST API Guide: https://www.youtube.com/watch?v=X51KOJKrofU (Habits/practices of API development that inspired our code)
 
 
 Generative AI:
@@ -44,7 +45,7 @@ Generative AI:
 -Gemini
 
 !!!!!!!!!
-(Note: we used AI to mostly speed up our debugging process)
+(Note: we used AI to mostly speed up our debugging process and to help with error handling)
 (However, we did also use AI for ideas on how to approach implementing certain features for the web app)
 (Also, AI was used with caution to clean up/optimize certain aspects of our code to improve the user experience)
 (Lastly, AI was used as a tool/teacher to accelerate our learning of different concepts with React and occasionally PHP)

@@ -2,7 +2,7 @@
  * File:         ListingCard.js
  * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
  * MACIDs:       alamy1, govindag, kharodg, zikoa
- * Date:         March 20th, 2025 (Updated April 23rd, 2025)
+ * Date:         March 20th, 2025
  * Description:  A general-purpose listing card component. Displays vehicle info
  *               and conditionally renders action buttons based on context.
 */
@@ -29,7 +29,7 @@ import "./css/listingcard.css";
  * @returns {JSX.Element} The ListingCard component.
 */
 function ListingCard({
-  listing, // Added listing prop
+  listing,
   title,
   image,
   price,
@@ -87,7 +87,6 @@ function ListingCard({
         )}
 
         {context === "selling" && onEdit && (
-          // ***MODIFIED HERE*** Pass the listing object to onEdit
           <button className="edit-btn" onClick={() => onEdit(listing)}>
             <i className="fas fa-pencil-alt"></i> Edit
           </button>
@@ -105,7 +104,7 @@ function ListingCard({
           </button>
         )}
 
-        {context === "bookmarks" && onBookmarkToggle && ( // Ensure onBookmarkToggle exists for remove
+        {context === "bookmarks" && onBookmarkToggle && (
           <button
             className="remove-bookmark-btn"
             onClick={handleBookmarkClick}
