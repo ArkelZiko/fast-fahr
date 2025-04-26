@@ -52,7 +52,7 @@ body {
 .message-timestamp {
   font-size: 0.7rem;
   color: #999;
-  margin-top: 0.2rem; /
+  margin-top: 0.2rem; 
 }
 
 .chat-message.sent {
