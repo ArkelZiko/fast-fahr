@@ -49,9 +49,6 @@ function Header() {
   const handleSearch = (e) => {
     e.preventDefault();
     const cleaned = search.trim().replace(/[\s-]/g, "").toLowerCase();
-    if (location.pathname === "/buying") {
-      navigate(`/buying?search=${encodeURIComponent(cleaned)}`);
-    } else {
       navigate(`/buying?search=${encodeURIComponent(cleaned)}`);
     }
   };
@@ -69,7 +66,7 @@ function Header() {
         <input
           type="text"
           className="search-box"
-          placeholder="Search"
+          placeholder="Search Listings"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
