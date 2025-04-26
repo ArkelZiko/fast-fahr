@@ -8,12 +8,6 @@
  * Description:  Handles creation of new car listings using filter_input and positional placeholders.
  */
 
-declare(strict_types=1);
-
-ini_set('display_errors', '0');
-ini_set('log_errors', '1');
-error_reporting(E_ALL);
-
 include __DIR__ . '/../../config/connect.php';
 include __DIR__ . '/../auth/auth_check.php';
 include __DIR__ . '/../../vendor/autoload.php';
