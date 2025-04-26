@@ -11,7 +11,8 @@ const routes = [
   '/register',
   '/forgot-password',
   '/reset-password',
-  '/verify-code'
+  '/verify-code',
+  '/account'
 ];
 
 const buildDir = path.join(__dirname, 'build');

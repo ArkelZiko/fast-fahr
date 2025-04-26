@@ -11,7 +11,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LoginHeader from '../components/loginElements/LoginHeader';
+import Header from '../components/Header';
 import '../components/css/register.css';
 
 /**
@@ -84,7 +84,7 @@ function RegisterPage() {
 
   return (
     <div className="login-page">
-      <LoginHeader />
+      <Header />
       <div className="form-container">
         <h2>Registration Form</h2>
 

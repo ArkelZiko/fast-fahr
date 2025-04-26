@@ -10,7 +10,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LoginHeader from '../components/loginElements/LoginHeader';
+import Header from '../components/Header';
 import '../components/css/login.css';
 
 
@@ -59,7 +59,7 @@ function ForgotPasswordPage() {
 
     return (
         <div className="login-page">
-            <LoginHeader />
+            <Header />
             <div className="login-container">
                 <h2>Forgot Password</h2>
 

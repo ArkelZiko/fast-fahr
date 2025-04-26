@@ -20,6 +20,7 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetCodePage from './pages/ResetCodePage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import BookmarksPage from "./pages/BookmarksPage";
+import ManageAccount from "./pages/ManageAccount";
 
 /**
  * The root component of the FastFahr application.
@@ -41,6 +42,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/verify-code" element={<ResetCodePage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/account" element={<ManageAccount />} />
         </Routes>
       </AuthProvider>
     </Router>
