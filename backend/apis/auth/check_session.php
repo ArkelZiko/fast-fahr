@@ -1,14 +1,14 @@
 <?php
 
 /**
- * File:         check_session.php
- * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
- * MACIDs:       alamy1, govindag, kharodg, zikoa
- * Date:         March 25th, 2025
- * Description:  API endpoint called by the frontend (likely on page load/refresh)
- *               to check if a valid user session exists. Returns user details
- *               if logged in, otherwise indicates the user is not logged in.
- */
+* File:         check_session.php
+* Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+* MACIDs:       alamy1, govindag, kharodg, zikoa
+* Date:         March 25th, 2025
+* Description:  API endpoint called by the frontend (likely on page load/refresh)
+*               to check if a valid user session exists. Returns user details
+*               if logged in, otherwise indicates the user is not logged in.
+*/
 
 session_start();
 

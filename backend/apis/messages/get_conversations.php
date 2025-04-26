@@ -4,10 +4,8 @@
  * File:         get_conversations.php
  * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
  * MACIDs:       alamy1, govindag, kharodg, zikoa
- * Date:         April 3rd, 2025
- * Description:  Fetches a list of conversations for the logged-in user, including
- *               details about the other participant, the last message, timestamp,
- *               and unread status.
+ * Date:         April 3rd, 2025 (Refactored April 23rd, 2025)
+ * Description:  Fetches a list of conversations for the logged-in user.
  */
 
 include __DIR__ . '/../../vendor/autoload.php';
@@ -30,27 +28,34 @@ include '../../config/connect.php';
 include '../../models/MessageModel.php';
 include '../auth/auth_check.php';
 
-$loggedInUserId = require_login();
+$loggedInUserId = null;
+if (function_exists('require_login')) {
+   try { $loggedInUserId = require_login(); }
+   catch (Exception $e) {
+      http_response_code(401); echo json_encode(['success' => false, 'error' => 'Not authenticated']); exit;
+   }
+} else {
+   http_response_code(500); echo json_encode(['success' => false, 'error' => 'Auth system error.']); exit;
+}
 
-try {
-    $messageModel = new Message($dbh);
-    $conversations = $messageModel->getConversations($loggedInUserId);
+$messageModel = new Message($dbh);
+$conversations = $messageModel->getConversations($loggedInUserId);
 
-    foreach ($conversations as &$convo) {
-        if ($convo['lastMessageTimestamp']) {
-            $date = new DateTime($convo['lastMessageTimestamp']);
-            $convo['lastMessageTimestamp'] = $date->format('M d, H:i');
+foreach ($conversations as &$convo) {
+    if (!empty($convo['lastMessageTimestamp'])) {
+        try { // Keep try-catch for DateTime as it can throw errors
+             $date = new DateTimeImmutable($convo['lastMessageTimestamp']);
+             $convo['lastMessageTimestamp'] = $date->format('M d, H:i');
+        } catch (Exception $e) {
+             $convo['lastMessageTimestamp'] = 'Invalid Date';
         }
-
-        $convo['unread'] = ($convo['unreadCount'] ?? 0) > 0;
-        unset($convo['unreadCount']);
     }
 
-    echo json_encode($conversations);
-} catch (PDOException $e) {
-    http_response_code(500);
-    echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
-} catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode(['error' => 'Server error: ' . $e->getMessage()]);
+    $convo['unread'] = isset($convo['unreadCount']) && $convo['unreadCount'] > 0;
+    unset($convo['unreadCount']);
 }
+unset($convo);
+
+echo json_encode($conversations);
+
+exit;

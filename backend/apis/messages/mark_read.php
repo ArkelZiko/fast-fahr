@@ -5,8 +5,7 @@
  * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
  * MACIDs:       alamy1, govindag, kharodg, zikoa
  * Date:         April 4th, 2025
- * Description:  Handles requests to mark messages received by the logged-in user
- *               from a specific sender as read in the database.
+ * Description:  Marks messages from a sender as read for the logged-in user.
  */
 
 include __DIR__ . '/../../vendor/autoload.php';
@@ -29,32 +28,33 @@ include '../../config/connect.php';
 include '../../models/MessageModel.php';
 include '../auth/auth_check.php';
 
-$loggedInUserId = require_login();
+$loggedInUserId = null;
+if (function_exists('require_login')) {
+   try { $loggedInUserId = require_login(); }
+   catch (Exception $e) {
+      http_response_code(401); echo json_encode(['success' => false, 'error' => 'Not authenticated']); exit;
+   }
+} else {
+   http_response_code(500); echo json_encode(['success' => false, 'error' => 'Auth system error.']); exit;
+}
 
 $data = json_decode(file_get_contents('php://input'), true);
 $senderId = filter_var($data['sender_id'] ?? null, FILTER_VALIDATE_INT);
 
 if (!$senderId) {
     http_response_code(400);
-    echo json_encode(['error' => 'Missing sender_id.']);
+    echo json_encode(['success' => false, 'error' => 'Missing or invalid sender_id.']);
     exit;
 }
 
-try {
-    $messageModel = new Message($dbh);
-    $success = $messageModel->markMessagesAsRead($loggedInUserId, $senderId);
+$messageModel = new Message($dbh);
+$success = $messageModel->markMessagesAsRead($loggedInUserId, $senderId);
 
-    if ($success) {
-        http_response_code(200);
-        echo json_encode(['success' => true, 'message' => 'Messages marked as read.']);
-    } else {
-        http_response_code(200);
-        echo json_encode(['success' => true, 'message' => 'Messages marked as read or none were unread.']);
-    }
-} catch (PDOException $e) {
+if ($success) {
+    echo json_encode(['success' => true, 'message' => 'Messages marked as read operation completed.']);
+} else {
     http_response_code(500);
-    echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
-} catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode(['success' => false, 'error' => 'Server error: ' . $e->getMessage()]);
+    echo json_encode(['success' => false, 'error' => 'Failed to mark messages as read.']);
 }
+
+exit;

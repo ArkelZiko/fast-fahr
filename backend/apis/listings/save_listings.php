@@ -4,10 +4,8 @@
  * File:         save_listings.php
  * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
  * MACIDs:       alamy1, govindag, kharodg, zikoa
- * Date:         April 14th, 2025 (Updated April 23rd, 2025)
- * Description:  Handles the creation of new car listings including
- *               saving vehicle data to the posts table and processing
- *               image uploads. Returns the new listing data on success.
+ * Date:         April 14th, 2025
+ * Description:  Handles creation of new car listings using filter_input and positional placeholders.
  */
 
 declare(strict_types=1);
@@ -36,18 +34,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 if (!isset($dbh) || !$dbh instanceof PDO) {
-    error_log("Database connection (\$dbh) not established in connect.php.");
     http_response_code(500);
-    echo json_encode(['success' => false, 'error' => 'Internal Server Error: Database connection failed.']);
+    echo json_encode(['success' => false, 'error' => 'Server Error: DB Connection failed.']);
     exit;
 }
 
-try {
-    $loggedInUserId = require_login();
-} catch (Exception $e) {
-    http_response_code(401);
-    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
-    exit;
+$loggedInUserId = null;
+if (function_exists('require_login')) {
+   try { $loggedInUserId = require_login(); }
+   catch (Exception $e) {
+      http_response_code(401); echo json_encode(['success' => false, 'error' => 'Not authenticated']); exit;
+   }
+} else {
+   http_response_code(500); echo json_encode(['success' => false, 'error' => 'Auth system error.']); exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -56,174 +55,136 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$requiredFields = [
-    'title', 'make', 'model', 'year', 'price', 'mileage', 'description',
-    'transmission', 'fuelType', 'driveType', 'bodyType', 'exteriorColor',
-    'province', 'city'
-];
-$missingFields = [];
-foreach ($requiredFields as $field) {
-    if (empty($_POST[$field])) {
-        $missingFields[] = $field;
-    }
-}
-if (!empty($missingFields)) {
+$title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_SPECIAL_CHARS) ?: '');
+$make = trim(filter_input(INPUT_POST, 'make', FILTER_SANITIZE_SPECIAL_CHARS) ?: '');
+$model = trim(filter_input(INPUT_POST, 'model', FILTER_SANITIZE_SPECIAL_CHARS) ?: '');
+$description = trim(filter_input(INPUT_POST, 'description', FILTER_SANITIZE_SPECIAL_CHARS) ?: '');
+$transmission = trim(filter_input(INPUT_POST, 'transmission', FILTER_SANITIZE_SPECIAL_CHARS) ?: '');
+$fuelType = trim(filter_input(INPUT_POST, 'fuelType', FILTER_SANITIZE_SPECIAL_CHARS) ?: '');
+$driveType = trim(filter_input(INPUT_POST, 'driveType', FILTER_SANITIZE_SPECIAL_CHARS) ?: '');
+$bodyType = trim(filter_input(INPUT_POST, 'bodyType', FILTER_SANITIZE_SPECIAL_CHARS) ?: '');
+$exteriorColor = trim(filter_input(INPUT_POST, 'exteriorColor', FILTER_SANITIZE_SPECIAL_CHARS) ?: '');
+$province = trim(filter_input(INPUT_POST, 'province', FILTER_SANITIZE_SPECIAL_CHARS) ?: '');
+$city = trim(filter_input(INPUT_POST, 'city', FILTER_SANITIZE_SPECIAL_CHARS) ?: '');
+$year = filter_input(INPUT_POST, 'year', FILTER_VALIDATE_INT);
+$price = filter_input(INPUT_POST, 'price', FILTER_VALIDATE_FLOAT);
+$mileage_str = filter_input(INPUT_POST, 'mileage', FILTER_SANITIZE_SPECIAL_CHARS);
+$mileage = filter_var(str_replace(',', '', $mileage_str), FILTER_VALIDATE_INT);
+$mainPhotoIndex_input = filter_input(INPUT_POST, 'mainPhotoIndex', FILTER_VALIDATE_INT);
+$mainPhotoIndex = ($mainPhotoIndex_input === false || $mainPhotoIndex_input < 0) ? 0 : $mainPhotoIndex_input;
+
+$errors = [];
+if (empty($title)) { $errors[] = 'Title'; }
+if (empty($make)) { $errors[] = 'Make'; }
+if (empty($model)) { $errors[] = 'Model'; }
+if ($year === false || $year <= 1900) { $errors[] = 'Valid Year'; }
+if ($price === false || $price < 0) { $errors[] = 'Valid Price'; }
+if ($mileage === false || $mileage < 0) { $errors[] = 'Valid Mileage'; }
+if (empty($description)) { $errors[] = 'Description'; }
+if (empty($transmission)) { $errors[] = 'Transmission'; }
+if (empty($fuelType)) { $errors[] = 'Fuel Type'; }
+if (empty($driveType)) { $errors[] = 'Drive Type'; }
+if (empty($bodyType)) { $errors[] = 'Body Type'; }
+if (empty($exteriorColor)) { $errors[] = 'Exterior Color'; }
+if (empty($province)) { $errors[] = 'Province'; }
+if (empty($city)) { $errors[] = 'City'; }
+
+if (!empty($errors)) {
     http_response_code(400);
-    echo json_encode(['success' => false, 'error' => 'Missing required fields: ' . implode(', ', $missingFields)]);
+    echo json_encode(['success' => false, 'error' => 'Missing or invalid fields: ' . implode(', ', $errors)]);
     exit;
 }
 
-$postData = [
-    ':user_id' => $loggedInUserId,
-    ':title' => trim($_POST['title']),
-    ':make' => trim($_POST['make']),
-    ':model' => trim($_POST['model']),
-    ':year' => (int) $_POST['year'],
-    ':price' => (float) $_POST['price'],
-    ':mileage' => (int) str_replace(',', '', $_POST['mileage']),
-    ':description' => trim($_POST['description']),
-    ':transmission' => trim($_POST['transmission']),
-    ':fuelType' => trim($_POST['fuelType']),
-    ':driveType' => trim($_POST['driveType']),
-    ':bodyType' => trim($_POST['bodyType']),
-    ':exteriorColor' => trim($_POST['exteriorColor']),
-    ':province' => trim($_POST['province']),
-    ':city' => trim($_POST['city']),
-];
-
-try {
-    $dbh->beginTransaction();
-
-    $stmt = $dbh->prepare("
-        INSERT INTO posts (
-            user_id, title, make, model, year, price, mileage,
-            description, transmission, fuelType, driveType,
-            bodyType, exteriorColor, province, city
-        ) VALUES (
-            :user_id, :title, :make, :model, :year, :price, :mileage,
-            :description, :transmission, :fuelType, :driveType,
-            :bodyType, :exteriorColor, :province, :city
-        )
-    ");
-    $stmt->execute($postData);
-    $listingId = $dbh->lastInsertId();
-
-    if (!$listingId) {
-        throw new Exception("Failed to retrieve last insert ID for post.");
-    }
-
-    $mainImagePath = null;
-    $uploadedImagePaths = [];
-
-    if (!empty($_FILES['photos']['name'][0])) {
-        $uploadDir = dirname(__DIR__, 3) . '/uploads';
-        if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755, true) && !is_dir($uploadDir)) {
-             throw new Exception("Failed to create upload directory: " . $uploadDir);
-        }
-        if (!is_writable($uploadDir)) {
-             throw new Exception("Upload directory is not writable: " . $uploadDir);
-        }
-
-        $files = $_FILES['photos'];
-        $mainIndex = isset($_POST['mainPhotoIndex']) ? (int) $_POST['mainPhotoIndex'] : 0;
-        $imageInsertCount = 0;
-
-        $insertImgStmt = $dbh->prepare("
-            INSERT INTO post_images (post_id, image_path, is_main)
-            VALUES (:post_id, :image_path, :is_main)
-        ");
-
-        for ($i = 0; $i < count($files['name']); $i++) {
-            if ($files['error'][$i] !== UPLOAD_ERR_OK) {
-                error_log("Upload error for file " . ($files['name'][$i] ?? 'unknown') . ": Error code " . $files['error'][$i]);
-                continue;
-            }
-
-            $finfo = new finfo(FILEINFO_MIME_TYPE);
-            $mimeType = $finfo->file($files['tmp_name'][$i]);
-            if ($mimeType !== 'image/jpeg' && $mimeType !== 'image/png') {
-                error_log("Invalid file type uploaded: " . ($files['name'][$i] ?? 'unknown') . " (Type: " . $mimeType . ")");
-                continue;
-            }
-
-            $tmpName = $files['tmp_name'][$i];
-            $originalName = basename($files['name'][$i] ?? 'uploaded_image');
-            $safeOriginalName = preg_replace("/[^a-zA-Z0-9._-]/", "_", $originalName);
-            $extension = pathinfo($safeOriginalName, PATHINFO_EXTENSION);
-            $uniqueName = uniqid('img_', true) . '.' . ($extension ?: 'jpg');
-            $imagePath = '/uploads/' . $uniqueName;
-            $destination = $uploadDir . '/' . $uniqueName;
-
-            if (move_uploaded_file($tmpName, $destination)) {
-                $isMain = ($i === $mainIndex) ? 1 : 0;
-                if ($isMain) {
-                    $mainImagePath = $imagePath;
-                }
-                $insertImgStmt->execute([
-                    ':post_id' => $listingId,
-                    ':image_path' => $imagePath,
-                    ':is_main' => $isMain
-                ]);
-                $uploadedImagePaths[] = $imagePath;
-                $imageInsertCount++;
-            } else {
-                error_log("Failed to move uploaded file: " . ($files['name'][$i] ?? 'unknown') . " to destination: " . $destination);
-            }
-        }
-
-        if ($imageInsertCount === 0 && count($files['name']) > 0) {
-             error_log("Warning: Files were submitted, but none were successfully processed for listing ID: " . $listingId);
-        }
-    } else {
-         error_log("No files uploaded for listing ID: " . $listingId);
-    }
-
-    if ($mainImagePath === null && !empty($uploadedImagePaths)) {
-         $mainImagePath = $uploadedImagePaths[0];
-    }
-
-    $newListingData = [
-        'id' => (int)$listingId,
-        'user_id' => $loggedInUserId,
-        'title' => $postData[':title'],
-        'make' => $postData[':make'],
-        'model' => $postData[':model'],
-        'year' => $postData[':year'],
-        'price' => $postData[':price'],
-        'mileage' => $postData[':mileage'],
-        'city' => $postData[':city'],
-        'province' => $postData[':province'],
-        'description' => $postData[':description'],
-        'transmission' => $postData[':transmission'],
-        'fuelType' => $postData[':fuelType'],
-        'driveType' => $postData[':driveType'],
-        'bodyType' => $postData[':bodyType'],
-        'exteriorColor' => $postData[':exteriorColor'],
-        'image_path' => $mainImagePath ?: '/images/default-car.png'
-    ];
-
-    $dbh->commit();
-
-    echo json_encode([
-        'success' => true,
-        'message' => 'Listing saved successfully.',
-        'listingId' => $listingId,
-        'newListing' => $newListingData
-    ]);
-
-} catch (PDOException $e) {
-    $dbh->rollBack();
-    http_response_code(500);
-    error_log("Database error in save_listings.php: " . $e->getMessage() . " | Post Data: " . json_encode($postData));
-    echo json_encode(['success' => false, 'error' => 'Database operation failed. Please try again later.']);
-
-} catch (Exception $e) {
-    if ($dbh->inTransaction()) {
-       $dbh->rollBack();
-    }
-    http_response_code(500);
-    error_log("Server error in save_listings.php: " . $e->getMessage());
-    echo json_encode(['success' => false, 'error' => 'An unexpected server error occurred: ' . $e->getMessage()]);
+if (empty($_FILES['photos']['name'][0])) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'error' => 'At least one photo is required.']);
+    exit;
 }
 
-?>
+$postParams = [
+    $loggedInUserId, $title, $make, $model, $year, $price, $mileage,
+    $description, $transmission, $fuelType, $driveType, $bodyType,
+    $exteriorColor, $province, $city
+];
+
+$dbh->beginTransaction();
+
+$cmdPost = "INSERT INTO posts (user_id, title, make, model, year, price, mileage, description, transmission, fuelType, driveType, bodyType, exteriorColor, province, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$stmtPost = $dbh->prepare($cmdPost);
+$successPost = $stmtPost->execute($postParams);
+$listingId = $dbh->lastInsertId();
+
+if (!$successPost || !$listingId) {
+    $dbh->rollBack();
+    http_response_code(500);
+    echo json_encode(['success' => false, 'error' => 'Failed to save listing data.']);
+    exit;
+}
+
+$mainImagePath = null;
+$uploadedImagePaths = [];
+$uploadDir = dirname(__DIR__, 3) . '/uploads';
+if (!is_dir($uploadDir)) { mkdir($uploadDir, 0755, true); }
+
+$files = $_FILES['photos'];
+$imageInsertCount = 0;
+$cmdImage = "INSERT INTO post_images (post_id, image_path, is_main) VALUES (?, ?, ?)";
+$stmtImage = $dbh->prepare($cmdImage);
+
+for ($i = 0; $i < count($files['name']); $i++) {
+    if ($files['error'][$i] === UPLOAD_ERR_OK) {
+        $tmpName = $files['tmp_name'][$i];
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        if (!in_array($finfo->file($tmpName), ['image/jpeg', 'image/png'])) { continue; }
+
+        $originalName = basename($files['name'][$i] ?? 'img');
+        $safeOriginalName = preg_replace("/[^a-zA-Z0-9._-]/", "_", $originalName);
+        $extension = pathinfo($safeOriginalName, PATHINFO_EXTENSION);
+        $uniqueName = uniqid('img_', true) . '.' . ($extension ?: 'jpg');
+        $imagePath = '/uploads/' . $uniqueName;
+        $destination = $uploadDir . '/' . $uniqueName;
+
+        if (move_uploaded_file($tmpName, $destination)) {
+            $isMain = ($i === $mainPhotoIndex) ? 1 : 0;
+            if ($isMain) $mainImagePath = $imagePath;
+            $imageParams = [$listingId, $imagePath, $isMain];
+            if ($stmtImage->execute($imageParams)) {
+                 $uploadedImagePaths[] = $imagePath;
+                 $imageInsertCount++;
+            } else {
+                 unlink($destination);
+            }
+        }
+    }
+}
+
+if ($imageInsertCount === 0) {
+    $dbh->rollBack();
+    http_response_code(500);
+    echo json_encode(['success' => false, 'error' => 'Failed to save listing images.']);
+    exit;
+}
+
+if ($mainImagePath === null && !empty($uploadedImagePaths)) { $mainImagePath = $uploadedImagePaths[0]; }
+
+$dbh->commit();
+
+$newListingData = [
+    'id' => (int)$listingId, 'user_id' => $loggedInUserId,
+    'title' => $title, 'make' => $make, 'model' => $model, 'year' => $year,
+    'price' => $price, 'mileage' => $mileage,
+    'city' => $city, 'province' => $province,
+    'description' => $description, 'transmission' => $transmission,
+    'fuelType' => $fuelType, 'driveType' => $driveType, 'bodyType' => $bodyType,
+    'exteriorColor' => $exteriorColor,
+    'image_path' => $mainImagePath ?: '/images/default-car.png'
+];
+
+echo json_encode([
+    'success' => true,
+    'message' => 'Listing saved successfully.',
+    'listingId' => $listingId,
+    'newListing' => $newListingData
+]);
+
+exit;

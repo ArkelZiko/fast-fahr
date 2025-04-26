@@ -5,8 +5,7 @@
  * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
  * MACIDs:       alamy1, govindag, kharodg, zikoa
  * Date:         April 21st, 2025
- * Description:  Handles deletion of a car listing from the db
- *               Makes sure user is logged in before doing so
+ * Description:  Handles deletion of a car listing from the db.
  */
 
 include __DIR__ . '/../../config/connect.php';
@@ -27,45 +26,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-try {
-
-    $loggedInUserId = require_login();
-
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        http_response_code(405);
-        throw new Exception('Only POST allowed.');
+$loggedInUserId = null;
+if (function_exists('require_login')) {
+    try { //
+      $loggedInUserId = require_login();
+    } catch (Exception $e) {
+       http_response_code(401);
+       echo json_encode(['success' => false, 'error' => 'Not authenticated']);
+       exit;
     }
-
-    $data = json_decode(file_get_contents('php://input'), true);
-    $listingIdToDelete = filter_var($data['listing_id'] ?? null, FILTER_VALIDATE_INT);
-
-    if (!$listingIdToDelete) {
-        http_response_code(400);
-        throw new Exception('Missing or invalid listing ID.');
-    }
-
-    $deleteQuery = "DELETE FROM posts WHERE id = ? AND user_id = ?";
-    $deleteStmt = $dbh->prepare($deleteQuery);
-    $params = [$listingIdToDelete, $loggedInUserId];
-    $success = $deleteStmt->execute($params);
-
-    if ($success) {
-        if ($deleteStmt->rowCount() > 0) {
-            echo json_encode(['success' => true, 'message' => 'Listing deleted.']);
-        } else {
-            http_response_code(404);
-            throw new Exception('Listing not found or delete permission denied.');
-        }
-    } else {
-        http_response_code(500);
-        throw new Exception('Database error during deletion process.');
-    }
-} catch (Exception $e) {
-    $errorCode = 500;
-    if ($e->getMessage() === 'User not logged in') $errorCode = 401;
-    if ($e->getMessage() === 'Missing or invalid listing ID.') $errorCode = 400;
-    if ($e->getMessage() === 'Listing not found or delete permission denied.') $errorCode = 404;
-
-    http_response_code($errorCode);
-    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+} else {
+    http_response_code(500);
+    echo json_encode(['success' => false, 'error' => 'Authentication system unavailable.']);
+    exit;
 }
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['success' => false, 'error' => 'Only POST allowed.']);
+    exit;
+}
+
+$data = json_decode(file_get_contents('php://input'), true);
+$listingIdToDelete = filter_var($data['listing_id'] ?? null, FILTER_VALIDATE_INT);
+
+if (!$listingIdToDelete) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'error' => 'Missing or invalid listing ID.']);
+    exit;
+}
+
+$cmd = "DELETE FROM posts WHERE id = ? AND user_id = ?";
+$stmt = $dbh->prepare($cmd);
+$params = [$listingIdToDelete, $loggedInUserId];
+$success = $stmt->execute($params);
+
+if ($success) {
+    if ($stmt->rowCount() > 0) {
+        echo json_encode(['success' => true, 'message' => 'Listing deleted.']);
+    } else {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'error' => 'Listing not found or permission denied.']);
+    }
+} else {
+    http_response_code(500);
+    echo json_encode(['success' => false, 'error' => 'Database error during deletion.']);
+}
+
+exit;

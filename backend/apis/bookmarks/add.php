@@ -5,9 +5,7 @@
  * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
  * MACIDs:       alamy1, govindag, kharodg, zikoa
  * Date:         April 17th, 2025
- * Description:  Creating a bookmark which on the backend is adding a listing
- *               to the db inside the bookmarks table
- *               user has to be logged in for this action
+ * Description:  Adds a bookmark for a logged-in user.
  */
 
 include "../../config/connect.php";
@@ -38,7 +36,6 @@ if (empty($_SESSION['user_id'])) {
 }
 
 $post_id = filter_input(INPUT_POST, 'post_id', FILTER_VALIDATE_INT);
-
 if (!$post_id) {
   http_response_code(400);
   echo json_encode(['success' => false, 'message' => 'Invalid or missing post_id']);
@@ -47,24 +44,21 @@ if (!$post_id) {
 
 $loggedInUserId = $_SESSION['user_id'];
 
-try {
-  $sql = "INSERT IGNORE INTO bookmarks (user_id, post_id, created_at) VALUES (:user_id, :post_id, NOW())";
-  $stmt = $dbh->prepare($sql);
-  $stmt->bindParam(':user_id', $loggedInUserId, PDO::PARAM_INT);
-  $stmt->bindParam(':post_id', $post_id, PDO::PARAM_INT);
-  $stmt->execute();
+// INSERT IGNORE prevents errors if the bookmark already exists (PK violation)
+$cmd = "INSERT IGNORE INTO bookmarks (user_id, post_id, created_at) VALUES (?, ?, NOW())";
+$stmt = $dbh->prepare($cmd);
+$params = [$loggedInUserId, $post_id];
+$success = $stmt->execute($params);
 
-  if ($stmt->rowCount() > 0) {
-    echo json_encode(['success' => true, 'message' => 'Bookmarked']);
-  } else {
-    echo json_encode(['success' => true, 'message' => 'Bookmark already exists']);
-  }
-} catch (PDOException $e) {
-  error_log("Database Error in bookmarks/add.php: " . $e->getMessage());
-  http_response_code(500);
-  echo json_encode(['success' => false, 'message' => 'Database error occurred while adding bookmark.']);
-} catch (Exception $e) {
-  error_log("General Error in bookmarks/add.php: " . $e->getMessage());
-  http_response_code(500);
-  echo json_encode(['success' => false, 'message' => 'An unexpected server error occurred.']);
+if ($success) {
+    if ($stmt->rowCount() > 0) {
+        echo json_encode(['success' => true, 'message' => 'Bookmarked']);
+    } else {
+        echo json_encode(['success' => true, 'message' => 'Bookmark already exists or insertion ignored']);
+    }
+} else {
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Failed to add bookmark.']);
 }
+
+exit; 

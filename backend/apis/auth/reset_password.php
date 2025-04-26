@@ -1,18 +1,17 @@
 <?php
 
 /**
- * File:         reset_password.php
- * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
- * MACIDs:       alamy1, govindag, kharodg, zikoa
- * Date:         April 6th, 2025
- * Description:  Handles the actual password reset action. Validates the provided
- *               email, reset token, and new password. If the token is valid and
- *               not expired, it updates the user's password hash in the database
- *               and deletes the used token.
- */
+* File:         reset_password.php
+* Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+* MACIDs:       alamy1, govindag, kharodg, zikoa
+* Date:         April 6th, 2025
+* Description:  Handles the actual password reset action. Validates token/password,
+*               updates the password hash, and deletes the used token.
+*/
 
 include "../../config/connect.php";
 include "../../models/UserModel.php";
+include "../../models/PasswordResetModel.php";
 include __DIR__ . '/../../vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
@@ -38,45 +37,32 @@ if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL) || empty($plainT
     echo json_encode(['success' => false, 'message' => 'Email, token, and new password are required.']);
     exit;
 }
-
 if (strlen($newPassword) < 8) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Password must be at least 8 characters long.']);
     exit;
 }
 
-try {
-    $userModel = new User($dbh);
-    $passwordResetModel = new PasswordReset($dbh);
-} catch (InvalidArgumentException | PDOException $e) {
-    error_log("Error instantiating models or DB connection: " . $e->getMessage());
-    http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Server configuration error.']);
-    exit;
-}
+$userModel = new User($dbh);
+$passwordResetModel = new PasswordReset($dbh);
 
-try {
+$resetData = $passwordResetModel->validateResetToken($email, $plainToken);
 
-    $resetData = $passwordResetModel->validateResetToken($email, $plainToken);
+if ($resetData !== false) {
+    $userId = $resetData['user_id'];
+    $resetId = $resetData['id'];
+    $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
 
-    if ($resetData !== false) {
-        $userId = $resetData['user_id'];
-        $resetId = $resetData['id'];
-        $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
-
-        if ($userModel->updatePassword($userId, $newPasswordHash)) {
-            $passwordResetModel->deleteTokenById($resetId);
-            echo json_encode(['success' => true, 'message' => 'Your password has been successfully updated. You can now log in.']);
-        } else {
-            http_response_code(500);
-            echo json_encode(['success' => false, 'message' => 'Failed to update password due to a server error.']);
-        }
+    if ($userModel->updatePassword($userId, $newPasswordHash)) {
+        $passwordResetModel->deleteTokenById($resetId);
+        echo json_encode(['success' => true, 'message' => 'Password updated successfully.']);
     } else {
-        http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'Invalid or expired reset token. Please start the process again.']);
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => 'Failed to update password.']);
     }
-} catch (Exception $e) {
-    error_log("General Error in reset_password.php: " . $e->getMessage());
-    http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'An unexpected server error occurred while resetting the password.']);
+} else {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Invalid or expired reset token.']);
 }
+
+exit;
