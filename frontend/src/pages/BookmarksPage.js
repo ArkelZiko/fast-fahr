@@ -170,6 +170,8 @@ export default function BookmarksPage() {
         </div>
       </div>
 
+      {viewError && <div className="error-banner">{viewError}</div>}
+
       {isViewerOpen && selectedListing && (
         <ViewModal
           images={viewerImages}
