@@ -18,13 +18,6 @@ function Header() {
   const [search, setSearch] = useState("");
   const [searchError, setSearchError] = useState("");
 
-  useEffect(() => {
-    if (currentUser) {
-      console.log("Current user in Header:", currentUser);
-      console.log("Profile picture property:", currentUser.profile_picture);
-    }
-  }, [currentUser]);
-
   const handleLogout = async () => {
     try {
       const response = await fetch(
@@ -37,7 +30,6 @@ function Header() {
 
       await response.json();
     } catch (error) {
-      console.error("Logout error:", error);
     } finally {
       logout();
       navigate("/login");

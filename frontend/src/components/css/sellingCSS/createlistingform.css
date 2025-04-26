@@ -24,6 +24,12 @@
   border-bottom: 1px solid #eee;
 }
 
+.photo-warning {
+  color: #d9534f;
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+}
+
 .modal-header h2 {
   margin: 0;
   font-size: 1.6rem;

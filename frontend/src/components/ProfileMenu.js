@@ -17,9 +17,7 @@ function ProfileMenu({ user, onLogout }) {
   let menuRef = useRef(null);
   let profileRef = useRef(null);
 
-  console.log("ProfileMenu user data:", user);
   if (user && user.profile_picture) {
-    console.log("Profile picture URL:", user.profile_picture);
   }
 
   useEffect(() => {
@@ -69,11 +67,9 @@ function ProfileMenu({ user, onLogout }) {
               alt={`${user.username}'s profile`} 
               className="header-profile-image"
               onLoad={() => {
-                console.log("Profile image loaded successfully");
                 setImageLoaded(true);
               }}
               onError={(e) => {
-                console.error("Failed to load profile image:", user.profile_picture);
                 setImageFailed(true);
               }}
               style={{ display: imageLoaded ? 'block' : 'none' }}

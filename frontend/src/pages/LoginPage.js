@@ -108,7 +108,10 @@ function LoginPage() {
         )}
 
         {status.submitted && !status.info.error && (
-          <div className="success-message">{status.info.msg}</div>
+          <>
+            <div className="success-message">{status.info.msg}</div>
+            <p className="info-redirect">Redirecting to homepage...</p>
+          </>
         )}
 
         <form onSubmit={handleSubmit}>

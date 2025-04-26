@@ -1,14 +1,12 @@
 <?php
 
 /**
- * File:         verify_code.php
- * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
- * MACIDs:       alamy1, govindag, kharodg, zikoa
- * Date:         April 6th, 2025
- * Description:  Verifies if a password reset code (token) provided by the user
- *               is valid and not expired for the given email address. Does not
- *               change the password itself.
- */
+* File:         verify_code.php
+* Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+* MACIDs:       alamy1, govindag, kharodg, zikoa
+* Date:         April 6th, 2025
+* Description:  Verifies if a password reset code (token) is valid and not expired.
+*/
 
 include "../../config/connect.php";
 include "../../models/PasswordResetModel.php";
@@ -37,26 +35,15 @@ if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL) || empty($plainT
     exit;
 }
 
-try {
-    $passwordResetModel = new PasswordReset($dbh);
-} catch (InvalidArgumentException | PDOException $e) {
-    error_log("Error instantiating model or DB connection: " . $e->getMessage());
-    http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Server configuration error.']);
-    exit;
+$passwordResetModel = new PasswordReset($dbh);
+
+$isValid = $passwordResetModel->validateResetToken($email, $plainToken);
+
+if ($isValid !== false) {
+    echo json_encode(['success' => true, 'message' => 'Code verified successfully.']);
+} else {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Invalid or expired reset code.']);
 }
 
-try {
-    $isValid = $passwordResetModel->validateResetToken($email, $plainToken);
-
-    if ($isValid !== false) {
-        echo json_encode(['success' => true, 'message' => 'Code verified successfully.']);
-    } else {
-        http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'Invalid or expired reset code. Please request a new one.']);
-    }
-} catch (Exception $e) {
-    error_log("General Error in verify_code.php: " . $e->getMessage());
-    http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'An unexpected error occurred during code verification.']);
-}
+exit;

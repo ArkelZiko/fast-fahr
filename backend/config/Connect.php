@@ -1,16 +1,16 @@
 <?php
 
 /**
- * File:         check_session.php
- * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
- * MACIDs:       alamy1, govindag, kharodg, zikoa
- * Date:         March 19th, 2025
- * Description:  Main config file for establishing a db connection w/ PDO
- */
+* File:         connect.php
+* Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
+* MACIDs:       alamy1, govindag, kharodg, zikoa
+* Date:         March 19th, 2025
+* Description:  Main config file for establishing a db connection w/ PDO
+*/
 
 try {
     $dbh = new PDO(
-        "mysql:host=localhost;dbname=fastfahr",
+        "mysql:host=localhost;dbname=zikoa_db",
         "root",
         ""
     );

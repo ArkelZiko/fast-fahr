@@ -6,6 +6,13 @@
               which is mostlly dedicated to the cars news feed
 */
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
 .news-feed-section {
   max-width: 1400px;
   margin: 2rem auto;

@@ -5,8 +5,7 @@
  * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
  * MACIDs:       alamy1, govindag, kharodg, zikoa
  * Date:         April 17th, 2025
- * Description:  Dealing with removing a bookmark from the db (bookmarks table)
- *               user has to be logged in for this action
+ * Description:  Removes a bookmark for a logged-in user.
  */
 
 include "../../config/connect.php";
@@ -37,7 +36,6 @@ if (empty($_SESSION['user_id'])) {
 }
 
 $post_id = filter_input(INPUT_POST, 'post_id', FILTER_VALIDATE_INT);
-
 if (!$post_id) {
   http_response_code(400);
   echo json_encode(['success' => false, 'message' => 'Invalid or missing post_id']);
@@ -46,22 +44,20 @@ if (!$post_id) {
 
 $loggedInUserId = $_SESSION['user_id'];
 
-try {
-  $sql = "DELETE FROM bookmarks WHERE user_id = :user_id AND post_id = :post_id";
-  $stmt = $dbh->prepare($sql);
-  $stmt->bindParam(':user_id', $loggedInUserId, PDO::PARAM_INT);
-  $stmt->bindParam(':post_id', $post_id, PDO::PARAM_INT);
-  $stmt->execute();
+$cmd = "DELETE FROM bookmarks WHERE user_id = ? AND post_id = ?";
+$stmt = $dbh->prepare($cmd);
+$params = [$loggedInUserId, $post_id];
+$success = $stmt->execute($params);
 
-  if ($stmt->rowCount() > 0) {
-    echo json_encode(['success' => true, 'message' => 'Un-bookmarked']);
-  } else {
-    echo json_encode(['success' => true, 'message' => 'Bookmark not found or already removed']);
-  }
-} catch (PDOException $e) {
-  http_response_code(500);
-  echo json_encode(['success' => false, 'message' => 'Database error occurred while removing bookmark.']);
-} catch (Exception $e) {
-  http_response_code(500);
-  echo json_encode(['success' => false, 'message' => 'An unexpected server error occurred.']);
+if ($success) {
+    if ($stmt->rowCount() > 0) {
+        echo json_encode(['success' => true, 'message' => 'Un-bookmarked']);
+    } else {
+        echo json_encode(['success' => true, 'message' => 'Bookmark not found or already removed']);
+    }
+} else {
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Failed to remove bookmark.']);
 }
+
+exit;

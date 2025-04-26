@@ -10,7 +10,7 @@
  */
 
 import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; 
+import { useNavigate, useLocation } from "react-router-dom";
 import ViewModal from "../components/buyingComponents/ViewModal";
 import "../components/css/buyingCSS/buyingpage.css";
 import filterListings from "../components/filterListingsComponent/filterListings";
@@ -25,7 +25,7 @@ import { fetchBookmarks, toggleBookmark } from "../hooks/useBookmarks";
 function BuyingPage() {
   const { currentUser, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation(); 
+  const location = useLocation();
   const [listings, setListings] = useState([]);
   const [filteredListings, setFilteredListings] = useState([]);
   const [bookmarkedIds, setBookmarkedIds] = useState(new Set());
@@ -35,6 +35,7 @@ function BuyingPage() {
   const [viewerImages, setViewerImages] = useState([]);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [selectedCar, setSelectedCar] = useState(null);
+  const [viewError, setViewError] = useState("");
 
   const normalize = (str) => str.toLowerCase().replace(/[\s-]/g, "");
 
@@ -168,11 +169,14 @@ function BuyingPage() {
           setViewerImages(data);
           setSelectedCar(car);
           setIsViewerOpen(true);
+          setViewError("");
         } else {
-          alert("Failed to load images.");
+          setViewError("Failed to load images. Please try again.");
         }
       })
-      .catch(() => alert("Failed to load images."));
+      .catch((error) => {
+        setViewError("Failed to load images. Please try again.");
+      });
   }, []);
 
   const openFilterModal = () => setIsFilterModalOpen(true);
@@ -226,6 +230,7 @@ function BuyingPage() {
         </div>
 
         {fetchError && <div className="error-banner">{fetchError}</div>}
+        {viewError && <div className="error-banner">{viewError}</div>}
 
         <div className="my-listings-grid">
           {!fetchError && visibleListings.length > 0 ? (

@@ -113,3 +113,10 @@ input::placeholder {
   margin: 0 8px;
   color: #ddd;
 }
+
+.info-redirect {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+}

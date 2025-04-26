@@ -5,8 +5,7 @@
  * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
  * MACIDs:       alamy1, govindag, kharodg, zikoa
  * Date:         April 22nd, 2025
- * Description:  Taking all the images for a gievn listing from the post_images table
- *               so it can be used for when user presses "view" on a given listing
+ * Description:  Fetches all image paths for a given post ID.
  */
 
 include '../../config/connect.php';
@@ -33,13 +32,12 @@ if (!$postId) {
     exit;
 }
 
-try {
-    $stmt = $dbh->prepare("SELECT image_path FROM post_images WHERE post_id = ?");
-    $stmt->execute([$postId]);
-    $images = $stmt->fetchAll(PDO::FETCH_COLUMN);
+$cmd = "SELECT image_path FROM post_images WHERE post_id = ?";
+$stmt = $dbh->prepare($cmd);
+$params = [$postId];
+$stmt->execute($params);
+$images = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-    echo json_encode($images);
-} catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode(["error" => "Database error"]);
-}
+echo json_encode($images);
+
+exit;

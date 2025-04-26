@@ -1,15 +1,15 @@
 <?php
 
 /**
- * File:         update-profile-picture.php
+ * File:         update_profile_picture.php
  * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
  * MACIDs:       alamy1, govindag, kharodg, zikoa
  * Date:         April 25th, 2025
- * Description:  Handles profile picture uploads. Validates the file,
- *               saves it, and updates user profile reference.
+ * Description:  Handles profile picture uploads.
  */
 
-include "../../config/connect.php";
+include __DIR__ . '/../../config/connect.php';
+include __DIR__ . '/../auth/auth_check.php';
 include __DIR__ . '/../../vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
@@ -26,110 +26,96 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+if (session_status() == PHP_SESSION_NONE) { session_start(); }
+$loggedInUserId = null;
+if (function_exists('require_login')) {
+   try { $loggedInUserId = require_login(); }
+   catch (Exception $e) {
+      http_response_code(401); echo json_encode(['success' => false, 'error' => 'Not authenticated']); exit;
+   }
+} else {
+   http_response_code(500); echo json_encode(['success' => false, 'error' => 'Auth system error.']); exit;
 }
 
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    http_response_code(401);
-    echo json_encode([
-        'success' => false,
-        'message' => 'Unauthorized. Please log in to access this resource.'
-    ]);
-    exit;
-}
-
-$user_id = $_SESSION['user_id'];
-
+// Check if a picture was uploaded successfully.
 if (!isset($_FILES['profilePicture']) || $_FILES['profilePicture']['error'] !== UPLOAD_ERR_OK) {
     http_response_code(400);
-    echo json_encode([
-        'success' => false,
-        'message' => 'No file uploaded or upload error occurred.'
-    ]);
+    $uploadErrors = [
+        UPLOAD_ERR_INI_SIZE   => 'File exceeds upload_max_filesize.',
+        UPLOAD_ERR_FORM_SIZE  => 'File exceeds MAX_FILE_SIZE.',
+        UPLOAD_ERR_PARTIAL    => 'File only partially uploaded.',
+        UPLOAD_ERR_NO_FILE    => 'No file was uploaded.',
+        UPLOAD_ERR_NO_TMP_DIR => 'Missing temporary folder.',
+        UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.',
+        UPLOAD_ERR_EXTENSION  => 'PHP extension stopped the upload.',
+    ];
+    $errorCode = $_FILES['profilePicture']['error'] ?? UPLOAD_ERR_NO_FILE;
+    $message = $uploadErrors[$errorCode] ?? 'Unknown upload error.';
+    echo json_encode(['success' => false, 'message' => $message]);
     exit;
 }
 
-$upload_dir = dirname(__DIR__, 3) . '/uploads/profile_pictures/';
-$web_path = '/fastfahr/uploads/profile_pictures/';
+$upload_dir_base = dirname(__DIR__, 3) . '/uploads'; 
+$upload_subdir = '/profile_pictures/';             
+$upload_dir = $upload_dir_base . $upload_subdir;   
+$web_path_base = '/fastfahr/uploads';              
+$web_path_subdir = '/profile_pictures/';           
 $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
-$max_size = 5 * 1024 * 1024; 
+$max_size = 5 * 1024 * 1024; // 5 MB
 
-if (!file_exists($upload_dir)) {
-    mkdir($upload_dir, 0755, true);
+if (!is_dir($upload_dir) && !mkdir($upload_dir, 0755, true) && !is_dir($upload_dir)) {
+     http_response_code(500);
+     echo json_encode(['success' => false, 'message' => 'Failed to create upload directory.']);
+     exit;
 }
 
+// Setting new variables
 $file = $_FILES['profilePicture'];
-$file_name = $file['name'];
 $file_tmp = $file['tmp_name'];
 $file_size = $file['size'];
 $file_type = $file['type'];
 
-if (!in_array($file_type, $allowed_types)) {
+$finfo = new finfo(FILEINFO_MIME_TYPE);
+$mime_type = $finfo->file($file_tmp);
+if (!in_array($mime_type, $allowed_types)) {
     http_response_code(400);
-    echo json_encode([
-        'success' => false,
-        'message' => 'Only JPG, PNG, and GIF files are allowed.'
-    ]);
+    echo json_encode(['success' => false, 'message' => 'Invalid file type. Only JPG, PNG, GIF allowed.']);
     exit;
 }
 
+// Checking if the file exceeds the maximum allowed size of 5MB
 if ($file_size > $max_size) {
     http_response_code(400);
-    echo json_encode([
-        'success' => false,
-        'message' => 'File size exceeds the limit of 5MB.'
-    ]);
+    echo json_encode(['success' => false, 'message' => 'File size exceeds 5MB limit.']);
     exit;
 }
 
-$new_filename = $user_id . '_' . uniqid() . '.' . pathinfo($file_name, PATHINFO_EXTENSION);
+$file_extension = pathinfo($file['name'], PATHINFO_EXTENSION) ?: 'jpg'; // Get original extension
+$new_filename = $loggedInUserId . '_' . uniqid() . '.' . strtolower($file_extension);
 $upload_path = $upload_dir . $new_filename;
-$image_url = $web_path . $new_filename;
+$image_url = $web_path_base . $web_path_subdir . $new_filename; // Construct relative URL path
 
-try {
-    if (move_uploaded_file($file_tmp, $upload_path)) {
-        $cmd = "UPDATE users SET profile_picture = ? WHERE user_id = ?";
-        $stmt = $dbh->prepare($cmd);
-        $args = [$image_url, $user_id];
-        $success = $stmt->execute($args);
+if (move_uploaded_file($file_tmp, $upload_path)) {
+    $cmd_update = "UPDATE users SET profile_picture = ? WHERE user_id = ?";
+    $stmt_update = $dbh->prepare($cmd_update);
+    $params_update = [$image_url, $loggedInUserId];
+    $success_db = $stmt_update->execute($params_update);
 
-        if ($success) {
-            $_SESSION['user_profile_picture'] = $image_url;
-
-            echo json_encode([
-                'success' => true,
-                'message' => 'Profile picture updated successfully!',
-                'profile_picture' => $image_url
-            ]);
-        } else {
-            unlink($upload_path);
-
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Failed to update profile information in the database.'
-            ]);
-        }
-    } else {
-        http_response_code(500);
+    if ($success_db) {
+        $_SESSION['user_profile_picture'] = $image_url;
         echo json_encode([
-            'success' => false,
-            'message' => 'Failed to upload file. Please try again.'
+            'success' => true,
+            'message' => 'Profile picture updated!',
+            'profile_picture' => $image_url
         ]);
+    } else {
+        unlink($upload_path);
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => 'Failed to update database record.']);
     }
-} catch (PDOException $e) {
-    error_log("Database Error: " . $e->getMessage());
+} else {
     http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'message' => 'A database error occurred. Please try again later.'
-    ]);
-} catch (Exception $e) {
-    error_log("General Error: " . $e->getMessage());
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'message' => 'An unexpected error occurred.'
-    ]);
+    echo json_encode(['success' => false, 'message' => 'Failed to save uploaded file.']);
 }
+
+exit;

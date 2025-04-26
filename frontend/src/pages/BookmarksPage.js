@@ -20,6 +20,7 @@ export default function BookmarksPage() {
   const [bookmarkedListings, setBookmarkedListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [viewError, setViewError] = useState("");
 
   const [selectedListing, setSelectedListing] = useState(null);
   const [viewerImages, setViewerImages] = useState([]);
@@ -65,7 +66,7 @@ export default function BookmarksPage() {
       await toggleBookmark(listingId, true);
       setBookmarkedListings((prev) => prev.filter((l) => l.id !== listingId));
     } catch (err) {
-      alert("Couldn’t remove bookmark – try again.");
+      setError("Couldn't remove bookmark, please try again");
     }
   };
 
@@ -81,8 +82,11 @@ export default function BookmarksPage() {
         setSelectedListing(listing);
         setViewerImages(images);
         setIsViewerOpen(true);
+        setViewError("");
       })
-      .catch(() => alert("Failed to load images."));
+      .catch((err) => {
+        setViewError("Failed to load images. Please try again.");
+      });
   };
 
   const handleContact = (creatorUserId, creatorUsername) => {
@@ -165,6 +169,8 @@ export default function BookmarksPage() {
           </div>
         </div>
       </div>
+
+      {viewError && <div className="error-banner">{viewError}</div>}
 
       {isViewerOpen && selectedListing && (
         <ViewModal
