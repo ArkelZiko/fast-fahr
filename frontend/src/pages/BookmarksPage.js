@@ -54,6 +54,7 @@ export default function BookmarksPage() {
       .finally(() => {
         if (isMounted) setLoading(false);
       });
+
     return () => {
       isMounted = false;
     };
@@ -69,9 +70,12 @@ export default function BookmarksPage() {
   };
 
   const handleView = (listing) => {
-    fetch(`${process.env.REACT_APP_API_BASE}/listings/image_listings.php?post_id=${listing.id}`, {
-      credentials: "include",
-    })
+    fetch(
+      `${process.env.REACT_APP_API_BASE}/listings/image_listings.php?post_id=${listing.id}`,
+      {
+        credentials: "include",
+      }
+    )
       .then((res) => res.json())
       .then((images) => {
         setSelectedListing(listing);
@@ -96,11 +100,16 @@ export default function BookmarksPage() {
 
   if (authLoading || loading) {
     return (
-      <div>
+      <div className="page-wrapper">
         <Header />
         <NavBar />
-        <div className="loading-page" style={{ textAlign: "center", padding: 50 }}>
-          Loading bookmarks…
+        <div className="page-content">
+          <div
+            className="loading-page"
+            style={{ textAlign: "center", padding: 50 }}
+          >
+            Loading bookmarks…
+          </div>
         </div>
         <Footer />
       </div>
@@ -110,41 +119,51 @@ export default function BookmarksPage() {
   if (!currentUser) return null;
 
   return (
-    <div className="buying-page">
+    <div className="page-wrapper">
       <Header />
       <NavBar />
-      <div className="buying-content-wrapper">
-        <div className="my-listings-header">
-          <h2>My Bookmarks</h2>
-        </div>
+      <div className="page-content">
+        <div className="buying-page">
+          <div className="buying-content-wrapper">
+            <div className="my-listings-header">
+              <h2>My Bookmarks</h2>
+            </div>
 
-        {error && <div className="error-banner">{error}</div>}
+            {error && <div className="error-banner">{error}</div>}
 
-        {!error && bookmarkedListings.length > 0 ? (
-          <div className="my-listings-grid">
-            {bookmarkedListings.map((listing) => (
-              <ListingCard
-                key={listing.id}
-                title={listing.title}
-                image={
-                  listing.image_path
-                    ? `${process.env.REACT_APP_STATIC_BASE}${listing.image_path}`
-                    : "/images/default-car.png"
-                }
-                price={listing.price}
-                mileage={listing.mileage}
-                year={listing.year}
-                isBookmarked={true}
-                onBookmarkToggle={(next) => handleBookmarkToggle(listing.id, next)}
-                onView={() => handleView(listing)}
-                onContact={() => handleContact(listing.user_id, listing.creator_username)} // 🚀 ADDED THIS
-                context="buying"
-              />
-            ))}
+            {!error && bookmarkedListings.length > 0 ? (
+              <div className="my-listings-grid">
+                {bookmarkedListings.map((listing) => (
+                  <ListingCard
+                    key={listing.id}
+                    title={listing.title}
+                    image={
+                      listing.image_path
+                        ? `${process.env.REACT_APP_STATIC_BASE}${listing.image_path}`
+                        : "/images/default-car.png"
+                    }
+                    price={listing.price}
+                    mileage={listing.mileage}
+                    year={listing.year}
+                    isBookmarked={true}
+                    onBookmarkToggle={(next) =>
+                      handleBookmarkToggle(listing.id, next)
+                    }
+                    onView={() => handleView(listing)}
+                    onContact={() =>
+                      handleContact(listing.user_id, listing.creator_username)
+                    }
+                    context="buying"
+                  />
+                ))}
+              </div>
+            ) : !error ? (
+              <p className="no-listings-message">
+                You have no bookmarks saved.
+              </p>
+            ) : null}
           </div>
-        ) : !error ? (
-          <p className="no-listings-message">You have no bookmarks saved.</p>
-        ) : null}
+        </div>
       </div>
 
       {isViewerOpen && selectedListing && (
@@ -158,7 +177,9 @@ export default function BookmarksPage() {
           specs={{
             Make: selectedListing.make,
             Model: selectedListing.model,
-            Kilometers: `${Number(selectedListing.mileage).toLocaleString()} km`,
+            Kilometers: `${Number(
+              selectedListing.mileage
+            ).toLocaleString()} km`,
             Transmission: selectedListing.transmission,
             Drive: selectedListing.driveType,
             Fuel: selectedListing.fuelType,

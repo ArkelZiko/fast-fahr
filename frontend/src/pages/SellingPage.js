@@ -8,7 +8,7 @@
  *               Allows users to create new listings via a modal form and delete
  *               their existing listings via a confirmation modal. Includes
  *               placeholder for edit functionality.
-*/
+ */
 
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -22,11 +22,10 @@ import CreateListingForm from "../components/sellingComponents/CreateListingForm
 import DeleteListingModal from "../components/sellingComponents/DeleteListingModal.js";
 import { useAuth } from "../hooks/useAuth";
 
-
 /**
  * Renders the Selling page, displaying and managing the user's own listings.
  * @returns {JSX.Element|null} The SellingPage component or null if redirecting.
-*/
+ */
 function SellingPage() {
   const { currentUser, isLoading: authLoading, requireAuth } = useAuth();
   const navigate = useNavigate();
@@ -231,97 +230,103 @@ function SellingPage() {
   }
 
   return (
-    <div className="selling-page">
+    <div className="page-wrapper">
       <Header />
       <NavBar />
-      <div className="selling-content-wrapper">
-        <div className="my-listings-header">
-          <h2>My Listings</h2>
-          <button
-            className="create-listing-btn-trigger"
-            onClick={openCreateModal}
-          >
-            <i className="fas fa-plus"></i> Create Listing
-          </button>
-        </div>
-
-        {fetchError && <div className="error-banner">{fetchError}</div>}
-
-        <section className="my-listings-section">
-          {!fetchError && myListings.length > 0 ? (
-            <div className="my-listings-grid">
-              {myListings.map((listing) => (
-                <ListingCard
-                  key={listing.id}
-                  title={listing.title}
-                  image={
-                    listing.image_path
-                      ? `${process.env.REACT_APP_STATIC_BASE}${listing.image_path}`
-                      : "/images/default-car.png"
-                  }
-                  price={listing.price}
-                  mileage={listing.mileage}
-                  year={listing.year}
-                  onView={() => handleView(listing)}
-                  onEdit={() => handleEditListing(listing.id)}
-                  onDelete={() =>
-                    openDeleteConfirmModal(listing.id, listing.title)
-                  }
-                  context="selling"
-                />
-              ))}
+      <div className="page-content">
+        <div className="selling-page">
+          <div className="selling-content-wrapper">
+            <div className="my-listings-header">
+              <h2>My Listings</h2>
+              <button
+                className="create-listing-btn-trigger"
+                onClick={openCreateModal}
+              >
+                <i className="fas fa-plus"></i> Create Listing
+              </button>
             </div>
-          ) : !fetchError ? (
-            <p className="no-listings-message">
-              You haven't created any listings yet.
-            </p>
-          ) : null}
-        </section>
 
-        {isCreateModalOpen && (
-          <div className="modal-overlay" onClick={closeCreateModal}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <CreateListingForm
-                onSubmit={handlePublishListing}
-                onClose={closeCreateModal}
+            {fetchError && <div className="error-banner">{fetchError}</div>}
+
+            <section className="my-listings-section">
+              {!fetchError && myListings.length > 0 ? (
+                <div className="my-listings-grid">
+                  {myListings.map((listing) => (
+                    <ListingCard
+                      key={listing.id}
+                      title={listing.title}
+                      image={
+                        listing.image_path
+                          ? `${process.env.REACT_APP_STATIC_BASE}${listing.image_path}`
+                          : "/images/default-car.png"
+                      }
+                      price={listing.price}
+                      mileage={listing.mileage}
+                      year={listing.year}
+                      onView={() => handleView(listing)}
+                      onEdit={() => handleEditListing(listing.id)}
+                      onDelete={() =>
+                        openDeleteConfirmModal(listing.id, listing.title)
+                      }
+                      context="selling"
+                    />
+                  ))}
+                </div>
+              ) : !fetchError ? (
+                <p className="no-listings-message">
+                  You haven't created any listings yet.
+                </p>
+              ) : null}
+            </section>
+
+            {isCreateModalOpen && (
+              <div className="modal-overlay" onClick={closeCreateModal}>
+                <div
+                  className="modal-content"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <CreateListingForm
+                    onSubmit={handlePublishListing}
+                    onClose={closeCreateModal}
+                  />
+                </div>
+              </div>
+            )}
+
+            {isDeleteModalOpen && listingToDelete && (
+              <DeleteListingModal
+                listingTitle={listingToDelete.title}
+                onClose={closeDeleteConfirmModal}
+                onConfirmDelete={handleConfirmDelete}
+                isLoading={isDeleting}
+                error={deleteError}
               />
-            </div>
+            )}
           </div>
-        )}
 
-        {isDeleteModalOpen && listingToDelete && (
-          <DeleteListingModal
-            listingTitle={listingToDelete.title}
-            onClose={closeDeleteConfirmModal}
-            onConfirmDelete={handleConfirmDelete}
-            isLoading={isDeleting}
-            error={deleteError}
-          />
-        )}
+          {isViewerOpen && selectedListing && (
+            <ViewModal
+              images={viewerImages}
+              onClose={() => setIsViewerOpen(false)}
+              title={selectedListing.title}
+              year={selectedListing.year}
+              price={selectedListing.price}
+              description={selectedListing.description}
+              specs={{
+                Make: selectedListing.make,
+                Model: selectedListing.model,
+                Kilometers: Number(selectedListing.mileage).toLocaleString(),
+                Transmission: selectedListing.transmission,
+                Drive: selectedListing.driveType,
+                Fuel: selectedListing.fuelType,
+                Body: selectedListing.bodyType,
+                Exterior: selectedListing.exteriorColor,
+                Location: `${selectedListing.city}, ${selectedListing.province}`,
+              }}
+            />
+          )}
+        </div>
       </div>
-
-      {isViewerOpen && selectedListing && (
-        <ViewModal
-          images={viewerImages}
-          onClose={() => setIsViewerOpen(false)}
-          title={selectedListing.title}
-          year={selectedListing.year}
-          price={selectedListing.price}
-          description={selectedListing.description}
-          specs={{
-            Make: selectedListing.make,
-            Model: selectedListing.model,
-            Kilometers: Number(selectedListing.mileage).toLocaleString(),
-            Transmission: selectedListing.transmission,
-            Drive: selectedListing.driveType,
-            Fuel: selectedListing.fuelType,
-            Body: selectedListing.bodyType,
-            Exterior: selectedListing.exteriorColor,
-            Location: `${selectedListing.city}, ${selectedListing.province}`,
-          }}
-        />
-      )}
-
       <Footer />
     </div>
   );

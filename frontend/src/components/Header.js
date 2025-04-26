@@ -16,6 +16,7 @@ function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const [search, setSearch] = useState("");
+  const [searchError, setSearchError] = useState("");
 
   // Debug the current user data
   useEffect(() => {
@@ -54,15 +55,14 @@ function Header() {
     const raw = search.trim();
 
     if (raw.length === 0) {
-      alert("Please enter a search term.");
+      setSearchError("Please enter a search term.");
       return;
     }
-
     if (raw.length > 100) {
-      alert("Search term too long. Maximum 100 characters allowed.");
+      setSearchError("Search term too long. Max 100 characters.");
       return;
     }
-
+    setSearchError("");
     const cleaned = raw.replace(/[\s-]/g, "").toLowerCase();
 
     navigate(`/buying?search=${encodeURIComponent(cleaned)}`);
