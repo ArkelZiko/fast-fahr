@@ -18,4 +18,3 @@ try {
 } catch (PDOException $e) {
     die("ERROR: Couldn't connect. {$e->getMessage()}");
 }
-?>

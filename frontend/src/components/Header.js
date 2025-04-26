@@ -1,20 +1,23 @@
-import React, { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import ProfileMenu from './ProfileMenu'; // Adjust path as needed
+import ProfileMenu from './ProfileMenu';
 import "./css/header.css";
-import "./css/profile-menu.css"; // Make sure the CSS path is correct
+import "./css/profile-menu.css";
 import logo from "./images/logo.png";
 
 /**
  * Renders the main site header, adapting based on user login status.
  * @returns {JSX.Element} The header component.
 */
+
 function Header() {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [search, setSearch] = useState("");
 
-  // Debug the current user data
+    // Debug the current user data
   useEffect(() => {
     if (currentUser) {
       console.log("Current user in Header:", currentUser);
@@ -29,18 +32,28 @@ function Header() {
           credentials: 'include'
       });
 
-      const data = await response.json();
+      await response.json();
       
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
-       logout();
-       navigate('/login');
+      logout();
+      navigate('/login');
     }
   };
 
   const handleSignInClick = () => {
     navigate('/login');
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const cleaned = search.trim().replace(/[\s-]/g, "").toLowerCase();
+    if (location.pathname === "/buying") {
+      navigate(`/buying?search=${encodeURIComponent(cleaned)}`);
+    } else {
+      navigate(`/buying?search=${encodeURIComponent(cleaned)}`);
+    }
   };
 
   return (
@@ -52,12 +65,18 @@ function Header() {
         </Link>
       </div>
 
-      <div className="search-wrapper">
-        <input type="text" className="search-box" placeholder="Search" />
-        <button className="search-btn" title="Search">
+      <form className="search-wrapper" onSubmit={handleSearch}>
+        <input
+          type="text"
+          className="search-box"
+          placeholder="Search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <button type="submit" className="search-btn" title="Search">
           <i className="fas fa-search"></i>
         </button>
-      </div>
+      </form>
 
       {/* Conditionally render Sign-in or Profile Menu */}
       <div className="header-actions">

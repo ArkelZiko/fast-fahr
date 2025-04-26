@@ -143,7 +143,7 @@ export default function BookmarksPage() {
                   handleBookmarkToggle(listing.id, next)
                 }
                 onView={() => handleView(listing)}
-                context="bookmarks"
+                context="buying"
               />
             ))}
           </div>

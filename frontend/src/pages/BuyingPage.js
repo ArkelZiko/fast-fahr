@@ -2,16 +2,15 @@
  * File:         BuyingPage.js
  * Authors:      Yusuf Alam, Goshanraj Govindaraj, Gureet Kharod, Arkel Ziko
  * MACIDs:       alamy1, govindag, kharodg, zikoa
- * Date:         April 20th, 2025 (Date reflects latest functional version provided)
+ * Date:         April 20th, 2025
  * Description:  Page component for displaying available car listings for purchase.
  *               Fetches all listings, allows filtering via a modal, displays listings
- *               using ListingCard, handles bookmarking, contacting seller (via MessagesPage),
- *               and viewing listing details via a modal. Adapts functionality based on
- *               user login status (redirects interaction attempts if not logged in).
+ *               using ListingCard, handles bookmarking, contacting seller, viewing listing details,
+ *               and now supports search filtering by title (ignoring spaces, dashes, case).
  */
 
 import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // ADDED useLocation
 import ViewModal from "../components/buyingComponents/ViewModal";
 import "../components/css/buyingCSS/buyingpage.css";
 import filterListings from "../components/filterListingsComponent/filterListings";
@@ -23,15 +22,10 @@ import NavBar from "../components/Navbar";
 import { useAuth } from "../hooks/useAuth";
 import { fetchBookmarks, toggleBookmark } from "../hooks/useBookmarks";
 
-/**
- * Renders the Buying page, displaying car listings available for purchase.
- * Includes filtering, bookmarking, contacting, and viewing functionality.
- * Allows public viewing but redirects interactions for non-logged-in users.
- * @returns {JSX.Element} The BuyingPage component.
- */
 function BuyingPage() {
   const { currentUser, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation(); // NEW
   const [listings, setListings] = useState([]);
   const [filteredListings, setFilteredListings] = useState([]);
   const [bookmarkedIds, setBookmarkedIds] = useState(new Set());
@@ -41,6 +35,8 @@ function BuyingPage() {
   const [viewerImages, setViewerImages] = useState([]);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [selectedCar, setSelectedCar] = useState(null);
+
+  const normalize = (str) => str.toLowerCase().replace(/[\s-]/g, '');
 
   useEffect(() => {
     if (!authLoading) {
@@ -60,9 +56,7 @@ function BuyingPage() {
         .then((res) => {
           if (!res.ok) {
             return res.text().then((text) => {
-              throw new Error(
-                `HTTP error! status: ${res.status}, response: ${text}`
-              );
+              throw new Error(`HTTP error! status: ${res.status}, response: ${text}`);
             });
           }
           return res.json();
@@ -80,8 +74,7 @@ function BuyingPage() {
           }
         })
         .catch((error) => {
-          if (isMounted)
-            setFetchError(`Failed to load listings: ${error.message}`);
+          if (isMounted) setFetchError(`Failed to load listings: ${error.message}`);
         })
         .finally(() => {
           if (isMounted) setPageLoading(false);
@@ -106,7 +99,7 @@ function BuyingPage() {
             }
           }
         })
-        .catch((error) => {
+        .catch(() => {
           if (isMounted) setBookmarkedIds(new Set());
         });
     } else {
@@ -132,7 +125,7 @@ function BuyingPage() {
           return next;
         });
         await toggleBookmark(id, isCurrentlyBookmarked);
-      } catch (e) {
+      } catch {
         setBookmarkedIds((prev) => {
           const next = new Set(prev);
           isCurrentlyBookmarked ? next.add(id) : next.delete(id);
@@ -159,14 +152,10 @@ function BuyingPage() {
     [currentUser, navigate]
   );
 
-  // --- HANDKLE THE VIEW BUTTON STUFF ---
   const handleView = useCallback((car) => {
-    fetch(
-      `${process.env.REACT_APP_API_BASE}/listings/image_listings.php?post_id=${car.id}`,
-      {
-        credentials: "include",
-      }
-    )
+    fetch(`${process.env.REACT_APP_API_BASE}/listings/image_listings.php?post_id=${car.id}`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
@@ -197,11 +186,20 @@ function BuyingPage() {
     closeFilterModal();
   }, [listings]);
 
+  const searchParam = new URLSearchParams(location.search).get('search') || '';
+
+  const visibleListings = filteredListings.filter(car => {
+    if (!searchParam) return true;
+    return normalize(car.title).includes(searchParam);
+  });
+
   if (pageLoading) {
     return (
       <div className="buying-page">
-        <Header /> <NavBar />{" "}
-        <div className="loading-page">Loading Listings...</div> <Footer />
+        <Header />
+        <NavBar />
+        <div className="loading-page">Loading Listings...</div>
+        <Footer />
       </div>
     );
   }
@@ -213,10 +211,7 @@ function BuyingPage() {
       <div className="buying-content-wrapper">
         <div className="my-listings-header">
           <h2>Current Listings</h2>
-          <button
-            className="create-listing-btn-trigger"
-            onClick={openFilterModal}
-          >
+          <button className="create-listing-btn-trigger" onClick={openFilterModal}>
             <i className="fas fa-filter"></i> Filter Listings
           </button>
         </div>
@@ -224,8 +219,8 @@ function BuyingPage() {
         {fetchError && <div className="error-banner">{fetchError}</div>}
 
         <div className="my-listings-grid">
-          {!fetchError && filteredListings.length > 0 ? (
-            filteredListings.map((car) => (
+          {!fetchError && visibleListings.length > 0 ? (
+            visibleListings.map((car) => (
               <ListingCard
                 key={car.id}
                 title={car.title}
@@ -239,9 +234,7 @@ function BuyingPage() {
                 year={car.year}
                 isBookmarked={!!currentUser && bookmarkedIds.has(car.id)}
                 onBookmarkToggle={(next) => handleBookmark(car.id)}
-                onContact={() =>
-                  handleContact(car.user_id, car.creator_username)
-                }
+                onContact={() => handleContact(car.user_id, car.creator_username)}
                 onView={() => handleView(car)}
                 context="buying"
               />
@@ -267,7 +260,7 @@ function BuyingPage() {
         </div>
       )}
 
-      {isViewerOpen && (
+      {isViewerOpen && selectedCar && (
         <ViewModal
           images={viewerImages}
           onClose={() => setIsViewerOpen(false)}
