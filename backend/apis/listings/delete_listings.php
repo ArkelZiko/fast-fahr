@@ -7,7 +7,7 @@
  * Date:         April 21st, 2025
  * Description:  Handles deletion of a car listing from the db
  *               Makes sure user is logged in before doing so
-*/
+ */
 
 include __DIR__ . '/../../config/connect.php';
 include __DIR__ . '/../auth/auth_check.php';
@@ -53,14 +53,13 @@ try {
         if ($deleteStmt->rowCount() > 0) {
             echo json_encode(['success' => true, 'message' => 'Listing deleted.']);
         } else {
-             http_response_code(404);
-             throw new Exception('Listing not found or delete permission denied.');
+            http_response_code(404);
+            throw new Exception('Listing not found or delete permission denied.');
         }
     } else {
         http_response_code(500);
         throw new Exception('Database error during deletion process.');
     }
-
 } catch (Exception $e) {
     $errorCode = 500;
     if ($e->getMessage() === 'User not logged in') $errorCode = 401;
@@ -70,4 +69,3 @@ try {
     http_response_code($errorCode);
     echo json_encode(['success' => false, 'error' => $e->getMessage()]);
 }
-?>

@@ -44,14 +44,14 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 try {
     // Get user ID from session
     $user_id = $_SESSION['user_id'];
-    
+
     // Query to fetch user data
     $cmd = "SELECT username, email, profile_picture FROM users WHERE user_id = ?";
     $stmt = $dbh->prepare($cmd);
-    
+
     $args = [$user_id];
     $stmt->execute($args);
-    
+
     if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         echo json_encode([
             'success' => true,

@@ -23,25 +23,25 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-W
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    http_response_code(204);
-    exit;
+  http_response_code(204);
+  exit;
 }
 
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+  session_start();
 }
 
 if (empty($_SESSION['user_id'])) {
   http_response_code(401);
-  echo json_encode(['success'=>false,'message'=>'Not authenticated']);
+  echo json_encode(['success' => false, 'message' => 'Not authenticated']);
   exit;
 }
 
-$post_id = filter_input(INPUT_POST,'post_id',FILTER_VALIDATE_INT);
+$post_id = filter_input(INPUT_POST, 'post_id', FILTER_VALIDATE_INT);
 
 if (!$post_id) {
   http_response_code(400);
-  echo json_encode(['success'=>false,'message'=>'Invalid or missing post_id']);
+  echo json_encode(['success' => false, 'message' => 'Invalid or missing post_id']);
   exit;
 }
 
@@ -55,18 +55,16 @@ try {
   $stmt->execute();
 
   if ($stmt->rowCount() > 0) {
-      echo json_encode(['success'=>true,'message'=>'Bookmarked']);
+    echo json_encode(['success' => true, 'message' => 'Bookmarked']);
   } else {
-      echo json_encode(['success'=>true,'message'=>'Bookmark already exists']);
+    echo json_encode(['success' => true, 'message' => 'Bookmark already exists']);
   }
-
 } catch (PDOException $e) {
-    error_log("Database Error in bookmarks/add.php: " . $e->getMessage());
-    http_response_code(500);
-    echo json_encode(['success'=>false,'message'=>'Database error occurred while adding bookmark.']);
+  error_log("Database Error in bookmarks/add.php: " . $e->getMessage());
+  http_response_code(500);
+  echo json_encode(['success' => false, 'message' => 'Database error occurred while adding bookmark.']);
 } catch (Exception $e) {
-    error_log("General Error in bookmarks/add.php: " . $e->getMessage());
-    http_response_code(500);
-    echo json_encode(['success'=>false,'message'=>'An unexpected server error occurred.']);
+  error_log("General Error in bookmarks/add.php: " . $e->getMessage());
+  http_response_code(500);
+  echo json_encode(['success' => false, 'message' => 'An unexpected server error occurred.']);
 }
-?>

@@ -105,11 +105,11 @@ try {
         $stmt = $dbh->prepare($cmd);
         $args = [$image_url, $user_id];
         $success = $stmt->execute($args);
-        
+
         if ($success) {
             // Update session variable
             $_SESSION['user_profile_picture'] = $image_url;
-            
+
             echo json_encode([
                 'success' => true,
                 'message' => 'Profile picture updated successfully!',
@@ -118,7 +118,7 @@ try {
         } else {
             // Remove file if database update fails
             unlink($upload_path);
-            
+
             http_response_code(500);
             echo json_encode([
                 'success' => false,
@@ -147,4 +147,3 @@ try {
         'message' => 'An unexpected error occurred.'
     ]);
 }
-?>

@@ -7,7 +7,7 @@
  * Date:         April 17th, 2025
  * Description:  Dealing with removing a bookmark from the db (bookmarks table)
  *               user has to be logged in for this action
-*/
+ */
 
 include "../../config/connect.php";
 include __DIR__ . '/../../vendor/autoload.php';
@@ -22,25 +22,25 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-W
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    http_response_code(204);
-    exit;
+  http_response_code(204);
+  exit;
 }
 
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+  session_start();
 }
 
 if (empty($_SESSION['user_id'])) {
   http_response_code(401);
-  echo json_encode(['success'=>false,'message'=>'Not authenticated']);
+  echo json_encode(['success' => false, 'message' => 'Not authenticated']);
   exit;
 }
 
-$post_id = filter_input(INPUT_POST,'post_id',FILTER_VALIDATE_INT);
+$post_id = filter_input(INPUT_POST, 'post_id', FILTER_VALIDATE_INT);
 
 if (!$post_id) {
   http_response_code(400);
-  echo json_encode(['success'=>false,'message'=>'Invalid or missing post_id']);
+  echo json_encode(['success' => false, 'message' => 'Invalid or missing post_id']);
   exit;
 }
 
@@ -54,16 +54,14 @@ try {
   $stmt->execute();
 
   if ($stmt->rowCount() > 0) {
-      echo json_encode(['success'=>true,'message'=>'Un-bookmarked']);
+    echo json_encode(['success' => true, 'message' => 'Un-bookmarked']);
   } else {
-      echo json_encode(['success'=>true,'message'=>'Bookmark not found or already removed']);
+    echo json_encode(['success' => true, 'message' => 'Bookmark not found or already removed']);
   }
-
 } catch (PDOException $e) {
-    http_response_code(500);
-    echo json_encode(['success'=>false,'message'=>'Database error occurred while removing bookmark.']);
+  http_response_code(500);
+  echo json_encode(['success' => false, 'message' => 'Database error occurred while removing bookmark.']);
 } catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode(['success'=>false,'message'=>'An unexpected server error occurred.']);
+  http_response_code(500);
+  echo json_encode(['success' => false, 'message' => 'An unexpected server error occurred.']);
 }
-?>

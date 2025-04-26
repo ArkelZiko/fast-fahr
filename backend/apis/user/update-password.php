@@ -76,10 +76,10 @@ try {
     $stmt = $dbh->prepare($cmd);
     $args = [$user_id];
     $stmt->execute($args);
-    
+
     if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $currentPasswordHash = $row['password_hash'];
-        
+
         // Verify the current password
         if (!password_verify($currentPassword, $currentPasswordHash)) {
             http_response_code(401);
@@ -89,16 +89,16 @@ try {
             ]);
             exit;
         }
-        
+
         // Hash the new password
         $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
-        
+
         // Update the password in the database
         $cmd = "UPDATE users SET password_hash = ? WHERE user_id = ?";
         $stmt = $dbh->prepare($cmd);
         $args = [$newPasswordHash, $user_id];
         $success = $stmt->execute($args);
-        
+
         if ($success) {
             echo json_encode([
                 'success' => true,
@@ -133,4 +133,3 @@ try {
         'message' => 'An unexpected error occurred.'
     ]);
 }
-?>

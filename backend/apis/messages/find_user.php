@@ -44,11 +44,11 @@ try {
     $foundUser = $userModel->getUserByUsername($usernameToFind);
 
     if ($foundUser) {
-         if ($foundUser['user_id'] == $loggedInUserId) {
-             http_response_code(400);
-             echo json_encode(['error' => 'You cannot start a conversation with yourself.']);
-             exit;
-         }
+        if ($foundUser['user_id'] == $loggedInUserId) {
+            http_response_code(400);
+            echo json_encode(['error' => 'You cannot start a conversation with yourself.']);
+            exit;
+        }
 
         echo json_encode([
             'success' => true,
@@ -62,7 +62,6 @@ try {
         http_response_code(404);
         echo json_encode(['success' => false, 'message' => 'User not found.']);
     }
-
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
@@ -70,4 +69,3 @@ try {
     http_response_code(500);
     echo json_encode(['success' => false, 'error' => 'Server error: ' . $e->getMessage()]);
 }
-?>

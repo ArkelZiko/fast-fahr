@@ -8,10 +8,10 @@
  * Description:  Handles the creation of new car listings including
  *               saving vehicle data to the posts.sql table (not to be confused with POST)  
  *               and processing several image uploads using the FormData object
-*/
+ */
 
 include __DIR__ . '/../../config/connect.php';
-include __DIR__ . '/../auth/auth_check.php'; 
+include __DIR__ . '/../auth/auth_check.php';
 include __DIR__ . '/../../vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
@@ -41,9 +41,20 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $requiredFields = [
-    'title', 'make', 'model', 'year', 'price', 'mileage',
-    'description', 'transmission', 'fuelType', 'driveType',
-    'bodyType', 'exteriorColor', 'province', 'city'
+    'title',
+    'make',
+    'model',
+    'year',
+    'price',
+    'mileage',
+    'description',
+    'transmission',
+    'fuelType',
+    'driveType',
+    'bodyType',
+    'exteriorColor',
+    'province',
+    'city'
 ];
 
 foreach ($requiredFields as $field) {
@@ -128,11 +139,9 @@ try {
 } catch (Exception $e) {
     http_response_code(500);
     if ($e->getMessage() === 'User not logged in') {
-         http_response_code(401);
+        http_response_code(401);
     } else {
         http_response_code(500);
     }
     echo json_encode(['error' => 'Server error: ' . $e->getMessage()]);
 }
-
-?>

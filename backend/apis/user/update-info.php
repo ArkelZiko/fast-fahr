@@ -75,7 +75,7 @@ try {
         $stmt = $dbh->prepare($cmd);
         $args = [$email, $user_id];
         $stmt->execute($args);
-        
+
         if ($stmt->fetchColumn() > 0) {
             http_response_code(409); // Conflict
             echo json_encode([
@@ -85,14 +85,14 @@ try {
             exit;
         }
     }
-    
+
     // Check if the new username already exists (for a different user)
     if ($username !== $_SESSION['user_username']) {
         $cmd = "SELECT COUNT(*) FROM users WHERE username = ? AND user_id != ?";
         $stmt = $dbh->prepare($cmd);
         $args = [$username, $user_id];
         $stmt->execute($args);
-        
+
         if ($stmt->fetchColumn() > 0) {
             http_response_code(409); // Conflict
             echo json_encode([
@@ -102,18 +102,18 @@ try {
             exit;
         }
     }
-    
+
     // Update user information
     $cmd = "UPDATE users SET username = ?, email = ? WHERE user_id = ?";
     $stmt = $dbh->prepare($cmd);
     $args = [$username, $email, $user_id];
     $success = $stmt->execute($args);
-    
+
     if ($success) {
         // Update session variables
         $_SESSION['user_username'] = $username;
         $_SESSION['user_email'] = $email;
-        
+
         echo json_encode([
             'success' => true,
             'message' => 'Profile information updated successfully!'
@@ -140,4 +140,3 @@ try {
         'message' => 'An unexpected error occurred: ' . $e->getMessage()
     ]);
 }
-?>

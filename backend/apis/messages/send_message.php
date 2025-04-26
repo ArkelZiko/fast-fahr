@@ -44,7 +44,7 @@ try {
         exit;
     }
 
-     if ($receiverId === $loggedInUserId) {
+    if ($receiverId === $loggedInUserId) {
         http_response_code(400);
         echo json_encode(['success' => false, 'error' => 'Cannot send messages to yourself.']);
         exit;
@@ -56,41 +56,38 @@ try {
     if ($newMessageId) {
         $newMessageData = $messageModel->getMessageById($newMessageId);
         if ($newMessageData) {
-             $date = new DateTime($newMessageData['sent_at']);
+            $date = new DateTime($newMessageData['sent_at']);
 
-             $formattedMessage = [
-                 'id'           => $newMessageData['message_id'],
-                 'senderId'     => $newMessageData['sender_id'],
-                 'receiverId'   => $newMessageData['receiver_id'],
-                 'senderName'   => $newMessageData['senderName'],
-                 'senderAvatar' => $newMessageData['senderAvatar'] ?? 'https://i.pravatar.cc/150?u=default',
-                 'text'         => $newMessageData['content'],
-                 'timestamp'    => $date->format(DateTime::ATOM),
-                 'isRead'       => false
-             ];
+            $formattedMessage = [
+                'id'           => $newMessageData['message_id'],
+                'senderId'     => $newMessageData['sender_id'],
+                'receiverId'   => $newMessageData['receiver_id'],
+                'senderName'   => $newMessageData['senderName'],
+                'senderAvatar' => $newMessageData['senderAvatar'] ?? 'https://i.pravatar.cc/150?u=default',
+                'text'         => $newMessageData['content'],
+                'timestamp'    => $date->format(DateTime::ATOM),
+                'isRead'       => false
+            ];
 
             http_response_code(201);
             echo json_encode(['success' => true, 'message' => 'Message sent.', 'newMessage' => $formattedMessage]);
         } else {
-             http_response_code(200);
-             echo json_encode(['success' => true, 'message' => 'Message sent, but retrieval of details failed.']);
+            http_response_code(200);
+            echo json_encode(['success' => true, 'message' => 'Message sent, but retrieval of details failed.']);
         }
-
     } else {
         http_response_code(500);
         echo json_encode(['success' => false, 'error' => 'Failed to save message to database.']);
     }
-
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(['success' => false, 'error' => 'Database error occurred.']);
 } catch (Exception $e) {
-     if ($e->getMessage() === 'User not logged in') {
-         http_response_code(401);
-         echo json_encode(['success' => false, 'error' => 'Authentication required.']);
-     } else {
-         http_response_code(500);
-         echo json_encode(['success' => false, 'error' => 'An unexpected server error occurred.']);
-     }
+    if ($e->getMessage() === 'User not logged in') {
+        http_response_code(401);
+        echo json_encode(['success' => false, 'error' => 'Authentication required.']);
+    } else {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'error' => 'An unexpected server error occurred.']);
+    }
 }
-?>
