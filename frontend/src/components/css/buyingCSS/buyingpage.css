@@ -5,7 +5,6 @@
  Description: Formatting to the buying page (similar to that of selling Page)
 */
 
-/* Global resets or body styling can go here if needed */
 
 .buying-content-wrapper {
   padding: 2rem;
@@ -36,14 +35,13 @@ body {
   flex: 1;
 }
 
-/* Header area for listings */
 .my-listings-header {
   display: flex;
-  justify-content: space-between; /* Spread out the heading & button */
+  justify-content: space-between; 
   align-items: center;
   margin-bottom: 1.5rem;
   padding-bottom: 0.8rem;
-  border-bottom: 2px solid #ff9800; /* Underline with orange line */
+  border-bottom: 2px solid #ff9800; 
 }
 
 .my-listings-header h2 {
@@ -53,7 +51,7 @@ body {
   margin: 0;
 }
 
-/* Filter button (matching the 'Create Listing' button style) */
+
 .create-listing-btn-trigger {
   display: inline-flex;
   align-items: center;
@@ -82,7 +80,7 @@ body {
 .my-listings-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 4.5rem; /* Adjust as needed */
+  gap: 4.5rem;
 }
 
 .no-listings-message {
@@ -96,7 +94,6 @@ body {
   margin-top: 1rem;
 }
 
-/* Modal styles (same as your selling page) */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -131,7 +128,6 @@ body {
   }
 }
 
-/* Responsive tweaks */
 @media (max-width: 600px) {
   .my-listings-header {
     flex-direction: column;

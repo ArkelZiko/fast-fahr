@@ -26,12 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-// Start session if not already started
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Check if user is logged in
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     http_response_code(401);
     echo json_encode([
@@ -42,10 +40,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 }
 
 try {
-    // Get user ID from session
     $user_id = $_SESSION['user_id'];
 
-    // Query to fetch user data
     $cmd = "SELECT username, email, profile_picture FROM users WHERE user_id = ?";
     $stmt = $dbh->prepare($cmd);
 

@@ -111,7 +111,6 @@
 }
 
 .header-actions {
-  /* Basic container for alignment if needed */
   display: flex;
   align-items: center;
 }
@@ -119,8 +118,8 @@
 .header-user-info {
   display: flex;
   align-items: center;
-  gap: 1rem; /* Space between username and logout button */
-  color: #333; /* Or your desired text color */
+  gap: 1rem; 
+  color: #333; 
   font-family: "Poppins", sans-serif;
 }
 

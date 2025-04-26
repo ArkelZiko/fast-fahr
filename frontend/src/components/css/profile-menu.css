@@ -1,4 +1,3 @@
-/* Profile Menu Styles */
 .profile-menu-container {
   position: relative;
 }
@@ -39,7 +38,6 @@
   background-color: #4a90e2;
 }
 
-/* Dropdown Menu Styles */
 .profile-dropdown-menu {
   position: absolute;
   top: 50px;

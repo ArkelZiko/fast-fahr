@@ -15,7 +15,6 @@ function ManageAccount() {
   let navigate = useNavigate();
   let { user } = useAuth();
 
-  // State for form fields
   let [userData, setUserData] = useState({
     username: "",
     email: "",
@@ -26,16 +25,12 @@ function ManageAccount() {
     currentProfilePicture: null,
   });
 
-  // State for displaying messages
   let [message, setMessage] = useState({ text: "", type: "" });
 
-  // State for loading
   let [isLoading, setIsLoading] = useState(false);
 
-  // State to track if user is logged in
   let [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Fetch user data on component mount
   useEffect(() => {
     let fetchUserData = async () => {
       try {
@@ -61,7 +56,6 @@ function ManageAccount() {
           }));
           setIsLoggedIn(true);
         } else {
-          // Redirect to login if not logged in
           navigate("/login", { replace: true });
         }
       } catch (error) {
@@ -72,7 +66,6 @@ function ManageAccount() {
       }
     };
 
-    // Check if user is already authenticated from context
     if (user) {
       setUserData((prevState) => ({
         ...prevState,
@@ -86,7 +79,6 @@ function ManageAccount() {
     }
   }, [user, navigate]);
 
-  // Handle input changes
   let handleInputChange = (e) => {
     let { name, value } = e.target;
     setUserData((prevState) => ({
@@ -95,7 +87,6 @@ function ManageAccount() {
     }));
   };
 
-  // Handle profile picture selection
   let handleFileChange = (e) => {
     setUserData((prevState) => ({
       ...prevState,
@@ -103,7 +94,6 @@ function ManageAccount() {
     }));
   };
 
-  // Handle form submission for general info update
   let handleInfoUpdate = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -145,12 +135,10 @@ function ManageAccount() {
     }
   };
 
-  // Handle password update
   let handlePasswordUpdate = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Validate password match
     if (userData.newPassword !== userData.confirmPassword) {
       setMessage({
         text: "New passwords do not match.",
@@ -183,7 +171,6 @@ function ManageAccount() {
           text: "Password updated successfully!",
           type: "success",
         });
-        // Clear password fields
         setUserData((prevState) => ({
           ...prevState,
           currentPassword: "",
@@ -206,7 +193,6 @@ function ManageAccount() {
     }
   };
 
-  // Handle profile picture upload
   let handleProfilePictureUpdate = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -233,34 +219,27 @@ function ManageAccount() {
           type: "success",
         });
 
-        // Add cache-busting parameter to prevent browser caching
         let imageUrl = data.profile_picture + "?t=" + new Date().getTime();
 
-        // Update the current profile picture in state
         setUserData((prevState) => ({
           ...prevState,
           currentProfilePicture: imageUrl,
-          profilePicture: null, // Reset the file input
+          profilePicture: null, 
         }));
 
-        // Force refresh the image container completely
         let container = document.getElementById("profile-picture-container");
         if (container) {
-          // Clear the container
           container.innerHTML = "";
 
-          // Create a new image element
           let img = document.createElement("img");
           img.src = imageUrl;
           img.alt = "Current profile";
           img.className = "profile-img";
 
-          // Add error handler
           img.onerror = function () {
             console.log("New image failed to load:", imageUrl);
             this.style.display = "none";
 
-            // Create placeholder as fallback
             let placeholder = document.createElement("div");
             placeholder.className = "profile-placeholder";
             placeholder.textContent = userData.username
@@ -270,11 +249,9 @@ function ManageAccount() {
             container.appendChild(placeholder);
           };
 
-          // Add the new image to the container
           container.appendChild(img);
         }
 
-        // Reset the file input field
         let fileInput = document.getElementById("profilePicture");
         if (fileInput) {
           fileInput.value = "";
@@ -311,7 +288,6 @@ function ManageAccount() {
         {isLoggedIn ? (
           <>
             <div className="account-sections">
-              {/* Profile Picture Section on the Left */}
               <section className="account-section">
                 <h2>Profile Picture</h2>
                 <form onSubmit={handleProfilePictureUpdate}>
@@ -330,7 +306,6 @@ function ManageAccount() {
                             e.target.onerror = null;
                             e.target.style.display = "none";
 
-                            // Creating a placeholder element and replacing it with a default iamge
                             let placeholder = document.createElement("div");
                             placeholder.className = "profile-placeholder";
                             placeholder.textContent = userData.username
@@ -373,7 +348,6 @@ function ManageAccount() {
                 </form>
               </section>
 
-              {/* Profile Information Section in the Center */}
               <section className="account-section">
                 <h2>Profile Information</h2>
                 <form onSubmit={handleInfoUpdate}>
@@ -411,7 +385,6 @@ function ManageAccount() {
                 </form>
               </section>
 
-              {/* Password Update Section on the Right Side */}
               <section className="account-section">
                 <h2>Change Password</h2>
                 <form onSubmit={handlePasswordUpdate}>

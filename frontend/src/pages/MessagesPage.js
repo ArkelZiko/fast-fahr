@@ -186,9 +186,9 @@ function MessagesPage() {
           })
             .then((response) => {
               if (!response.ok) {
-              } // No action on error, just log silently if needed
+              } 
             })
-            .catch((err) => {}); // No action on error
+            .catch((err) => {}); 
 
           return prevConversations.map((convo) =>
             convo.other_user_id === otherUserId

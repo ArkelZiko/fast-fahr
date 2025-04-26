@@ -26,12 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-// Start session if not already started
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Check if user is logged in
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     http_response_code(401);
     echo json_encode([
@@ -41,10 +39,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     exit;
 }
 
-// Get user ID from session
 $user_id = $_SESSION['user_id'];
 
-// Check if file was uploaded
 if (!isset($_FILES['profilePicture']) || $_FILES['profilePicture']['error'] !== UPLOAD_ERR_OK) {
     http_response_code(400);
     echo json_encode([
@@ -54,25 +50,21 @@ if (!isset($_FILES['profilePicture']) || $_FILES['profilePicture']['error'] !== 
     exit;
 }
 
-// Configuration with fixed path in your /fastfahr/ directory
 $upload_dir = dirname(__DIR__, 3) . '/uploads/profile_pictures/';
 $web_path = '/fastfahr/uploads/profile_pictures/';
 $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
-$max_size = 5 * 1024 * 1024; // 5MB
+$max_size = 5 * 1024 * 1024; 
 
-// Create upload directory if it doesn't exist
 if (!file_exists($upload_dir)) {
     mkdir($upload_dir, 0755, true);
 }
 
-// Get file information
 $file = $_FILES['profilePicture'];
 $file_name = $file['name'];
 $file_tmp = $file['tmp_name'];
 $file_size = $file['size'];
 $file_type = $file['type'];
 
-// Validate file type
 if (!in_array($file_type, $allowed_types)) {
     http_response_code(400);
     echo json_encode([
@@ -82,7 +74,6 @@ if (!in_array($file_type, $allowed_types)) {
     exit;
 }
 
-// Validate file size
 if ($file_size > $max_size) {
     http_response_code(400);
     echo json_encode([
@@ -92,22 +83,18 @@ if ($file_size > $max_size) {
     exit;
 }
 
-// Generate a unique filename
 $new_filename = $user_id . '_' . uniqid() . '.' . pathinfo($file_name, PATHINFO_EXTENSION);
 $upload_path = $upload_dir . $new_filename;
 $image_url = $web_path . $new_filename;
 
 try {
-    // Move the uploaded file to the destination
     if (move_uploaded_file($file_tmp, $upload_path)) {
-        // Update user profile in the database
         $cmd = "UPDATE users SET profile_picture = ? WHERE user_id = ?";
         $stmt = $dbh->prepare($cmd);
         $args = [$image_url, $user_id];
         $success = $stmt->execute($args);
 
         if ($success) {
-            // Update session variable
             $_SESSION['user_profile_picture'] = $image_url;
 
             echo json_encode([
@@ -116,7 +103,6 @@ try {
                 'profile_picture' => $image_url
             ]);
         } else {
-            // Remove file if database update fails
             unlink($upload_path);
 
             http_response_code(500);

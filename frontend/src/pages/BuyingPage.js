@@ -10,7 +10,7 @@
  */
 
 import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // ADDED useLocation
+import { useNavigate, useLocation } from "react-router-dom"; 
 import ViewModal from "../components/buyingComponents/ViewModal";
 import "../components/css/buyingCSS/buyingpage.css";
 import filterListings from "../components/filterListingsComponent/filterListings";
@@ -25,7 +25,7 @@ import { fetchBookmarks, toggleBookmark } from "../hooks/useBookmarks";
 function BuyingPage() {
   const { currentUser, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation(); // NEW
+  const location = useLocation(); 
   const [listings, setListings] = useState([]);
   const [filteredListings, setFilteredListings] = useState([]);
   const [bookmarkedIds, setBookmarkedIds] = useState(new Set());

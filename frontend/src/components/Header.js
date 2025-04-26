@@ -18,7 +18,6 @@ function Header() {
   const [search, setSearch] = useState("");
   const [searchError, setSearchError] = useState("");
 
-  // Debug the current user data
   useEffect(() => {
     if (currentUser) {
       console.log("Current user in Header:", currentUser);

@@ -6,7 +6,6 @@
 *             Formats the image + car info/description placement
 */
 
-/* Makes it easier to change colors accros the whole page */
 :root {
   --primary-red: #cc1a1d;
   --primary-yellow: #f9b73c;

@@ -91,7 +91,6 @@ try {
                 $mail->send();
             } catch (Exception $e) {
                 error_log("PHPMailer Error sending reset email to $email: {$mail->ErrorInfo}");
-                //Delete the token if email failed critically
                 $passwordResetModel->deleteTokensForUser($userId);
             }
         } else {
