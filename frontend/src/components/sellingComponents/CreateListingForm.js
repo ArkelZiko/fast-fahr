@@ -126,7 +126,7 @@ function CreateListingForm({ onSubmitSuccess, onClose }) {
       setPhotoWarning(
         `Please only upload a max of 7 photos, ${
           addedCount > 0 ? `only ${addedCount} were added` : "None added"
-        } Total: ${limitedFiles.length}.`
+        }`
       );
     } else {
       setPhotoWarning("");
@@ -266,10 +266,8 @@ function CreateListingForm({ onSubmitSuccess, onClose }) {
         if (data.success && data.newListing) {
           if (onSubmitSuccess) {
             onSubmitSuccess(data.newListing);
-          } else {
-            alert("Listing created!");
-            if (onClose) onClose();
           }
+          if (onClose) onClose();
         } else {
           const message = data.error || "Failed to create listing.";
           if (isMounted.current) setSubmitError(message);
