@@ -47,24 +47,6 @@ function Filters({ onApplyFilters, onClearFilters, isModal = false, onClose }) {
   }, [make]);
 
   /**
-   * Applies the selected (the whole poiint of this)
-   */
-  // Function is not needed after merging the handleSubmit it (keeping it just in case)
-  // const handleApplyFilters = () => {
-  //   const filterData = {
-  //     make,
-  //     model,
-  //     priceMin: price[0],
-  //     priceMax: price[1],
-  //     mileageMin: mileage[0],
-  //     mileageMax: mileage[1],
-  //     yearMin,
-  //     yearMax,
-  //   };
-  //   onApplyFilters(filterData);
-  // };
-
-  /**
    * Clears all filters and resets to default values
    */
   const handleClearFilters = () => {
@@ -74,6 +56,13 @@ function Filters({ onApplyFilters, onClearFilters, isModal = false, onClose }) {
     setYearMax("");
     setPrice([0, 200000]);
     setMileage([0, 200000]);
+    setTransmission("");
+    setDriveType("");
+    setExteriorColor("");
+    setFuelType("");
+    setBodyType("");
+    setProvince("");
+    setCity("");
     onApplyFilters({});
   };
 
@@ -128,7 +117,7 @@ function Filters({ onApplyFilters, onClearFilters, isModal = false, onClose }) {
           </select>
         </div>
 
-        {/* Model Dropdown (wont work until make is chosen) DROPDOWN */}
+        {/* Model Dropdown */}
         <div className="filter-group">
           <label>Model</label>
           <select
@@ -136,7 +125,7 @@ function Filters({ onApplyFilters, onClearFilters, isModal = false, onClose }) {
             onChange={(e) => setModel(e.target.value)}
             disabled={!make}
           >
-            <option value="">Select Model</option>
+            <option value="">Any</option>
             {models.map((m) => (
               <option key={m} value={m}>
                 {m}
@@ -145,16 +134,18 @@ function Filters({ onApplyFilters, onClearFilters, isModal = false, onClose }) {
           </select>
         </div>
 
-        {/* Year Min DROPDOWN*/}
-        <label>Min Year</label>
-        <select value={yearMin} onChange={(e) => setYearMin(e.target.value)}>
-          <option value="">Min Year</option>
-          {getYearOptions().map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
+        {/* Year Min Dropdown */}
+        <div className="filter-group">
+          <label>Min Year</label>
+          <select value={yearMin} onChange={(e) => setYearMin(e.target.value)}>
+            <option value="">Any</option>
+            {getYearOptions().map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </div>
 
         {/* Price Range SLIDER */}
         <div className="filter-group">
@@ -242,9 +233,9 @@ function Filters({ onApplyFilters, onClearFilters, isModal = false, onClose }) {
 
         {/* Year Max DROPDOWN */}
         <div className="filter-group">
-          <label>Max Year</label>
+          <label>Max</label>
           <select value={yearMax} onChange={(e) => setYearMax(e.target.value)}>
-            <option value="">Max Year</option>
+            <option value="">Any</option>
             {getYearOptions().map((year) => (
               <option key={year} value={year}>
                 {year}
@@ -254,14 +245,40 @@ function Filters({ onApplyFilters, onClearFilters, isModal = false, onClose }) {
         </div>
       </div>
 
-      <button
-        type="button"
-        className={`more-filters ${showAdvancedFilters ? "expanded" : ""}`}
-        onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-      >
-        {showAdvancedFilters ? "Fewer Filters" : "More Filters"}
-        <span className="arrow-icon">▼</span>
-      </button>
+      <div className="filter-top-row">
+        <button
+          type="button"
+          className={`more-filters ${showAdvancedFilters ? "expanded" : ""}`}
+          onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+        >
+          {showAdvancedFilters ? "Fewer Filters" : "More Filters"}
+          <span className="arrow-icon">▼</span>
+        </button>
+
+        {!showAdvancedFilters && (
+          <div className="action-buttons">
+            <button
+              type={isModal ? "submit" : "button"}
+              className="apply-btn"
+              onClick={!isModal ? handleSubmit : undefined}
+            >
+              Apply Filters
+            </button>
+            {onClearFilters && (
+              <button
+                type="button"
+                className="filter-clear"
+                onClick={() => {
+                  handleClearFilters();
+                  if (onClearFilters) onClearFilters();
+                }}
+              >
+                Clear Filters
+              </button>
+            )}
+          </div>
+        )}
+      </div>
 
       {showAdvancedFilters && (
         <div
@@ -391,27 +408,30 @@ function Filters({ onApplyFilters, onClearFilters, isModal = false, onClose }) {
       )}
 
       {/* Apply and Clear BUTTONS */}
-      <div className="filter-actions">
-        <button
-          type={isModal ? "submit" : "button"}
-          className="apply-btn"
-          onClick={!isModal ? handleSubmit : undefined}
-        >
-          Apply Filters
-        </button>
-        {onClearFilters && (
+
+      {showAdvancedFilters && (
+        <div className="filter-actions bottom-actions">
           <button
-            type="button"
-            className="filter-clear"
-            onClick={() => {
-              handleClearFilters();
-              if (onClearFilters) onClearFilters();
-            }}
+            type={isModal ? "submit" : "button"}
+            className="apply-btn"
+            onClick={!isModal ? handleSubmit : undefined}
           >
-            Clear Filters
+            Apply Filters
           </button>
-        )}
-      </div>
+          {onClearFilters && (
+            <button
+              type="button"
+              className="filter-clear"
+              onClick={() => {
+                handleClearFilters();
+                if (onClearFilters) onClearFilters();
+              }}
+            >
+              Clear Filters
+            </button>
+          )}
+        </div>
+      )}
     </form>
   );
 }
