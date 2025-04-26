@@ -227,7 +227,6 @@ function EditListingForm({ listingToEdit, onSubmitSuccess, onClose }) {
     event.preventDefault();
     setSubmitError("");
 
-    console.log("Submitting Edit Form - selectedFiles:", selectedFiles);
 
     if (!listingToEdit || !listingToEdit.id) {
       setSubmitError("Cannot submit edit: Listing data is missing.");

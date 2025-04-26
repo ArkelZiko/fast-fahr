@@ -64,7 +64,6 @@ function SellingPage() {
       const allListingsData = await response.json();
 
       if (!Array.isArray(allListingsData)) {
-        console.error("Received non-array data for listings:", allListingsData);
         throw new Error("Invalid data format received for listings.");
       }
 
@@ -73,7 +72,6 @@ function SellingPage() {
       );
       setMyListings(userSpecificListings);
     } catch (error) {
-      console.error("Failed to load listings:", error);
       setFetchError(`Failed to load listings: ${error.message}`);
       setMyListings([]);
     } finally {
@@ -113,7 +111,6 @@ function SellingPage() {
       setMyListings((prevListings) => [newListing, ...prevListings]);
       closeCreateModal();
     } else {
-      console.error("handleListingCreated missing data");
       closeCreateModal();
     }
   };
@@ -142,7 +139,6 @@ function SellingPage() {
         );
         closeEditModal();
       } else {
-        console.error("handleListingUpdated missing data");
         closeEditModal();
       }
     },

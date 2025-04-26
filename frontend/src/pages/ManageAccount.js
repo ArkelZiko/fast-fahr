@@ -211,7 +211,6 @@ function ManageAccount() {
       );
 
       let data = await response.json();
-      console.log("Profile picture update response:", data);
 
       if (data.success) {
         setMessage({
@@ -224,7 +223,7 @@ function ManageAccount() {
         setUserData((prevState) => ({
           ...prevState,
           currentProfilePicture: imageUrl,
-          profilePicture: null, 
+          profilePicture: null,
         }));
 
         let container = document.getElementById("profile-picture-container");
@@ -237,7 +236,6 @@ function ManageAccount() {
           img.className = "profile-img";
 
           img.onerror = function () {
-            console.log("New image failed to load:", imageUrl);
             this.style.display = "none";
 
             let placeholder = document.createElement("div");
@@ -263,7 +261,6 @@ function ManageAccount() {
         });
       }
     } catch (error) {
-      console.error("Profile picture update error:", error);
       setMessage({
         text: "An error occurred. Please try again later.",
         type: "error",
@@ -302,7 +299,6 @@ function ManageAccount() {
                           alt="Current profile"
                           className="profile-img"
                           onError={(e) => {
-                            console.log("Image failed to load:", e.target.src);
                             e.target.onerror = null;
                             e.target.style.display = "none";
 

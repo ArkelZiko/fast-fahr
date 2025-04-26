@@ -79,11 +79,18 @@ function ForgotPasswordPage() {
         <h2>Forgot Password</h2>
 
         {status.info.msg && (
-          <div
-            className={status.info.error ? "error-message" : "success-message"}
-          >
-            {status.info.msg}
-          </div>
+          <>
+            <div
+              className={
+                status.info.error ? "error-message" : "success-message"
+              }
+            >
+              {status.info.msg}
+            </div>
+            {!status.info.error && (
+              <p className="info-redirect">Redirecting you shortly...</p>
+            )}
+          </>
         )}
 
         <form onSubmit={handleSubmit}>
