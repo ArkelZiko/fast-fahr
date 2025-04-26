@@ -6,32 +6,38 @@
               which is mostlly dedicated to the cars news feed
 */
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
 .news-feed-section {
-  max-width: 1400px; 
-  margin: 2rem auto; 
-  padding: 0 2rem; 
+  max-width: 1400px;
+  margin: 2rem auto;
+  padding: 0 2rem;
   font-family: "Poppins", sans-serif;
 }
 
 .section-title {
-  font-size: 1.8rem; 
+  font-size: 1.8rem;
   font-weight: 700;
   color: #111;
   margin-bottom: 1.5rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #ff9800; 
+  border-bottom: 2px solid #ff9800;
 }
-
 
 .news-items-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem; 
+  gap: 2rem;
 }
 
 @media (max-width: 768px) {
   .news-feed-section {
-    padding: 0 1rem; 
+    padding: 0 1rem;
   }
   .news-items-container {
     gap: 1.5rem;
